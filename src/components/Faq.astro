@@ -15,6 +15,25 @@ import { preguntas, site } from '../data/site';
         class="h-section"
         parts={[{ text: 'Lo que conviene saber' }, { text: 'antes de empezar', em: true }]}
       />
+    </div>
+
+    <div class="faq__body">
+      <div class="faq__list">
+        {
+          preguntas.map((p, i) => (
+            <details class="faq__item reveal">
+              <summary>
+                <span class="faq__q">{p.q}</span>
+                <span class="faq__icon" aria-hidden="true">
+                  <Icon name="plus" />
+                </span>
+              </summary>
+              <p class="faq__a">{p.a}</p>
+            </details>
+          ))
+        }
+      </div>
+
       <!-- Tarjeta de contacto: el email se puede abrir o copiar (por si no hay app de correo) -->
       <div class="ask reveal">
         <Isotipo class="ask__mark" />
@@ -34,22 +53,6 @@ import { preguntas, site } from '../data/site';
           <p class="visually-hidden" aria-live="polite" data-copy-status></p>
         </div>
       </div>
-    </div>
-
-    <div class="faq__list">
-      {
-        preguntas.map((p, i) => (
-          <details class="faq__item reveal">
-            <summary>
-              <span class="faq__q">{p.q}</span>
-              <span class="faq__icon" aria-hidden="true">
-                <Icon name="plus" />
-              </span>
-            </summary>
-            <p class="faq__a">{p.a}</p>
-          </details>
-        ))
-      }
     </div>
   </div>
 </section>
@@ -95,6 +98,11 @@ import { preguntas, site } from '../data/site';
   }
 
   /* ---------- Tarjeta «¿No encuentras tu pregunta?» ---------- */
+
+  .faq__body {
+    display: grid;
+    gap: clamp(32px, 4vw, 48px);
+  }
 
   .ask {
     position: relative;
