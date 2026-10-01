@@ -64,32 +64,34 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
       }
     </div>
 
-    <div class="video__index">
-      <h3 class="video__index-title reveal">En el vídeo</h3>
-      <ol class="video__chapters">
+    <!-- Panel bajo el vídeo: de qué habla y, al pie, su descripción en texto (WCAG 1.2.1) -->
+    <div class="vpanel reveal">
+      <p class="vpanel__kicker">En el vídeo</p>
+      <ol class="vpanel__chapters">
         {
           capitulos.map((c, i) => (
-            <li class="reveal">
-              <span class="video__n">0{i + 1}</span>
-              {c}
+            <li>
+              <span class="vpanel__n">0{i + 1}</span>
+              <span class="vpanel__t">{c}</span>
             </li>
           ))
         }
       </ol>
-    </div>
 
-    <!-- Alternativa en texto: sin ella el vídeo no es accesible para quien no puede verlo -->
-    <details class="video__alt">
-      <summary>
-        <span class="video__alt-label video__alt-label--open">Leer la descripción del vídeo</span>
-        <span class="video__alt-label video__alt-label--close">Ocultar la descripción</span>
-        <span class="video__alt-icon" aria-hidden="true"><Icon name="plus" /></span>
-      </summary>
-      <div class="video__alt-card">
-        <p class="video__alt-kicker">Descripción del vídeo</p>
-        <p>{usarMuestras ? video.transcripcion : '[Transcripción del vídeo: lo que se dice y lo que se ve.]'}</p>
-      </div>
-    </details>
+      <details class="vpanel__alt">
+        <summary>
+          <span class="vpanel__alt-title">Descripción del vídeo</span>
+          <span class="vpanel__alt-action">
+            <span class="vpanel__alt-open">Leer</span>
+            <span class="vpanel__alt-close">Ocultar</span>
+            <span class="vpanel__alt-icon" aria-hidden="true"><Icon name="plus" /></span>
+          </span>
+        </summary>
+        <p class="vpanel__alt-text">
+          {usarMuestras ? video.transcripcion : '[Transcripción del vídeo: lo que se dice y lo que se ve.]'}
+        </p>
+      </details>
+    </div>
   </div>
 </section>
 
@@ -166,18 +168,32 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
     border-radius: 0;
   }
 
-  /* Índice: de qué habla el vídeo, en una línea con rombos dorados */
-  .video__index {
-    display: grid;
-    justify-items: center;
-    gap: 18px;
+  /* ---------- Panel bajo el vídeo ----------
+     Tarjeta de cristal sobre la bruma (como los compromisos de Sobre mí): etiqueta con rombo,
+     los tres temas en columnas con filetes finos y, al pie, la descripción desplegable. */
+  .vpanel {
     max-width: 1080px;
     margin: clamp(40px, 5vw, 64px) auto 0;
-    padding-inline: var(--gutter);
+    padding: clamp(24px, 3vw, 36px) clamp(24px, 3.2vw, 44px) 0;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 30px 60px -44px rgba(14, 32, 27, 0.55);
   }
 
-  .video__index-title {
-    font-family: var(--sans);
+  :global([data-theme='dark']) .vpanel {
+    border-color: rgba(131, 129, 130, 0.35);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: none;
+  }
+
+  .vpanel__kicker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(18px, 2vw, 26px);
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.22em;
@@ -185,169 +201,174 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
     color: var(--muted);
   }
 
-  .video__chapters {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: baseline;
-    gap: 12px 0;
+  .vpanel__kicker::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--gold-line);
+    transform: rotate(45deg);
+  }
+
+  .vpanel__kicker::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--gold-line);
+  }
+
+  .vpanel__chapters {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin: 0;
-    padding: 0;
+    padding: 0 0 clamp(22px, 2.6vw, 30px);
     list-style: none;
   }
 
-  .video__chapters li {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 10px;
+  .vpanel__chapters li {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    padding: 0 clamp(16px, 2vw, 28px);
+  }
+
+  .vpanel__chapters li:first-child {
+    padding-left: 0;
+  }
+
+  .vpanel__chapters li + li {
+    border-left: 1px solid var(--line);
+  }
+
+  .vpanel__n {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--number);
+  }
+
+  .vpanel__t {
     font-family: var(--serif);
-    font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+    font-size: clamp(1.15rem, 1.6vw, 1.375rem);
     font-weight: 300;
     line-height: 1.3;
     color: var(--text);
   }
 
-  .video__chapters li + li::before {
-    content: '';
-    align-self: center;
-    width: 6px;
-    height: 6px;
-    margin-inline: clamp(18px, 2.6vw, 36px);
-    background: var(--gold-line);
-    transform: rotate(45deg);
+  /* Pie desplegable: título a la izquierda, «Leer / Ocultar» con el círculo a la derecha */
+  .vpanel__alt {
+    border-top: 1px solid var(--line);
   }
 
-  .video__n {
-    font-family: var(--sans);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    color: var(--number);
-  }
-
-  /* Descripción del vídeo: botón en píldora bien visible sobre la textura y, al abrir, una
-     tarjeta legible en lugar de texto suelto sobre los rombos */
-  .video__alt {
-    max-width: 680px;
-    margin: 24px auto 0;
-    padding-inline: var(--gutter);
-    text-align: center;
-  }
-
-  .video__alt summary {
-    display: inline-flex;
+  .vpanel__alt summary {
+    display: flex;
     align-items: center;
-    gap: 14px;
-    min-height: 48px;
-    padding: 6px 6px 6px 22px;
-    border: 1px solid var(--line-ui);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.6);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-    color: var(--text);
-    font-size: 0.9375rem;
-    font-weight: 500;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 64px;
     cursor: pointer;
     list-style: none;
-    transition:
-      background-color 0.4s var(--ease),
-      box-shadow 0.4s var(--ease);
   }
 
-  :global([data-theme='dark']) .video__alt summary {
-    background: rgba(0, 0, 0, 0.45);
-  }
-
-  .video__alt summary::-webkit-details-marker {
+  .vpanel__alt summary::-webkit-details-marker {
     display: none;
   }
 
-  .video__alt-label--close,
-  .video__alt[open] .video__alt-label--open {
+  .vpanel__alt summary:focus-visible {
+    outline-offset: 4px;
+  }
+
+  .vpanel__alt-title {
+    font-family: var(--serif);
+    font-size: 1.0625rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text);
+  }
+
+  .vpanel__alt-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .vpanel__alt-close,
+  .vpanel__alt[open] .vpanel__alt-open {
     display: none;
   }
 
-  .video__alt[open] .video__alt-label--close {
+  .vpanel__alt[open] .vpanel__alt-close {
     display: inline;
   }
 
-  /* El «+» en un círculo relleno: se lee como botón y gira a «×» al abrir */
-  .video__alt-icon {
+  .vpanel__alt-icon {
     display: grid;
     place-items: center;
     width: 36px;
     height: 36px;
+    border: 1px solid var(--line-ui);
     border-radius: 50%;
+    color: var(--ink);
+    transition:
+      transform 0.5s var(--ease),
+      background-color 0.4s var(--ease),
+      color 0.4s var(--ease);
+  }
+
+  .vpanel__alt-icon :global(svg) {
+    width: 14px;
+    height: 14px;
+  }
+
+  .vpanel__alt[open] .vpanel__alt-icon {
+    transform: rotate(45deg);
     background: var(--ink);
     color: var(--bg);
-    transition: transform 0.5s var(--ease);
-  }
-
-  .video__alt-icon :global(svg) {
-    width: 16px;
-    height: 16px;
-  }
-
-  .video__alt[open] .video__alt-icon {
-    transform: rotate(45deg);
-  }
-
-  .video__alt summary:focus-visible {
-    outline-offset: 4px;
   }
 
   @media (hover: hover) {
-    .video__alt summary:hover {
-      background: rgba(255, 255, 255, 0.85);
-      box-shadow: 0 10px 24px -16px rgba(14, 32, 27, 0.5);
-    }
-    :global([data-theme='dark']) .video__alt summary:hover {
-      background: rgba(255, 255, 255, 0.06);
-      box-shadow: none;
+    .vpanel__alt summary:hover .vpanel__alt-icon {
+      background: var(--ink);
+      color: var(--bg);
     }
   }
 
-  .video__alt-card {
-    margin-top: 16px;
-    padding: 22px 26px 24px;
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    box-shadow: 0 20px 40px -28px rgba(14, 32, 27, 0.5);
-    text-align: left;
-    animation: alt-in 0.5s var(--ease);
-  }
-
-  @keyframes alt-in {
-    from {
-      opacity: 0;
-      transform: translateY(-6px);
-    }
-  }
-
-  .video__alt-kicker {
-    margin: 0 0 8px;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--number);
-  }
-
-  .video__alt-card p:last-child {
+  .vpanel__alt-text {
+    max-width: 68ch;
     margin: 0;
+    padding: 0 0 clamp(24px, 3vw, 32px);
     font-size: 1rem;
-    line-height: 1.7;
+    line-height: 1.75;
     color: var(--text);
   }
 
+  /* Se despliega y se recoge con suavidad donde el navegador sabe animar <details> */
+  @supports (interpolate-size: allow-keywords) {
+    .vpanel__alt {
+      interpolate-size: allow-keywords;
+    }
+    .vpanel__alt::details-content {
+      height: 0;
+      overflow: clip;
+      transition:
+        height 0.6s var(--ease),
+        content-visibility 0.6s allow-discrete;
+    }
+    .vpanel__alt[open]::details-content {
+      height: auto;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .video__alt-icon,
-    .video__alt summary {
+    .vpanel__alt-icon {
       transition: none;
     }
-    .video__alt-card {
-      animation: none;
+    .vpanel__alt::details-content {
+      transition: none;
     }
   }
 
@@ -518,13 +539,20 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
       width: 18px;
       height: 18px;
     }
-    .video__chapters {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
+    /* Móvil: los tres temas en lista, separados por filetes */
+    .vpanel__chapters {
+      grid-template-columns: 1fr;
+      padding-bottom: 8px;
     }
-    .video__chapters li + li::before {
-      display: none;
+    .vpanel__chapters li,
+    .vpanel__chapters li:first-child {
+      grid-template-columns: 32px 1fr;
+      align-items: baseline;
+      padding: 14px 0;
+    }
+    .vpanel__chapters li + li {
+      border-left: 0;
+      border-top: 1px solid var(--line);
     }
   }
 </style>
