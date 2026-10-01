@@ -1,0 +1,146 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import { llamada, nav, url } from '../data/site';
+
+// Página de error propia: sin ella, GitHub Pages enseñaría la de otra web de la cuenta
+---
+
+<Base title="Página no encontrada · Femuix" description="Esta página no existe o ha cambiado de sitio.">
+  <Header base={url('/')} />
+  <main id="main" class="nf">
+    <div class="container nf__inner">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="nf__title">
+        Esta página <em>no existe</em>
+      </h1>
+      <p class="lead nf__lead">
+        Puede que el enlace esté mal escrito o que la página haya cambiado de sitio. Desde aquí
+        llegas a todo lo demás.
+      </p>
+
+      <div class="nf__actions">
+        <a class="btn btn--primary" href={url('/')}>
+          Volver a la portada
+          <Icon name="arrow" />
+        </a>
+        <a class="text-link" href={llamada.href}>{llamada.enlace}</a>
+      </div>
+
+      <nav class="nf__nav" aria-label="Secciones de la portada">
+        <ul>
+          {
+            nav.map((item, i) => (
+              <li>
+                <a href={`${url('/')}${item.href}`}>
+                  <span class="nf__n">0{i + 1}</span>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+  </main>
+  <Footer base={url('/')} />
+</Base>
+
+<style>
+  .nf {
+    padding-block: clamp(140px, 18vw, 220px) var(--section);
+  }
+
+  .nf__inner {
+    display: grid;
+    justify-items: start;
+    gap: 28px;
+    max-width: calc(860px + var(--gutter) * 2);
+  }
+
+  /* Sin número de sección: aquí no hay índice que seguir */
+  .nf__inner .eyebrow::before {
+    display: none;
+  }
+
+  .nf__title {
+    font-family: var(--serif);
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .nf__lead {
+    max-width: 46ch;
+    margin: 0;
+  }
+
+  .nf__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    margin-top: 8px;
+  }
+
+  .nf__nav {
+    width: 100%;
+    margin-top: clamp(24px, 4vw, 48px);
+  }
+
+  .nf__nav ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .nf__nav a {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    min-height: 44px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--serif);
+    font-size: 1.375rem;
+    font-weight: 300;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nf__nav li:nth-child(odd) a {
+    margin-right: 24px;
+  }
+
+  .nf__n {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--number);
+  }
+
+  @media (hover: hover) {
+    .nf__nav a:hover {
+      color: var(--em-text);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .nf__nav ul {
+      grid-template-columns: 1fr;
+    }
+    .nf__nav li:nth-child(odd) a {
+      margin-right: 0;
+    }
+    .nf__actions .btn {
+      width: 100%;
+    }
+  }
+</style>
