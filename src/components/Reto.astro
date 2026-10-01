@@ -1,4 +1,5 @@
 ---
+import EmailPill from './EmailPill.astro';
 import Icon from './Icon.astro';
 import SplitText from './SplitText.astro';
 import { llamada, site, url } from '../data/site';
@@ -108,12 +109,17 @@ const dias = [
       <div class="reto__alt">
         <span class="reto__or" aria-hidden="true">o</span>
         <p class="reto__alt-q">¿Prefieres hablar directamente?</p>
-        <!-- Texto corto en una sola línea: el email (o «Reservar una llamada» cuando haya agenda) -->
-        <a class="reto__alt-link" href={llamada.href}>
-          <Icon name="mail" />
-          <span>{llamada.activa ? llamada.reservar : site.email}</span>
-          <Icon name="arrow" />
-        </a>
+        <!-- Con agenda: enlace para reservar la llamada. Sin agenda: la píldora del email -->
+        {
+          llamada.activa ? (
+            <a class="reto__alt-link" href={llamada.href}>
+              <span>{llamada.reservar}</span>
+              <Icon name="arrow" />
+            </a>
+          ) : (
+            <EmailPill email={site.email} center ghost />
+          )
+        }
       </div>
 
       <!-- Región de estado siempre presente para que el mensaje se anuncie al rellenarse -->

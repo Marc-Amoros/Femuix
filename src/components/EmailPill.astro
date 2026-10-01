@@ -1,0 +1,287 @@
+---
+import Icon from './Icon.astro';
+
+// Píldora de contacto: el email (abre el correo) y un botón para copiarlo, con su etiqueta
+// y un check al copiar. Se usa en las preguntas frecuentes y en el formulario del reto.
+interface Props {
+  email: string;
+  center?: boolean;
+  ghost?: boolean; // sin relleno: solo el filete, como un botón fantasma
+  class?: string;
+}
+
+const { email, center = false, ghost = false, class: className } = Astro.props;
+const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class:list={['pill', { 'pill--center': center, 'pill--ghost': ghost }, className]}>
+  <div class="ask__row">
+    <a class="ask__mail" href={`mailto:${email}`}>
+      <Icon name="mail" />
+      <span>{email}</span>
+    </a>
+    <button class="ask__copy" type="button" data-copy={email} aria-label="Copiar el email" aria-describedby={tipId}>
+      <span class="ask__icon ask__icon--copy"><Icon name="copy" /></span>
+      <span class="ask__icon ask__icon--done"><Icon name="check" /></span>
+      <span class="ask__tip" id={tipId} role="tooltip" data-copy-tip>Copiar email</span>
+    </button>
+  </div>
+  <p class="visually-hidden" aria-live="polite" data-copy-status></p>
+</div>
+
+<script>
+  // Copiar el email: el icono pasa a un check, la etiqueta dice «Copiado» y se anuncia a los
+  // lectores de pantalla. La etiqueta se puede cerrar con Escape (WCAG 1.4.13).
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const tip = btn.querySelector<HTMLElement>('[data-copy-tip]');
+    const status = btn.closest('.pill')?.querySelector<HTMLElement>('[data-copy-status]');
+    let timer = 0;
+
+    const reset = () => {
+      btn.classList.remove('is-done');
+      if (tip) tip.textContent = 'Copiar email';
+      if (status) status.textContent = '';
+    };
+
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+      } catch {
+        return;
+      }
+      btn.classList.remove('tip-off');
+      btn.classList.add('is-done');
+      if (tip) tip.textContent = '¡Copiado!';
+      if (status) status.textContent = 'Email copiado';
+      clearTimeout(timer);
+      timer = window.setTimeout(reset, 2200);
+    });
+
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') btn.classList.add('tip-off');
+    });
+    btn.addEventListener('mouseleave', () => btn.classList.remove('tip-off'));
+    btn.addEventListener('blur', () => btn.classList.remove('tip-off'));
+  });
+</script>
+
+<style>
+  .pill {
+    display: grid;
+  }
+
+  .pill--center .ask__row {
+    justify-self: center;
+  }
+
+  /* Fantasma: transparente, con filete verde (≥3:1) y sin sombra */
+  .pill--ghost .ask__row {
+    border-color: var(--line-ui);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .pill--ghost .ask__copy {
+    border-left-color: var(--line-strong);
+  }
+
+  @media (hover: hover) {
+    .pill--ghost .ask__row:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+    :global([data-theme='dark']) .pill--ghost .ask__row:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  /* Píldora blanca: email a la izquierda, botón de copiar a la derecha tras un filete */
+  .ask__row {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    max-width: 100%;
+    margin-top: 14px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    box-shadow: 0 10px 24px -18px rgba(14, 32, 27, 0.45);
+  }
+
+  :global([data-theme='dark']) .ask__row {
+    border-color: rgba(131, 129, 130, 0.45);
+    box-shadow: none;
+  }
+
+  /* El email, en la cursiva de la marca; el subrayado se completa al señalarlo */
+  .ask__mail {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 16px 0 14px;
+    font-family: var(--serif);
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink); /* verde pino: 11:1 sobre blanco */
+    text-decoration: none;
+  }
+
+  .ask__mail span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: linear-gradient(currentColor, currentColor) left bottom / 0% 1px no-repeat;
+    padding-bottom: 2px;
+    transition: background-size 0.6s var(--ease);
+  }
+
+  .ask__mail :global(svg) {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--gold-deep);
+  }
+
+  .ask__mail:focus-visible span {
+    background-size: 100% 1px;
+  }
+
+  /* Botón redondo de copiar */
+  .ask__copy {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-left: 1px solid var(--line);
+    border-radius: 0 999px 999px 0;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: color 0.3s var(--ease);
+  }
+
+  .ask__icon {
+    grid-area: 1 / 1;
+    display: grid;
+    place-items: center;
+    transition:
+      opacity 0.3s var(--ease),
+      transform 0.4s var(--ease);
+  }
+
+  .ask__icon :global(svg) {
+    width: 18px;
+    height: 18px;
+  }
+
+  .ask__icon--done {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  /* Copiado: el icono se convierte en un check dentro de un círculo verde */
+  .ask__copy.is-done .ask__icon--copy {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  .ask__copy.is-done .ask__icon--done {
+    opacity: 1;
+    transform: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .ask__copy:active .ask__icon {
+    transform: scale(0.9);
+  }
+
+  /* Etiqueta (tooltip) encima del botón: al señalarlo, con el foco y al copiar */
+  .ask__tip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--text);
+    color: var(--bg);
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, 4px);
+    transition:
+      opacity 0.25s var(--ease),
+      transform 0.25s var(--ease);
+  }
+
+  .ask__tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 5px solid transparent;
+    border-top-color: var(--text);
+    transform: translateX(-50%);
+  }
+
+  .ask__copy:focus-visible .ask__tip,
+  .ask__copy.is-done .ask__tip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .ask__copy.tip-off .ask__tip {
+    opacity: 0;
+  }
+
+  @media (hover: hover) {
+    .ask__mail:hover span {
+      background-size: 100% 1px;
+    }
+    .ask__copy:hover .ask__tip {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    .ask__copy.tip-off:hover .ask__tip {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ask__mail span,
+    .ask__icon,
+    .ask__tip {
+      transition: none;
+    }
+  }
+
+
+  /* Móviles estrechos: la píldora cabe sin desbordar (sin el sobre y con la letra algo menor) */
+  .pill {
+    min-width: 0;
+  }
+
+  @media (max-width: 420px) {
+    .ask__mail {
+      gap: 8px;
+      padding: 0 12px;
+      font-size: 1rem;
+    }
+    .ask__mail :global(svg) {
+      display: none;
+    }
+  }
+</style>
