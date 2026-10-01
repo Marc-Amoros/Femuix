@@ -474,14 +474,9 @@ const { base = '' } = Astro.props;
     .header {
       --header-h: 64px;
     }
+    /* El interruptor día / noche sigue a la vista en el móvil, junto al botón */
     .header :global(.header__mode) {
-      display: none;
-    }
-    .header__cta {
       margin-left: auto;
-    }
-    .menu__mode {
-      display: flex;
     }
     .menu-btn {
       width: 38px;
@@ -505,15 +500,16 @@ const { base = '' } = Astro.props;
   }
 
   /* Pantallas muy estrechas (320 px): todo cabe sin cortar el texto del botón */
-  @media (max-width: 380px) {
+  @media (max-width: 400px) {
     .header__bar {
       gap: 10px;
     }
     .header__logo {
       width: 80px;
     }
+    /* No caben interruptor y botón: el reto sigue en el menú y en la portada */
     .header__cta {
-      padding: 0 12px;
+      display: none;
     }
   }
 </style>
