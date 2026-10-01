@@ -156,7 +156,7 @@
   --muted: var(--g-400); /* 8,1:1 sobre negro */
   --surface: #000000; /* tarjetas negras sobre las bandas */
   --deep: var(--g-900);
-  --deep-glow: var(--pine-800); /* pie, sello y portal: brillo verde pino del logo (texto 7,9:1) */
+  --deep-glow: var(--g-800); /* brillo suave: el texto gris claro sigue en 9:1 */
   --tint: #161616;
   --mark: var(--g-700); /* texto blanco encima: 8,3:1 */
   --warm: #dac499; /* dorado: 12:1 sobre negro */
@@ -172,10 +172,10 @@
     rgba(131, 129, 130, 0.6) 78%,
     transparent
   );
-  /* Grafito con luz gris arriba a la izquierda y el verde pino del logo abajo a la derecha */
+  /* Grafito con luz gris arriba a la izquierda y un toque dorado abajo a la derecha */
   --band-image:
     radial-gradient(75% 60% at 0% 0%, rgba(75, 78, 84, 0.45), transparent 70%),
-    radial-gradient(70% 70% at 100% 100%, rgba(29, 60, 52, 0.85), transparent 72%);
+    radial-gradient(60% 60% at 100% 100%, rgba(218, 196, 153, 0.07), transparent 70%);
   --line: rgba(255, 255, 255, 0.12);
   --line-strong: rgba(255, 255, 255, 0.24);
   --number: var(--warm); /* numeración en dorado */
