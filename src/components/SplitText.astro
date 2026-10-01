@@ -1,0 +1,43 @@
+---
+// Titular que aparece palabra a palabra. Cada parte puede ir en cursiva (em).
+interface Part {
+  text: string;
+  em?: boolean;
+  br?: boolean; // empieza en una línea nueva
+}
+
+interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'p';
+  parts: Part[];
+  class?: string;
+  id?: string;
+  delay?: number;
+}
+
+const { as: Tag = 'h2', parts, class: className, id, delay = 0 } = Astro.props;
+
+let i = 0;
+const words = parts.flatMap((part) =>
+  part.text
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w, n) => ({ w, em: part.em, br: part.br && n === 0, i: i++ })),
+);
+const label = parts.map((p) => p.text).join(' ');
+---
+
+<!-- El texto real va oculto visualmente para lectores de pantalla y traductores;
+     las palabras animadas son solo visuales -->
+<Tag id={id} class:list={['split', className]} style={delay ? `--delay: ${delay}ms` : undefined}>
+  <span class="visually-hidden">{label}</span>
+  {
+    words.map((word, idx) => (
+      <>
+        <span class="w" aria-hidden="true">
+          <span style={`--i: ${word.i}`}>{word.em ? <em>{word.w}</em> : word.w}</span>
+        </span>
+        {idx < words.length - 1 && (words[idx + 1].br ? <br /> : ' ')}
+      </>
+    ))
+  }
+</Tag>

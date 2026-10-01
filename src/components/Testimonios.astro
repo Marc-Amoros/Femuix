@@ -1,0 +1,120 @@
+---
+import BeforeAfter from './BeforeAfter.astro';
+import Placeholder from './Placeholder.astro';
+import SplitText from './SplitText.astro';
+import { testimonios } from '../data/site';
+import { fotos, usarMuestras } from '../data/media';
+
+const huecos = [
+  {
+    label: 'Testimonio 1',
+    note: 'Nombre, barrio y una frase sobre el miedo que tenía antes de empezar.',
+  },
+  {
+    label: 'Testimonio 2',
+    note: 'Mejor si es una captura real de WhatsApp o una reseña de Google, con permiso.',
+  },
+];
+---
+
+<section class="section" aria-labelledby="testimonios-title">
+  <div class="container">
+    <div class="section-head testimonios__head">
+      <span class="eyebrow reveal">Testimonios</span>
+      <SplitText
+        id="testimonios-title"
+        class="h-section"
+        parts={[{ text: 'Lo que dicen quienes' }, { text: 'ya han pasado por aquí', em: true }]}
+      />
+      <p class="lead reveal">Pocos y verdaderos.</p>
+    </div>
+
+    <div class="testimonios">
+      {
+        testimonios.length > 0
+          ? testimonios.map((t, i) => (
+              <blockquote class="quote reveal">
+                <span class="quote__mark" aria-hidden="true">
+                  “
+                </span>
+                <p>{t.cita}</p>
+                <footer>
+                  <strong>{t.nombre}</strong> · {t.barrio}
+                </footer>
+              </blockquote>
+            ))
+          : huecos.map((h, i) => (
+              <div class="reveal">
+                <Placeholder label={h.label} note={h.note} ratio="4 / 3" icon="quote" />
+              </div>
+            ))
+      }
+
+      <div class="testimonios__wide reveal">
+        <BeforeAfter
+          note="Mientras no tengas los cinco proyectos fotografiados, enseña el proceso: boceto, render y foto final del mismo rincón."
+          antes={usarMuestras ? fotos.antes : undefined}
+          despues={usarMuestras ? fotos.despues : undefined}
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonios__head {
+    max-width: 820px;
+  }
+
+  .testimonios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .testimonios__wide {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+  }
+
+  .quote {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 0;
+    padding: clamp(32px, 4vw, 56px);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+  }
+
+  .quote__mark {
+    font-family: var(--serif);
+    font-size: 5rem;
+    line-height: 0.5;
+    color: var(--ink);
+  }
+
+  .quote p {
+    font-family: var(--serif);
+    font-size: clamp(1.25rem, 2vw, 1.65rem);
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .quote footer {
+    margin-top: auto;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  .quote strong {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  @media (max-width: 720px) {
+    .testimonios {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

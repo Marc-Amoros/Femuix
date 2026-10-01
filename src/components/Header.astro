@@ -1,0 +1,519 @@
+---
+import Logo from './Logo.astro';
+import ModeSwitch from './ModeSwitch.astro';
+import { nav, site } from '../data/site';
+
+// En páginas interiores los enlaces apuntan a las secciones de la portada
+interface Props {
+  base?: string;
+}
+
+const { base = '' } = Astro.props;
+---
+
+<header class="header" data-header>
+  <div class="container header__bar">
+    <a href={`${base}#top`} class="header__logo" aria-label="Femuix, ir al inicio">
+      <!-- Logotipo en verde sobre la cabecera blanca; FEMUIX black 2 en Dark UI -->
+      <Logo tone="dark" class="only-light" />
+      <Logo tone="gray" class="only-dark" />
+    </a>
+
+    <nav class="header__nav" aria-label="Principal">
+      {nav.map((item) => <a href={`${base}${item.href}`}>{item.label}</a>)}
+    </nav>
+
+    <!-- Modo día / modo noche: se ven las dos opciones y se resalta la activa -->
+    <ModeSwitch class="header__mode" />
+
+    <a class="btn btn--primary header__cta" href={`${base}${site.retoUrl}`}>
+      <span class="header__cta-long">Empezar por el reto gratuito</span>
+      <span class="header__cta-short">Reto gratuito</span>
+    </a>
+
+    <!-- Menú para móvil y tablet -->
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+      <span class="menu-btn__lines" aria-hidden="true"><i></i><i></i></span>
+      <span class="visually-hidden">Menú</span>
+    </button>
+  </div>
+
+  <div class="menu" id="menu" hidden data-menu>
+    <nav class="menu__nav" aria-label="Secciones">
+      <ul>
+        {
+          nav.map((item, i) => (
+            <li style={`--i: ${i}`}>
+              <a href={`${base}${item.href}`} data-menu-link>
+                <span class="menu__n">0{i + 1}</span>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="menu__foot">
+      <div class="menu__mode">
+        <span>Modo</span>
+        <ModeSwitch />
+      </div>
+      <a class="btn btn--primary" href={`${base}${site.retoUrl}`} data-menu-link>Empezar por el reto gratuito</a>
+      <a class="menu__mail" href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+  </div>
+  <span class="header__progress" aria-hidden="true"></span>
+</header>
+
+<script>
+  // Modo día (por defecto) o modo noche. La elección se recuerda en el navegador.
+  const root = document.documentElement;
+  const options = [...document.querySelectorAll<HTMLButtonElement>('[data-mode]')];
+
+  const sync = () => {
+    for (const opt of options) {
+      opt.setAttribute('aria-pressed', String(opt.dataset.mode === root.dataset.theme));
+    }
+  };
+
+  sync();
+
+  for (const opt of options) {
+    opt.addEventListener('click', () => {
+      const next = opt.dataset.mode === 'dark' ? 'dark' : 'light';
+      if (next === root.dataset.theme) return;
+
+      const apply = () => {
+        root.dataset.theme = next;
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute('content', next === 'dark' ? '#000000' : '#ffffff');
+        sync();
+      };
+      try {
+        localStorage.setItem('femuix-theme', next);
+      } catch {}
+
+      const doc = document as Document & {
+        startViewTransition?: (cb: () => void) => { ready: Promise<void> };
+      };
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce || !doc.startViewTransition) {
+        apply();
+        return;
+      }
+
+      // El nuevo modo se descubre en círculo desde la opción pulsada
+      const r = opt.getBoundingClientRect();
+      const x = r.left + r.width / 2;
+      const y = r.top + r.height / 2;
+      const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      doc.startViewTransition(apply).ready.then(() => {
+        root.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
+          {
+            duration: 800,
+            easing: 'cubic-bezier(0.77, 0, 0.18, 1)',
+            pseudoElement: '::view-transition-new(root)',
+          },
+        );
+      });
+    });
+  }
+
+  // Menú de móvil y tablet: se abre sobre la página y la deja inerte mientras tanto
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const menuBtn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const behind = [...document.querySelectorAll<HTMLElement>('main, footer, .skip-link')];
+
+  const setMenu = (open: boolean, returnFocus = true) => {
+    if (!menu || !menuBtn) return;
+    const lenis = (window as unknown as { lenis?: { stop(): void; start(): void } }).lenis;
+    menuBtn.setAttribute('aria-expanded', String(open));
+    header?.classList.toggle('is-menu-open', open);
+    root.classList.toggle('menu-open', open);
+    behind.forEach((el) => el.toggleAttribute('inert', open));
+    menu.hidden = !open;
+    if (open) {
+      lenis?.stop();
+      menu.querySelector<HTMLElement>('a')?.focus();
+    } else {
+      lenis?.start();
+      if (returnFocus) menuBtn.focus();
+    }
+  };
+
+  menuBtn?.addEventListener('click', () => setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuBtn?.getAttribute('aria-expanded') === 'true') setMenu(false);
+  });
+
+  // Al elegir una sección se cierra y la página se desplaza hasta ella
+  menu?.querySelectorAll('[data-menu-link]').forEach((link) => {
+    link.addEventListener('click', () => setMenu(false, false));
+  });
+
+  // Si la ventana pasa a tamaño escritorio con el menú abierto, se cierra
+  window.matchMedia('(min-width: 1101px)').addEventListener('change', (e) => {
+    if (e.matches) setMenu(false, false);
+  });
+</script>
+
+<style>
+  /* Cabecera blanca con el logotipo en verde; en Dark UI, negra con el logotipo en
+     negativo. Los colores salen de los tokens --hd-* */
+  .header {
+    --header-h: 80px;
+    --hd-bg: rgba(255, 255, 255, 0.92);
+    --hd-fg: var(--text);
+    --hd-soft: #3d3d3d;
+    --hd-line: var(--line);
+    --hd-btn-line: var(--line-strong);
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    background: var(--hd-bg);
+    color: var(--hd-fg);
+    box-shadow: inset 0 -1px 0 var(--hd-line);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    backdrop-filter: saturate(1.4) blur(14px);
+    transition:
+      box-shadow 0.5s var(--ease),
+      transform 0.6s var(--ease);
+  }
+
+  :global([data-theme='dark']) .header {
+    --hd-bg: rgba(0, 0, 0, 0.86);
+    --hd-fg: var(--white);
+    --hd-soft: #c4c4c4;
+    --hd-line: rgba(255, 255, 255, 0.12);
+    --hd-btn-line: rgba(255, 255, 255, 0.28);
+  }
+
+  .header.is-scrolled {
+    box-shadow:
+      inset 0 -1px 0 var(--hd-line),
+      0 12px 32px -24px rgba(14, 32, 27, 0.35);
+  }
+
+  /* Al abrir el menú la cabecera se vuelve opaca para fundirse con el panel. Sin el
+     desenfoque, porque backdrop-filter encerraría el panel fijo dentro de la cabecera */
+  .header.is-menu-open {
+    --hd-bg: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* Oculta al bajar, pero vuelve si algo de dentro recibe el foco (WCAG 2.4.7) */
+  .header.is-hidden:not(:focus-within):not(.is-menu-open) {
+    transform: translateY(-100%);
+  }
+
+  :global(html.menu-open) {
+    overflow: hidden;
+  }
+
+  .header__progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--gold-line); /* barra de progreso dorada */
+    transform: scaleX(var(--scroll, 0));
+    transform-origin: left;
+  }
+
+  .header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: var(--header-h);
+  }
+
+  .header__logo {
+    display: block;
+    width: 128px;
+    flex-shrink: 0;
+  }
+
+  .header__logo :global(svg) {
+    width: 100%;
+    height: auto;
+  }
+
+  .header__nav {
+    display: flex;
+    gap: 40px;
+    margin-left: auto;
+  }
+
+  .header__nav a {
+    position: relative;
+    padding-block: 13px; /* objetivo de 44 px de alto */
+    white-space: nowrap;
+    font-size: 0.875rem;
+    text-decoration: none;
+    color: var(--hd-soft);
+    transition: color 0.3s var(--ease);
+  }
+
+  .header__nav a:hover,
+  .header__nav a[aria-current] {
+    color: var(--hd-fg);
+  }
+
+  .header__nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s var(--ease);
+  }
+
+  .header__nav a:hover::after,
+  .header__nav a[aria-current]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .header__cta {
+    min-height: 42px;
+    padding: 0 22px;
+    font-size: 0.875rem;
+  }
+
+  .header__cta-short {
+    display: none;
+  }
+
+  /* ---------- Menú móvil y tablet ---------- */
+
+  .menu-btn {
+    display: none;
+    place-items: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid var(--hd-btn-line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--hd-fg);
+    cursor: pointer;
+    transition:
+      border-color 0.4s var(--ease),
+      background-color 0.4s var(--ease);
+  }
+
+  .menu-btn:hover {
+    border-color: var(--hd-fg);
+  }
+
+  .menu-btn__lines {
+    display: grid;
+    gap: 5px;
+    width: 18px;
+  }
+
+  .menu-btn__lines i {
+    display: block;
+    height: 1.5px;
+    border-radius: 1px;
+    background: currentColor;
+    transition: transform 0.45s var(--ease);
+  }
+
+  .menu-btn[aria-expanded='true'] .menu-btn__lines i:first-child {
+    transform: translateY(3.25px) rotate(45deg);
+  }
+
+  .menu-btn[aria-expanded='true'] .menu-btn__lines i:last-child {
+    transform: translateY(-3.25px) rotate(-45deg);
+  }
+
+  .menu {
+    position: fixed;
+    inset: var(--header-h) 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 40px;
+    padding: clamp(24px, 5vh, 48px) var(--gutter) calc(32px + env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--bg);
+    color: var(--text);
+    border-top: 1px solid var(--hd-line);
+    animation: menu-in 0.5s var(--ease);
+  }
+
+  .menu[hidden] {
+    display: none;
+  }
+
+  .menu__nav ul {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .menu__nav li {
+    border-bottom: 1px solid var(--line);
+    animation: menu-item 0.6s var(--ease) both;
+    animation-delay: calc(var(--i) * 60ms + 80ms);
+  }
+
+  .menu__nav a {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 18px 0;
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  /* Sección en la que estás: cursiva de la marca */
+  .menu__nav a[aria-current] {
+    font-style: italic;
+    color: var(--em);
+  }
+
+  .menu__n {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--number);
+  }
+
+  .menu__foot {
+    display: grid;
+    gap: 20px;
+  }
+
+  .menu__mode {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .menu__foot .btn {
+    width: 100%;
+  }
+
+  .menu__mail {
+    justify-self: center;
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+  }
+
+  @keyframes menu-item {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu,
+    .menu__nav li {
+      animation: none;
+    }
+  }
+
+  /* Hasta 1100 px (móvil y tablet, también en horizontal) se usa el menú compacto */
+  @media (max-width: 1100px) {
+    .header__nav {
+      display: none;
+    }
+    .menu-btn {
+      display: grid;
+    }
+    .header :global(.header__mode) {
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .header__cta-long {
+      display: none;
+    }
+    .header__cta-short {
+      display: inline;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .header {
+      --header-h: 64px;
+    }
+    .header :global(.header__mode) {
+      display: none;
+    }
+    .header__cta {
+      margin-left: auto;
+    }
+    .menu__mode {
+      display: flex;
+    }
+    .menu-btn {
+      width: 38px;
+      height: 38px;
+    }
+    .header__logo {
+      width: 104px;
+    }
+
+    .header__cta {
+      min-height: 38px;
+      padding: 0 16px;
+      font-size: 0.8125rem;
+    }
+    .header__cta-long {
+      display: none;
+    }
+    .header__cta-short {
+      display: inline;
+    }
+  }
+
+  /* Pantallas muy estrechas (320 px): todo cabe sin cortar el texto del botón */
+  @media (max-width: 380px) {
+    .header__bar {
+      gap: 10px;
+    }
+    .header__logo {
+      width: 80px;
+    }
+    .header__cta {
+      padding: 0 12px;
+    }
+  }
+</style>

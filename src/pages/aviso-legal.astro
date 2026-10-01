@@ -1,0 +1,39 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { site } from '../data/site';
+---
+
+<LegalPage title="Aviso legal" description="Datos del titular de femuix.com y condiciones de uso." updated="septiembre de 2026">
+  <h2>Titular de la web</h2>
+  <dl>
+    <dt>Titular</dt>
+    <dd>[Nombre y apellidos o razón social]</dd>
+    <dt>NIF</dt>
+    <dd>[NIF]</dd>
+    <dt>Domicilio</dt>
+    <dd>[Dirección postal], Barcelona</dd>
+    <dt>Email</dt>
+    <dd><a class="text-link" href={`mailto:${site.email}`}>{site.email}</a></dd>
+  </dl>
+
+  <h2>Objeto</h2>
+  <p>
+    Esta web informa sobre el servicio de acompañamiento en reformas de vivienda de Femuix en
+    Barcelona ciudad y permite apuntarse al reto gratuito por email.
+  </p>
+
+  <h2>Propiedad intelectual</h2>
+  <p>
+    Los textos, imágenes, logotipos y el diseño de esta web pertenecen a su titular o se usan con
+    permiso. No se pueden reproducir sin autorización previa por escrito.
+  </p>
+
+  <h2>Responsabilidad</h2>
+  <p>
+    La información de esta web es orientativa. El alcance, los plazos y el precio de cada proyecto se
+    fijan siempre en un contrato firmado antes de empezar.
+  </p>
+
+  <h2>Legislación aplicable</h2>
+  <p>[Legislación y jurisdicción aplicables, a completar por quien redacte los textos legales.]</p>
+</LegalPage>

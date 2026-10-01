@@ -1,0 +1,128 @@
+---
+// Intro de entrada: los tres rombos del isotipo se unen y el telón sube.
+// Solo se muestra si <html> tiene la clase `intro` (una vez por sesión, sin movimiento reducido).
+import { site } from '../data/site';
+---
+
+<div class="intro-screen" aria-hidden="true">
+  <svg class="intro-mark" viewBox="-4 -4 179 179">
+    <path class="d d--left" d="M62.2567 83.1204L84.9967 46.7404L56.5167 1.43044C56.2587 0.997391 55.8927 0.638783 55.4544 0.389741C55.0162 0.1407 54.5207 0.00976562 54.0167 0.00976562C53.5126 0.00976563 53.0172 0.1407 52.5789 0.389741C52.1407 0.638783 51.7747 0.997391 51.5167 1.43044L0.506674 83.1204C0.17547 83.6551 0 84.2715 0 84.9004C0 85.5294 0.17547 86.1458 0.506674 86.6804L51.5067 168.68C51.7627 169.116 52.1281 169.477 52.5666 169.728C53.0051 169.979 53.5015 170.111 54.0067 170.111C54.5119 170.111 55.0083 169.979 55.4468 169.728C55.8853 169.477 56.2506 169.116 56.5067 168.68L84.9967 123.18L62.2567 86.6804C61.9277 86.145 61.7535 85.5289 61.7535 84.9004C61.7535 84.272 61.9277 83.6559 62.2567 83.1204Z"></path>
+    <path class="d d--right" d="M169.566 83.1003L118.266 1.43031C118.01 0.994796 117.645 0.633722 117.206 0.382848C116.768 0.131973 116.271 0 115.766 0C115.261 0 114.764 0.131973 114.326 0.382848C113.887 0.633722 113.522 0.994796 113.266 1.43031L84.9961 46.7403L107.826 83.1003C108.157 83.6388 108.332 84.2584 108.332 84.8903C108.332 85.5222 108.157 86.1418 107.826 86.6803L84.9961 123.18L113.296 168.66C113.55 169.098 113.915 169.462 114.354 169.715C114.792 169.967 115.29 170.1 115.796 170.1C116.302 170.1 116.8 169.967 117.239 169.715C117.677 169.462 118.042 169.098 118.296 168.66L169.596 86.6603C169.921 86.1221 170.09 85.5045 170.084 84.8761C170.079 84.2476 169.9 83.633 169.566 83.1003Z"></path>
+    <path class="d d--center" d="M107.807 83.1002L84.9971 46.7402L62.2571 83.1202C61.9281 83.6557 61.7539 84.2718 61.7539 84.9002C61.7539 85.5287 61.9281 86.1448 62.2571 86.6802L84.9971 123.18L107.837 86.6802C108.163 86.139 108.333 85.5179 108.328 84.886C108.323 84.2541 108.142 83.6359 107.807 83.1002Z"></path>
+  </svg>
+  <p class="intro-tag">Reformas con orden · {site.city}</p>
+</div>
+
+<style>
+  .intro-screen {
+    display: none;
+  }
+
+  :global(html.intro) .intro-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 28px;
+    background: var(--green);
+    pointer-events: none;
+    animation: curtain 1s var(--ease-in-out) 1.25s forwards;
+  }
+
+  /* En Dark UI la cortina de entrada es negra y el símbolo, el de FEMUIX black 2 */
+  :global(html.intro[data-theme='dark']) .intro-screen {
+    background: #000000;
+  }
+
+  :global([data-theme='dark']) .d--left {
+    fill: #4b4e54;
+  }
+
+  :global([data-theme='dark']) .d--right {
+    fill: #838182;
+  }
+
+  .intro-mark {
+    width: clamp(72px, 9vw, 104px);
+    overflow: visible;
+  }
+
+  .d {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+  }
+
+  .d--left {
+    fill: #5d7975;
+    animation: from-left 0.9s var(--ease) 0.1s forwards;
+  }
+
+  .d--right {
+    fill: #919d9d;
+    animation: from-right 0.9s var(--ease) 0.1s forwards;
+  }
+
+  .d--center {
+    fill: #ffffff;
+    animation: pop 0.7s var(--ease) 0.55s forwards;
+  }
+
+  .intro-tag {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--on-dark-strong);
+    opacity: 0;
+    animation: fade 0.8s var(--ease) 0.6s forwards;
+  }
+
+  @keyframes from-left {
+    from {
+      opacity: 0;
+      transform: translateX(-70%);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes from-right {
+    from {
+      opacity: 0;
+      transform: translateX(70%);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fade {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes curtain {
+    to {
+      clip-path: inset(0 0 100% 0);
+      visibility: hidden;
+    }
+  }
+</style>

@@ -1,0 +1,276 @@
+---
+import Icon from './Icon.astro';
+import Isotipo from './Isotipo.astro';
+import Placeholder from './Placeholder.astro';
+import SplitText from './SplitText.astro';
+import { llamada, site, sobreMi } from '../data/site';
+import { fotos, usarMuestras } from '../data/media';
+---
+
+<section class="section band tex-none sobre" id="sobre-mi" data-expand aria-labelledby="sobre-title">
+  <div class="container sobre__grid">
+    <!-- Retrato con la firma superpuesta, como una tarjeta de visita -->
+    <div class="sobre__media">
+      <div class="sobre__frame">
+        <div class="clip-reveal">
+          <div data-parallax="0.08">
+            <Placeholder
+              label="Foto tuya"
+              note="Mirando a cámara, en una obra o en tu mesa de trabajo."
+              ratio="4 / 5"
+              foto={usarMuestras ? fotos.sobreMi : undefined}
+              sizes="(max-width: 640px) 100vw, 40vw"
+            />
+          </div>
+        </div>
+      </div>
+
+      <p class="sobre__sign reveal">
+        <Isotipo class="sobre__mark" />
+        <span class="sobre__sign-text">
+          <span class="sobre__name">Andrea</span>
+          <span class="sobre__role">Fundadora de Femuix · {site.city}</span>
+        </span>
+      </p>
+    </div>
+
+    <div class="sobre__copy">
+      <span class="eyebrow reveal">Por qué yo</span>
+      <SplitText
+        id="sobre-title"
+        class="h-display"
+        parts={[{ text: 'Hola,' }, { text: 'soy Andrea', em: true }]}
+      />
+      <p class="lead reveal">{sobreMi.intro}</p>
+
+      <blockquote class="sobre__quote reveal">
+        <p>{sobreMi.cita}</p>
+      </blockquote>
+
+      <ol class="sobre__pacts">
+        {
+          sobreMi.compromisos.map((c, i) => (
+            <li class="reveal">
+              <span class="sobre__n">0{i + 1}</span>
+              <h3>{c.titulo}</h3>
+              <p>{c.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="sobre__actions reveal">
+        <a class="btn btn--primary" href={llamada.href}>
+          {llamada.hablar}
+          <Icon name="arrow" />
+        </a>
+        <a class="text-link" href="#metodo">Ver cómo trabajo, fase a fase</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sobre__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(48px, 8vw, 128px);
+    align-items: center;
+  }
+
+  /* ---------- Retrato ---------- */
+
+  .sobre__media {
+    position: relative;
+    padding-bottom: 48px;
+  }
+
+  /* Paspartú blanco alrededor de la foto */
+  .sobre__frame {
+    padding: clamp(10px, 1.2vw, 16px);
+    border-radius: calc(var(--radius-lg) + 6px);
+    background: var(--surface);
+    box-shadow: 0 40px 80px -48px rgba(14, 32, 27, 0.55);
+  }
+
+  .sobre__frame .clip-reveal {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Tarjeta de firma que se apoya sobre la esquina de la foto */
+  .sobre__sign {
+    position: absolute;
+    right: clamp(-40px, -3vw, -16px);
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 26px 18px 20px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: 0 24px 48px -28px rgba(14, 32, 27, 0.5);
+  }
+
+  .sobre__sign :global(.sobre__mark) {
+    flex-shrink: 0;
+    width: 40px;
+  }
+
+  .sobre__sign-text {
+    display: grid;
+    gap: 4px;
+  }
+
+  .sobre__name {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .sobre__role {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- Texto ---------- */
+
+  .sobre__copy {
+    display: grid;
+    gap: 28px;
+    justify-items: start;
+  }
+
+  /* Cita: la idea que guía el estudio */
+  .sobre__quote {
+    margin: 4px 0 0;
+    padding: 2px 0 2px 16px;
+    border-left: 2px solid var(--gold-line);
+  }
+
+  .sobre__quote p {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--em);
+  }
+
+  /* Compromisos en tres tarjetas */
+  .sobre__pacts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sobre__pacts li {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 22px 20px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  :global([data-theme='dark']) .sobre__pacts li {
+    border-color: rgba(131, 129, 130, 0.35);
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .sobre__n {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--number);
+  }
+
+  .sobre__pacts h3 {
+    font-size: 1.1875rem;
+    line-height: 1.25;
+  }
+
+  .sobre__pacts p {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .sobre__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    margin-top: 4px;
+  }
+
+  /* Hasta escritorio grande los compromisos van en lista: número a la izquierda */
+  @media (max-width: 1280px) {
+    .sobre__pacts {
+      grid-template-columns: 1fr;
+    }
+    .sobre__pacts li {
+      grid-template-columns: 40px 1fr;
+      column-gap: 12px;
+      row-gap: 4px;
+    }
+    .sobre__pacts p {
+      grid-column: 2;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .sobre__grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: start;
+      gap: clamp(32px, 5vw, 48px);
+    }
+    .sobre__sign {
+      right: 12px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sobre__grid {
+      grid-template-columns: 1fr;
+    }
+    .sobre__media {
+      max-width: 420px;
+    }
+    .sobre__sign {
+      left: 12px;
+      right: 12px;
+      gap: 12px;
+      padding: 14px 18px 14px 14px;
+    }
+    .sobre__sign :global(.sobre__mark) {
+      width: 30px;
+    }
+    .sobre__name {
+      font-size: 1.25rem;
+    }
+    .sobre__role {
+      font-size: 0.625rem;
+      letter-spacing: 0.12em;
+    }
+    .sobre__actions .btn {
+      width: 100%;
+    }
+  }
+</style>

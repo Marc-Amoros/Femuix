@@ -1,0 +1,198 @@
+---
+import Isotipo from './Isotipo.astro';
+import { fotoSrcset, fotoUrl, type Foto } from '../data/media';
+
+// Hueco reservado para fotografía. Si recibe `foto`, muestra la imagen; si no, el hueco con su nota.
+interface Props {
+  label: string;
+  note?: string;
+  ratio?: string;
+  tone?: 'light' | 'dark';
+  icon?: 'photo' | 'play' | 'quote';
+  foto?: Foto;
+  sizes?: string; // ancho con el que se muestra, para que el navegador elija el tamaño justo
+  eager?: boolean; // true para la foto de portada (se carga de inmediato)
+  class?: string;
+}
+
+const {
+  label,
+  note,
+  ratio = '4 / 5',
+  tone = 'light',
+  icon = 'photo',
+  foto,
+  sizes = '(max-width: 900px) 100vw, 50vw',
+  eager = false,
+  class: className,
+} = Astro.props;
+---
+
+<figure class:list={['ph', `ph--${tone}`, { 'ph--photo': foto }, className]} style={`aspect-ratio: ${ratio}`}>
+  {
+    foto ? (
+      <img
+        class="ph__img"
+        src={fotoUrl(foto.id, 1200)}
+        srcset={fotoSrcset(foto.id)}
+        sizes={sizes}
+        alt={foto.alt}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        decoding="async"
+      />
+    ) : (
+  <div class="ph__inner">
+    {
+      icon === 'play' ? (
+        <span class="ph__play" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5.5v13l10.5-6.5z" />
+          </svg>
+        </span>
+      ) : icon === 'quote' ? (
+        <span class="ph__mark ph__mark--quote" aria-hidden="true">“</span>
+      ) : (
+        <Isotipo class="ph__mark" tone={tone === 'dark' ? 'light' : 'auto'} />
+      )
+    }
+    <figcaption>
+      <span class="ph__label">{label}</span>
+      {note && <span class="ph__note">{note}</span>}
+    </figcaption>
+  </div>
+    )
+  }
+</figure>
+
+<style>
+  .ph {
+    --ph-fg: var(--text); /* notas de 13 px: negro, 14:1 sobre la bruma suave */
+    --ph-frame: var(--line);
+    position: relative;
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: radial-gradient(120% 90% at 28% 18%, var(--ph-a) 0%, var(--ph-b) 55%, var(--ph-c) 100%);
+    color: var(--ph-fg);
+  }
+
+  .ph--dark {
+    --ph-fg: var(--on-dark-strong);
+    --ph-frame: rgba(201, 217, 213, 0.14);
+    background: radial-gradient(120% 90% at 28% 18%, var(--pine-600) 0%, var(--pine-700) 50%, var(--pine-900) 100%);
+  }
+
+  :global([data-theme='dark']) .ph--dark {
+    --ph-frame: rgba(131, 129, 130, 0.3);
+    background: radial-gradient(120% 90% at 28% 18%, var(--g-700) 0%, var(--g-800) 50%, var(--g-900) 100%);
+  }
+
+  /* Con foto: la imagen llena el hueco (un poco más alta para el efecto parallax) */
+  .ph--photo {
+    background: var(--tint);
+  }
+
+  .ph__img {
+    position: absolute;
+    inset: -6% 0;
+    width: 100%;
+    height: 112%;
+    object-fit: cover;
+    /* Tono ligeramente apagado: unifica fotos de distinta procedencia con la paleta */
+    filter: saturate(0.92) contrast(1.02);
+    transition: transform 1.8s var(--ease);
+  }
+
+  .ph--photo:hover .ph__img {
+    transform: scale(1.03);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ph__img {
+      transition: none;
+    }
+    .ph--photo:hover .ph__img {
+      transform: none;
+    }
+  }
+
+  .ph--photo::after {
+    display: none;
+  }
+
+  /* Paspartú: marco fino interior, como una lámina enmarcada */
+  .ph::after {
+    content: '';
+    position: absolute;
+    inset: clamp(10px, 1.4vw, 18px);
+    border: 1px solid var(--ph-frame);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+
+  .ph__inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 20px;
+    padding: 32px;
+    text-align: center;
+  }
+
+  .ph :global(.ph__mark) {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ph__mark--quote {
+    font-family: var(--serif);
+    font-size: 5rem;
+    line-height: 0.6;
+    height: 36px;
+    opacity: 0.6;
+  }
+
+  .ph__play {
+    display: grid;
+    place-items: center;
+    width: clamp(72px, 8vw, 104px);
+    height: clamp(72px, 8vw, 104px);
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--green);
+    transition: transform 0.6s var(--ease);
+  }
+
+  .ph__play svg {
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+  }
+
+  .ph:hover .ph__play {
+    transform: scale(1.1);
+  }
+
+  figcaption {
+    display: grid;
+    gap: 8px;
+    max-width: 34ch;
+  }
+
+  .ph__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .ph__note {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    opacity: 0.85;
+  }
+</style>

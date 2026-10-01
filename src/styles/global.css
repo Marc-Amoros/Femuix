@@ -1,0 +1,877 @@
+@import '@fontsource-variable/inter/index.css';
+@import 'lenis/dist/lenis.css';
+
+/* Merriweather (títulos): peso ligero 300 con tamaño óptico variable, recortada a caracteres latinos */
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/merriweather.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Merriweather';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/merriweather-italic.woff2') format('woff2');
+}
+
+/*
+  Paleta 60 / 30 / 10
+  60 % blanco      #FFFFFF → fondo y espacio en blanco
+  30 % bruma       #A4BCC2 → secciones de apoyo (.band), alternas con las blancas
+                             para marcar el ritmo de lectura
+  10 % verde pino  #1D3C34 → detalles: botones, numeración, filetes, iconos, sello
+                             y el pie. Poco y bien colocado: es lo que da el lujo.
+
+  Texto: negro #111111 en títulos y párrafos; gris carbón para el texto secundario
+  (#4A4A4A sobre blanco, #2E2E2E sobre bruma, ambos por encima de 4,5:1).
+
+  Dos modos (atributo data-theme en <html>):
+  White   → como arriba.
+  Dark UI → negro puro y escala de grises (FEMUIX black 2): bandas y pie en #101820,
+            detalles en #D0D3D4 / #9EA2A2, texto casi blanco y el logotipo black 2.
+*/
+:root {
+  color-scheme: light;
+
+  /* Escala del verde pino: 800 es el color de marca */
+  --pine-950: #0e201b;
+  --pine-900: #152d27;
+  --pine-800: #1d3c34;
+  --pine-700: #264a41;
+  --pine-600: #375d53;
+  --pine-500: #527a70;
+  --pine-400: #769e93;
+  --pine-300: #a3bdb6;
+  --pine-200: #d3e0dc; /* texto secundario sobre pino: 7,4:1 también sobre el brillo */
+  --pine-100: #e1eae8;
+  --pine-50: #f0f5f3;
+  --mint: #f9fbfa;
+
+  /* Colores del símbolo: la bruma es el 30 % */
+  --petrol: #487a7b;
+  --petrol-deep: #335f60; /* petróleo para texto pequeño y fondo de la banda del método: 7,1:1 con blanco */
+  --mist: #a4bcc2;
+  --mist-soft: #dbe5e8; /* bruma rebajada: superficies suaves sobre blanco */
+  --mist-faint: #eff4f5;
+
+  /* De la guía de color de interiorismo */
+  --burdeos: #ab464e; /* errores sobre claro (5,4:1) */
+  --rosa-empolvado: #e8ced1; /* errores sobre verde (8,1:1) */
+
+  /* Colores de marca: no cambian con el modo */
+  --green: var(--pine-800);
+  --white: #ffffff;
+  --accent: var(--mist); /* marca de enlaces, selección y CTA sobre verde */
+  --green-2: var(--pine-700); /* superficie sobre verde */
+  --on-dark-strong: #ffffff; /* cursivas y destacados sobre verde */
+  --on-dark-muted: var(--pine-200);
+  --line-dark: rgba(201, 217, 213, 0.18);
+
+  /* Colores del modo: cambian en Dark UI */
+  --bg: var(--white); /* fondo dominante (60 %) */
+  --band: var(--mist); /* secciones de apoyo (30 %) */
+  --ink: var(--pine-800); /* detalles en verde pino (10 %) */
+  --text: #111111; /* títulos y párrafos */
+  --muted: #4a4a4a; /* texto secundario, gris carbón (8,9:1) */
+  --surface: var(--white); /* tarjetas */
+  --deep: var(--pine-800); /* bloques en verde (.on-dark): pie, sello, portal */
+  --deep-glow: #24483f; /* brillo del pino en los bloques verdes: suave para no restar contraste */
+  --tint: var(--mist-faint); /* superficies suaves */
+  --warm: #dac499; /* dorado: crema tostada (guía de interiorismo) */
+  --gold-line: #b8955a; /* dorado intenso para filetes y rombos finos sobre blanco */
+  --gold-deep: #8c6d35; /* bronce: cifras y cursivas doradas sobre blanco (4,8:1) */
+  /* Filete entre secciones blancas: los verdes del símbolo, desvanecidos en los bordes */
+  --divider: linear-gradient(
+    90deg,
+    transparent,
+    rgba(72, 122, 123, 0.55) 22%,
+    var(--pine-800) 50%,
+    rgba(72, 122, 123, 0.55) 78%,
+    transparent
+  );
+  --mark: var(--warm); /* marca de los enlaces al pasar el ratón (texto negro: 11:1) */
+  --em: var(--petrol); /* cursivas de los titulares: azul petróleo del símbolo (4,8:1) */
+  --em-text: var(--petrol-deep); /* petróleo para texto de menos de 24 px: 7,1:1 */
+  /* Bruma con luz: claro arriba a la izquierda, petróleo suave abajo a la derecha */
+  --band-image:
+    radial-gradient(75% 60% at 0% 0%, rgba(255, 255, 255, 0.42), transparent 70%),
+    radial-gradient(60% 60% at 100% 100%, rgba(72, 122, 123, 0.12), transparent 70%);
+  --line: rgba(29, 60, 52, 0.13);
+  --line-strong: rgba(29, 60, 52, 0.28);
+  --number: var(--pine-800); /* numeración: índices, 01/02/03… */
+  --line-ui: var(--pine-500); /* bordes de campos y botones: ≥3:1 (WCAG 1.4.11) */
+  --error: var(--burdeos);
+  --fill-dim: #707070; /* frase que se ilumina, antes de encenderse: ya legible (4,9:1) */
+
+  /* Botón principal (CTA): verde pino con texto blanco (12:1); al pasar el ratón se
+     vacía a blanco con filete verde */
+  --cta-bg: var(--pine-800);
+  --cta-fg: var(--white);
+  --cta-hover-bg: var(--warm); /* al pasar el ratón, el CTA se rellena de dorado (7:1) */
+  --cta-hover-fg: var(--pine-800);
+  --cta-hover-line: var(--warm);
+  --ph-a: var(--white); /* degradado de los huecos de imagen */
+  --ph-b: var(--mist-faint);
+  --ph-c: var(--mist-soft);
+
+  --serif: 'Merriweather', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --container: 1240px;
+  --gutter: clamp(20px, 5vw, 64px);
+  --section: clamp(88px, 11vw, 160px);
+  --radius: 4px;
+  --radius-lg: clamp(8px, 0.8vw, 12px); /* esquinas más arquitectónicas */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+/* Dark UI «grafito y oro»: negro puro, los grises del símbolo FEMUIX black 2 y el dorado.
+   60 % negro #000000 · 30 % grafito #1F2024 (bandas, pie, sello, portal) con un brillo del
+   gris #4B4E54 · 10 % detalles: grises #4B4E54 / #838182 (filetes, bloques, tarjetas) y
+   dorado #DAC499 / #B8955A (cursivas, números, rombos, botones al pasar el ratón). */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --g-ink: #101820; /* Pantone Black 6 C */
+  --g-900: #1f2024; /* grafito: el #4B4E54 llevado a casi negro */
+  --g-800: #2b2d31;
+  --g-700: #4b4e54; /* pieza izquierda del símbolo, black 2 */
+  --g-500: #838182; /* pieza derecha del símbolo, black 2 */
+  --g-400: #9ea2a2; /* Pantone 422 C */
+  --g-200: #d0d3d4; /* Pantone 427 C */
+  --bg: #000000;
+  --band: var(--g-900);
+  --green: var(--g-900);
+  --green-2: var(--g-700);
+  --accent: var(--g-200);
+  --on-dark-muted: var(--g-200);
+  --line-dark: rgba(255, 255, 255, 0.14);
+  --ink: var(--g-200); /* detalles: 13,8:1 sobre negro */
+  --text: #f5f5f5; /* 19:1 */
+  --muted: var(--g-400); /* 8,1:1 sobre negro */
+  --surface: #000000; /* tarjetas negras sobre las bandas */
+  --deep: var(--g-900);
+  --deep-glow: var(--g-800); /* brillo suave: el texto gris claro sigue en 9:1 */
+  --tint: #161616;
+  --mark: var(--g-700); /* texto blanco encima: 8,3:1 */
+  --warm: #dac499; /* dorado: 12:1 sobre negro */
+  --em: var(--warm); /* cursivas de los titulares en dorado, como el acento del modo día */
+  --em-text: var(--warm);
+  --gold-line: #b8955a; /* filetes y rombos dorados: 7,5:1 sobre negro */
+  --gold-deep: var(--warm);
+  --divider: linear-gradient(
+    90deg,
+    transparent,
+    rgba(131, 129, 130, 0.6) 22%,
+    var(--gold-line) 50%,
+    rgba(131, 129, 130, 0.6) 78%,
+    transparent
+  );
+  /* Grafito con luz gris arriba a la izquierda y un toque dorado abajo a la derecha */
+  --band-image:
+    radial-gradient(75% 60% at 0% 0%, rgba(75, 78, 84, 0.45), transparent 70%),
+    radial-gradient(60% 60% at 100% 100%, rgba(218, 196, 153, 0.07), transparent 70%);
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.24);
+  --number: var(--warm); /* numeración en dorado */
+  --line-ui: var(--g-500); /* 5,4:1 sobre negro, ≥3:1 sobre el grafito */
+  --error: var(--rosa-empolvado);
+  --fill-dim: #7a7a7a; /* 4,8:1 sobre negro, texto grande, antes de encenderse */
+  --cta-bg: var(--white); /* CTA blanco con texto negro: 21:1 */
+  --cta-fg: #000000;
+  --cta-hover-bg: var(--warm); /* al pasar el ratón se llena de dorado: 12:1 */
+  --cta-hover-fg: #000000;
+  --cta-hover-line: var(--warm);
+  --ph-a: #2b2d31;
+  --ph-b: #1f2024;
+  --ph-c: #000000;
+}
+
+:root[data-theme='dark'] ::selection {
+  background: var(--warm);
+  color: #000000;
+}
+
+/* Bandas de bruma (30 %): el texto secundario se oscurece y filetes, campos y números
+   pasan a verde pino para mantener el contraste sobre #A4BCC2 */
+.band {
+  --muted: #1f1f1f; /* 7,5:1 sobre la bruma, también en su zona más oscura */
+  --number: #0f2620; /* pino profundo para números y etiquetas pequeñas: 7,2:1 */
+  --line: rgba(29, 60, 52, 0.2);
+  --line-strong: rgba(29, 60, 52, 0.42);
+  --line-ui: var(--pine-800);
+  --mark: var(--white);
+  --em: var(--pine-800); /* sobre bruma, cursivas en verde pino (6:1) */
+  --error: #420f16; /* burdeos profundo: 7,3:1 también en la zona más oscura de la bruma */
+  --fill-dim: #3f5256; /* 4,6:1 sobre bruma antes de encenderse */
+  background: var(--band-image), var(--band);
+  color: var(--text);
+}
+
+/* Banda petróleo solo en White, en su tono profundo (#335F60) para que se lea bien:
+   texto blanco 7,1:1 y cursivas en dorado claro 5,1:1. El fondo solo se oscurece hacia el
+   pino, nunca se aclara. */
+:root:not([data-theme='dark']) .band--teal {
+  --text: #ffffff;
+  --muted: #ffffff;
+  --ink: #ffffff;
+  --number: #ffffff;
+  --em: #ead9b0;
+  --line: rgba(255, 255, 255, 0.28);
+  --line-strong: rgba(255, 255, 255, 0.5);
+  --line-ui: #ffffff;
+  --mark: var(--pine-800);
+  background:
+    radial-gradient(90% 80% at 100% 100%, rgba(29, 60, 52, 0.5), transparent 70%),
+    radial-gradient(60% 50% at 0% 0%, rgba(29, 60, 52, 0.18), transparent 70%), var(--petrol-deep);
+  color: #ffffff;
+}
+
+:root:not([data-theme='dark']) .band--teal :focus-visible {
+  outline-color: #ffffff;
+}
+
+/* En Dark UI las bandas son negro azulado #101820 sobre el negro */
+:root[data-theme='dark'] .band {
+  --em: var(--warm); /* dorado: 7,2:1 en la zona más clara del grafito (sin esto heredaría el pino) */
+  --error: var(--rosa-empolvado);
+  --muted: var(--g-200); /* 8:1 también sobre el brillo gris */
+  --number: var(--warm);
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.24);
+  --line-ui: var(--g-500);
+  --mark: var(--g-700);
+  --fill-dim: #8a8a8a; /* 4,6:1 sobre el grafito, texto grande */
+}
+
+/* Sobre verde (pie, sello y portal) la numeración usa la bruma y el botón principal pasa
+   a blanco con texto verde (12:1) */
+.on-dark {
+  --number: var(--mist);
+  --line-ui: var(--pine-400);
+  --error: var(--rosa-empolvado);
+  --mark: var(--pine-600);
+  --cta-bg: var(--white);
+  --cta-fg: var(--pine-800);
+  --cta-hover-bg: var(--mist);
+  --cta-hover-fg: var(--pine-800);
+  --cta-hover-line: var(--mist);
+}
+
+/* En Dark UI los bloques (pie, sello, portal) son grafito con números y acentos dorados */
+:root[data-theme='dark'] .on-dark {
+  --number: var(--warm);
+  --line-ui: var(--g-500);
+  --mark: var(--g-700);
+  --cta-bg: var(--white);
+  --cta-fg: #000000;
+  --cta-hover-bg: var(--warm);
+  --cta-hover-fg: #000000;
+  --cta-hover-line: var(--warm);
+}
+
+/* Logotipo y símbolo según el modo: verde o negativo en White, FEMUIX black 2 en Dark UI
+   (ver Logo.astro e Isotipo.astro) */
+:root[data-theme='dark'] .only-light,
+:root:not([data-theme='dark']) .only-dark {
+  display: none;
+}
+
+/* Cambio de modo: el nuevo tema se descubre en círculo desde el botón (motion en Header.astro) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+  -webkit-text-size-adjust: 100%;
+}
+
+html.lenis {
+  scroll-behavior: auto;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+/* Grano de papel: en modo overlay el blanco puro no cambia y los verdes ganan textura */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+  line-height: 1.14;
+  color: inherit;
+  text-wrap: balance;
+}
+
+h1 em,
+h2 em,
+h3 em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--em);
+}
+
+.on-dark h1 em,
+.on-dark h2 em,
+.on-dark h3 em {
+  color: var(--on-dark-strong);
+}
+
+:root[data-theme='dark'] .on-dark :is(h1, h2, h3) em {
+  color: var(--warm);
+}
+
+p {
+  margin: 0;
+}
+
+/* Párrafos y listas sin palabras sueltas al final de línea */
+p,
+li {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+}
+
+/* Enlaces dentro de texto: filete verde siempre; al pasar el ratón, marca de bruma */
+.text-link {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  background: linear-gradient(var(--mark), var(--mark)) left bottom / 100% 0 no-repeat;
+  transition: background-size 0.4s var(--ease);
+}
+
+.text-link:hover {
+  background-size: 100% 100%;
+}
+
+::selection {
+  background: var(--warm);
+  color: #111111;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* ---------- Layout ---------- */
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--section);
+}
+
+.on-dark {
+  background-color: var(--deep);
+  background-image: radial-gradient(120% 60% at 50% 0%, var(--deep-glow) 0%, transparent 70%);
+  color: var(--white);
+}
+
+/* Secciones que se abren de tarjeta a ancho completo al entrar (motion.ts escribe --e) */
+.js [data-expand] {
+  clip-path: inset(0 calc((1 - var(--e, 1)) * 4vw) round calc((1 - var(--e, 1)) * 28px));
+}
+
+/* Foco blanco sobre fondos verdes (WCAG 2.4.7) */
+.on-dark :focus-visible {
+  outline-color: var(--white);
+}
+
+/* Dos secciones blancas seguidas: un filete con un rombo verde, que recuerda al símbolo,
+   marca el compás entre ellas */
+.section:not(.band, .on-dark) + .section:not(.band, .on-dark) {
+  position: relative;
+}
+
+.section:not(.band, .on-dark) + .section:not(.band, .on-dark)::before,
+.section:not(.band, .on-dark) + .section:not(.band, .on-dark)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+}
+
+.section:not(.band, .on-dark) + .section:not(.band, .on-dark)::before {
+  width: calc(min(var(--container), 100% - var(--gutter) * 2));
+  height: 1px;
+  background: var(--divider);
+  transform: translateX(-50%);
+}
+
+.section:not(.band, .on-dark) + .section:not(.band, .on-dark)::after {
+  width: 7px;
+  height: 7px;
+  background: var(--gold-line);
+  outline: 6px solid var(--bg);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* ---------- Textura: celosía de rombos ----------
+   Rombos con la proporción 1:2 del símbolo, en blanco, que suben desde abajo en las bandas
+   de bruma (vídeo y formulario del reto). Decorativa y detrás del contenido.
+   Además, todo el sitio lleva un grano de papel (body::after). */
+:root {
+  --tex-lattice: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='80'%3E%3Cpath d='M20 0.5L39.5 40L20 79.5L0.5 40Z' fill='none' stroke='%23FFFFFF' stroke-width='1'/%3E%3C/svg%3E");
+  --tex-lattice-op: 0.35;
+}
+
+:root[data-theme='dark'] {
+  --tex-lattice-op: 0.09;
+}
+
+.band {
+  position: relative;
+  isolation: isolate;
+}
+
+.band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--tex-lattice);
+  background-size: 40px 80px;
+  background-position: center bottom;
+  opacity: var(--tex-lattice-op);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.5) 18%, transparent 40%);
+  mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.5) 18%, transparent 40%);
+}
+
+/* Bandas sin textura (método y sobre mí) */
+.band.tex-none::before {
+  display: none;
+}
+
+/* ---------- Tipografía ---------- */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.on-dark .eyebrow {
+  color: var(--on-dark-strong);
+}
+
+main {
+  counter-reset: seccion;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+
+main .eyebrow {
+  counter-increment: seccion;
+}
+
+main .eyebrow::before {
+  content: counter(seccion, decimal-leading-zero);
+  color: var(--number);
+  width: auto;
+  height: auto;
+  padding-right: 40px;
+  /* Filete dorado entre el número y el texto */
+  background: linear-gradient(var(--gold-line), var(--gold-line)) right center / 28px 1px no-repeat;
+  font-variant-numeric: tabular-nums;
+}
+
+.h-display {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.h-section {
+  font-size: clamp(2rem, 4.2vw, 3.7rem);
+}
+
+.lead {
+  font-size: clamp(1.0625rem, 1.3vw, 1.225rem);
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 36em;
+}
+
+.on-dark .lead {
+  color: var(--on-dark-muted);
+}
+
+.section-head {
+  display: grid;
+  gap: 24px;
+  margin-bottom: clamp(56px, 7vw, 96px);
+}
+
+/* ---------- Botones ---------- */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 30px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  isolation: isolate;
+  transition:
+    color 0.5s var(--ease),
+    border-color 0.5s var(--ease),
+    transform 0.5s var(--ease);
+}
+
+/* Microinteracciones de los botones, con una sola lógica:
+   - el relleno entra por abajo y, al salir el ratón, sigue subiendo y se va por arriba;
+   - el texto rueda hacia arriba y la flecha avanza, en el mismo sentido y al mismo ritmo;
+   - con teclado (foco) pasa lo mismo que con el ratón;
+   - en pantallas táctiles no hay hover que se quede «pegado»: al pulsar, el botón se hunde. */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: transform 0.6s var(--ease);
+}
+
+.roll {
+  display: inline-block;
+  height: 1.3em;
+  height: 1lh;
+  overflow: hidden;
+  line-height: 1.3;
+  vertical-align: middle;
+}
+
+.roll__in {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.6s var(--ease);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.6s var(--ease);
+}
+
+.btn:active {
+  transform: scale(0.97);
+  transition-duration: 0.15s;
+}
+
+@media (hover: hover) {
+  .btn:hover::before {
+    transform: scaleY(1);
+    transform-origin: 50% 100%;
+  }
+  .btn:hover .roll__in {
+    transform: translateY(-50%);
+  }
+  .btn:hover svg {
+    transform: translateX(4px);
+  }
+}
+
+.btn:focus-visible::before {
+  transform: scaleY(1);
+  transform-origin: 50% 100%;
+}
+
+.btn:focus-visible .roll__in {
+  transform: translateY(-50%);
+}
+
+.btn:focus-visible svg {
+  transform: translateX(4px);
+}
+
+/* CTA: verde pino con texto crema sobre claro; crema con texto verde sobre verde
+   (los colores salen de los tokens --cta-* de cada contexto) */
+.btn--primary {
+  background: var(--cta-bg);
+  color: var(--cta-fg);
+}
+
+.btn--primary::before {
+  background: var(--cta-hover-bg);
+}
+
+.btn--primary:focus-visible {
+  color: var(--cta-hover-fg);
+  border-color: var(--cta-hover-line);
+}
+
+.btn--ghost {
+  border-color: var(--line-ui);
+  color: var(--ink);
+}
+
+.btn--ghost::before {
+  background: var(--ink);
+}
+
+.btn--ghost:focus-visible {
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.btn--light {
+  background: var(--white);
+  color: var(--green);
+}
+
+.btn--light::before {
+  background: var(--green);
+}
+
+.btn--light:focus-visible {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+@media (hover: hover) {
+  .btn--primary:hover {
+    color: var(--cta-hover-fg);
+    border-color: var(--cta-hover-line);
+  }
+  .btn--ghost:hover {
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .btn--light:hover {
+    color: var(--white);
+    border-color: var(--white);
+  }
+}
+
+/* ---------- Animaciones de entrada ---------- */
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(8px);
+  transition:
+    opacity 1.4s var(--ease),
+    transform 1.4s var(--ease),
+    filter 1.4s var(--ease);
+  transition-delay: calc(var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Imagen que se descubre de abajo arriba */
+.js .clip-reveal {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.5s var(--ease-in-out);
+  transition-delay: calc(var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
+}
+
+.js .clip-reveal > * {
+  transform: scale(1.18);
+  transition: transform 2s var(--ease);
+  transition-delay: calc(var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
+}
+
+.js .clip-reveal.is-visible {
+  clip-path: inset(0 0 0 0);
+}
+
+.js .clip-reveal.is-visible > * {
+  transform: none;
+}
+
+/* Titulares palabra a palabra (ver SplitText.astro) */
+/* Cada palabra recorta su contenido para el efecto de aparición. El margen interior deja sitio a
+   lo que sobresale en cursiva («?», «f», «j»…) y el margen negativo lo compensa sin mover nada */
+.split .w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.24em 0.14em 0.06em;
+  margin: 0 -0.24em -0.14em -0.06em;
+}
+
+.split .w > span {
+  display: inline-block;
+}
+
+.js .split .w > span {
+  transform: translateY(110%);
+  transition: transform 1.2s var(--ease);
+  transition-delay: calc(var(--i) * 45ms + var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
+}
+
+.js .split.is-visible .w > span {
+  transform: none;
+}
+
+.intro .hero {
+  --base: 1600ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js .reveal,
+  .js .clip-reveal,
+  .js .clip-reveal > *,
+  .js .split .w > span {
+    opacity: 1;
+    clip-path: none;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+  .js [data-expand] {
+    clip-path: none;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+
+/* ---------- Preferencias del sistema ----------
+   Contraste alto: filetes y texto secundario más fuertes y sin texturas.
+   Colores forzados (Windows): botones con borde, sin rellenos decorativos. */
+@media (prefers-contrast: more) {
+  :root {
+    --muted: #2b2b2b;
+    --line: rgba(29, 60, 52, 0.45);
+    --line-strong: rgba(29, 60, 52, 0.75);
+    --line-ui: var(--pine-800);
+    --fill-dim: #5c5c5c;
+  }
+
+  :root[data-theme='dark'] {
+    --muted: #d0d3d4;
+    --line: rgba(255, 255, 255, 0.45);
+    --line-strong: rgba(255, 255, 255, 0.75);
+    --line-ui: #d0d3d4;
+    --fill-dim: #9ea2a2;
+  }
+
+  .band {
+    --muted: #1a1a1a;
+  }
+
+  body::after,
+  .band::before {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  body::after,
+  .band::before,
+  .hero__media::before,
+  .hero__media::after {
+    display: none;
+  }
+
+  .btn {
+    border: 1px solid ButtonText;
+  }
+
+  .btn::before {
+    display: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid Highlight;
+  }
+}

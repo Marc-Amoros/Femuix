@@ -1,0 +1,43 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { site } from '../data/site';
+---
+
+<LegalPage
+  title="Accesibilidad"
+  description="Compromiso de accesibilidad de femuix.com: pautas WCAG 2.1 nivel AA."
+  updated="septiembre de 2026"
+  draft={false}
+>
+  <h2>Compromiso</h2>
+  <p>
+    Quiero que cualquier persona pueda informarse y apuntarse al reto, use el dispositivo que use y
+    tenga o no alguna discapacidad. Esta web se ha diseñado y revisado siguiendo las Pautas de
+    Accesibilidad para el Contenido Web (WCAG) 2.1, nivel AA.
+  </p>
+
+  <h2>Qué se ha cuidado</h2>
+  <ul>
+    <li>Contraste suficiente entre texto y fondo, en modo claro y en modo oscuro.</li>
+    <li>Toda la web se puede usar solo con el teclado, con el foco siempre visible.</li>
+    <li>Titulares, listas, formularios y preguntas con la estructura correcta para lectores de pantalla.</li>
+    <li>El formulario indica qué campo falta o es incorrecto y cómo corregirlo.</li>
+    <li>Nada se mueve solo: los efectos acompañan al scroll y se desactivan si tu sistema pide reducir el movimiento.</li>
+    <li>El texto se puede ampliar hasta el 200 % y la web se adapta a pantallas de 320 px sin desplazamiento horizontal.</li>
+    <li>Botones y enlaces con un área de pulsación cómoda (más de 40 px de alto) y un enlace «Saltar al contenido» al empezar a tabular.</li>
+    <li>El vídeo no se reproduce solo y tiene una descripción en texto justo debajo.</li>
+    <li>Si tu sistema pide más contraste o usa colores forzados, la web los respeta.</li>
+  </ul>
+
+  <h2>Pendiente</h2>
+  <p>
+    Cuando se incorporen las fotografías y el vídeo definitivos, tendrán texto alternativo, subtítulos
+    incrustados y transcripción completa.
+  </p>
+
+  <h2>¿Algo no funciona?</h2>
+  <p>
+    Si encuentras cualquier barrera, escríbeme a{' '}
+    <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>{' '}y lo resuelvo.
+  </p>
+</LegalPage>

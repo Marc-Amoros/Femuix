@@ -1,0 +1,394 @@
+---
+import SplitText from './SplitText.astro';
+import { fases, principios } from '../data/site';
+---
+
+<section class="section" id="como-trabajo" aria-labelledby="como-title">
+  <div class="container">
+    <div class="section-head como__head">
+      <span class="eyebrow reveal">Cómo trabajo</span>
+      <SplitText
+        id="como-title"
+        class="h-section"
+        parts={[{ text: 'Orden, por escrito' }, { text: 'y en un solo sitio', em: true }]}
+      />
+    </div>
+
+    <ul class="principios">
+      {
+        principios.map((p, i) => (
+          <li class="reveal">
+            <span class="principios__n">0{i + 1}</span>
+            <h3>{p.titulo}</h3>
+            <p>{p.texto}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <!-- Ilustración del portal de cliente. Sustituir por 2–3 capturas reales anonimizadas. -->
+  <div class="container">
+    <figure class="portal on-dark">
+      <div class="portal__stage" data-scrub aria-hidden="true">
+        <div class="portal__window">
+          <div class="portal__bar" aria-hidden="true">
+            <span></span><span></span><span></span>
+            <div class="portal__url">portal.femuix.com</div>
+          </div>
+
+          <div class="portal__body">
+            <aside class="portal__side" aria-hidden="true">
+              <div class="portal__brand"></div>
+              <div class="portal__nav is-active">Plan por fases</div>
+              <div class="portal__nav">Cronograma</div>
+              <div class="portal__nav">Documentos</div>
+              <div class="portal__nav">Decisiones</div>
+            </aside>
+
+            <div class="portal__main">
+              <div class="portal__title">Plan por fases</div>
+              <div class="portal__phases">
+                {
+                  fases.map((f, i) => (
+                    <div class:list={['portal__phase', { 'is-current': i === 1 }]}>
+                      <span class="portal__phase-n">{f.n}</span>
+                      <span class="portal__phase-name">{f.nombre}</span>
+                      <span class="portal__phase-bar">
+                        <i style={`--w: ${i < 1 ? 1 : i === 1 ? 0.55 : 0}`} />
+                      </span>
+                    </div>
+                  ))
+                }
+              </div>
+
+              <div class="portal__row">
+                <div class="portal__card">
+                  <div class="portal__card-title">Cronograma</div>
+                  <div class="portal__gantt" aria-hidden="true">
+                    <i style="--s: 0%; --w: 22%"></i>
+                    <i style="--s: 20%; --w: 30%"></i>
+                    <i style="--s: 48%; --w: 28%"></i>
+                    <i style="--s: 74%; --w: 26%"></i>
+                  </div>
+                </div>
+                <div class="portal__card">
+                  <div class="portal__card-title">Documentos</div>
+                  <ul class="portal__docs" aria-hidden="true">
+                    <li>Contrato firmado</li>
+                    <li>Planos de estado actual</li>
+                    <li>Propuesta de distribución</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="reveal">
+        El portal de cliente: el plan por fases, el cronograma y la carpeta de documentos, siempre
+        al día.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .como__head {
+    max-width: 760px;
+  }
+
+  .principios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(32px, 6vw, 96px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .principios li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    column-gap: 16px;
+    row-gap: 12px;
+    padding: 36px 0 44px;
+  }
+
+  /* Línea superior que se dibuja al aparecer */
+  .principios li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--line-strong);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.4s var(--ease) calc(var(--stagger, 0ms) + 150ms);
+  }
+
+  .principios li:global(.is-visible)::before {
+    transform: none;
+  }
+
+  .principios__n {
+    grid-row: span 2;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--gold-deep);
+  }
+
+  .principios h3 {
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    line-height: 1.2;
+  }
+
+  .principios p {
+    color: var(--muted);
+    max-width: 42ch;
+  }
+
+  /* ---------- Portal (ilustración) ---------- */
+
+  :global(:root:not([data-theme='dark'])) .portal {
+    --deep-glow: var(--pine-700); /* brillo del portal: el pie de foto llega a 7,2:1 */
+  }
+
+  .portal {
+    margin: clamp(56px, 7vw, 96px) 0 0;
+    padding: clamp(32px, 6vw, 96px) clamp(16px, 5vw, 80px) clamp(28px, 4vw, 48px);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .portal figcaption {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--on-dark-muted);
+  }
+
+  .portal__stage {
+    --p: 1;
+    perspective: 1600px;
+  }
+
+  .portal__window {
+    max-width: 980px;
+    margin-inline: auto;
+    overflow: hidden;
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 12px;
+    box-shadow: 0 60px 120px -40px rgba(14, 32, 27, 0.6);
+    font-size: 0.8125rem;
+    transform: rotateX(calc((1 - var(--p)) * 28deg)) scale(calc(0.86 + 0.14 * var(--p)));
+    transform-origin: center bottom;
+    will-change: transform;
+  }
+
+  /* Dark UI: ventana negra sobre #101820, separada con un filo */
+  :global([data-theme='dark']) .portal__window {
+    box-shadow:
+      0 0 0 1px var(--line-strong),
+      0 60px 120px -40px rgba(0, 0, 0, 0.8);
+  }
+
+  .portal__bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .portal__bar > span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--line-strong);
+  }
+
+  .portal__url {
+    margin-inline: auto;
+    padding: 3px 16px;
+    border-radius: 6px;
+    background: var(--tint);
+    font-size: 0.6875rem;
+    color: var(--text);
+  }
+
+  .portal__body {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    min-height: 360px;
+  }
+
+  .portal__side {
+    display: grid;
+    align-content: start;
+    gap: 4px;
+    padding: 22px 12px;
+    border-right: 1px solid var(--line);
+  }
+
+  .portal__brand {
+    width: 76px;
+    height: 12px;
+    margin: 0 10px 20px;
+    border-radius: 2px;
+    background: var(--ink);
+  }
+
+  .portal__nav {
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: var(--muted);
+  }
+
+  .portal__nav.is-active {
+    background: var(--tint);
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .portal__main {
+    display: grid;
+    align-content: start;
+    gap: 20px;
+    padding: 26px;
+  }
+
+  .portal__title {
+    font-family: var(--serif);
+    font-size: 1.375rem;
+  }
+
+  .portal__phases {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .portal__phase {
+    display: grid;
+    gap: 6px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+
+  .portal__phase.is-current {
+    border-color: var(--ink);
+    background: var(--tint);
+  }
+
+  .portal__phase-n {
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    color: var(--text);
+  }
+
+  .portal__phase-name {
+    font-family: var(--serif);
+  }
+
+  .portal__phase-bar {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--tint);
+    overflow: hidden;
+  }
+
+  /* Las barras se rellenan a medida que la ventana se endereza */
+  .portal__phase-bar i {
+    display: block;
+    height: 100%;
+    background: var(--ink);
+    transform: scaleX(calc(var(--w) * var(--p)));
+    transform-origin: left;
+  }
+
+  .portal__row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 10px;
+  }
+
+  .portal__card {
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+
+  .portal__card-title {
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .portal__gantt {
+    display: grid;
+    gap: 8px;
+  }
+
+  .portal__gantt i {
+    display: block;
+    height: 10px;
+    margin-left: var(--s);
+    width: var(--w);
+    border-radius: 3px;
+    background: var(--line-strong);
+  }
+
+  .portal__gantt i:first-child {
+    background: var(--ink);
+  }
+
+  .portal__docs {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+  }
+
+  .portal__docs li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .portal__docs li::before {
+    content: '';
+    width: 10px;
+    height: 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+  }
+
+  @media (max-width: 760px) {
+    .principios {
+      grid-template-columns: 1fr;
+    }
+    .portal__body {
+      grid-template-columns: 1fr;
+    }
+    .portal__side {
+      display: none;
+    }
+    .portal__phases {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .portal__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

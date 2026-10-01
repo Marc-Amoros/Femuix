@@ -1,0 +1,133 @@
+---
+import Isotipo from './Isotipo.astro';
+import { fases } from '../data/site';
+
+// Cinta con las cuatro fases. Solo se mueve con el scroll del usuario (WCAG 2.2.2).
+const loop = [...fases, ...fases];
+---
+
+<section class="marquee" aria-hidden="true">
+  <div class="marquee__shift" data-marquee="-1">
+    <div class="marquee__track">
+      {
+        [0, 1].map(() => (
+          <div class="marquee__group">
+            {loop.map((f, i) => (
+              <>
+                <span class:list={['marquee__item', { 'is-em': i % 2 === 1 }]}>
+                  <span class="marquee__n">{f.n}</span>
+                  <span class="marquee__word">{f.nombre}</span>
+                </span>
+                <Isotipo class="marquee__sep" tone="light" />
+              </>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Franja de verde pino con las fases en blanco y la cursiva en dorado (12:1 y 7:1). Los
+     bordes se funden con el color de fondo, no con una máscara, que también borraría el fondo */
+  .marquee {
+    --mq-bg: var(--pine-800);
+    --text: #ffffff;
+    --em: var(--warm); /* dorado sobre pino: 7:1 */
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(22px, 2.8vw, 36px);
+    background: var(--mq-bg);
+    color: #ffffff;
+  }
+
+  /* Dark UI: la franja es negra con filetes grises */
+  :global([data-theme='dark']) .marquee {
+    --mq-bg: var(--g-900);
+    --em: var(--warm); /* dorado sobre grafito: 10:1 */
+    border-block: 1px solid rgba(131, 129, 130, 0.35);
+  }
+
+  .marquee::before,
+  .marquee::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 12%;
+    pointer-events: none;
+  }
+
+  .marquee::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--mq-bg), transparent);
+  }
+
+  .marquee::after {
+    right: 0;
+    background: linear-gradient(270deg, var(--mq-bg), transparent);
+  }
+
+  /* Desplazamiento extra ligado al scroll (motion.ts escribe --sx) */
+  .marquee__shift {
+    transform: translate3d(var(--sx, 0px), 0, 0);
+    will-change: transform;
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+  }
+
+  .marquee__group {
+    display: flex;
+    align-items: center;
+    gap: clamp(22px, 2.8vw, 44px);
+    padding-right: clamp(22px, 2.8vw, 44px);
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: clamp(8px, 0.8vw, 12px);
+  }
+
+  .marquee__n {
+    padding-top: 0.5em;
+    font-family: var(--sans);
+    font-size: clamp(0.625rem, 0.8vw, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+  }
+
+  .marquee__word {
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+  }
+
+  /* Número y palabra comparten color: blanco, o dorado en las fases en cursiva */
+  .marquee__item {
+    color: var(--text);
+  }
+
+  .marquee__item.is-em {
+    color: var(--em);
+  }
+
+  .marquee__item.is-em .marquee__word {
+    font-style: italic;
+  }
+
+  .marquee :global(.marquee__sep) {
+    width: clamp(16px, 1.4vw, 22px);
+    flex-shrink: 0;
+  }
+
+
+</style>

@@ -1,0 +1,230 @@
+---
+import Isotipo from './Isotipo.astro';
+import { fotoSrcset, fotoUrl, type Foto } from '../data/media';
+
+// Comparador antes / después. Con fotos (idealmente del mismo rincón) muestra las imágenes;
+// sin ellas, los huecos reservados.
+interface Props {
+  note?: string;
+  antes?: Foto;
+  despues?: Foto;
+}
+
+const { note, antes, despues } = Astro.props;
+const sizes = '(max-width: 1240px) 100vw, 1240px';
+---
+
+<div class:list={['ba', { 'ba--photos': antes && despues }]} data-ba>
+  <div class="ba__layer ba__before">
+    {
+      antes ? (
+        <img class="ba__img" src={fotoUrl(antes.id, 1600)} srcset={fotoSrcset(antes.id, [800, 1200, 1600, 2000])} sizes={sizes} alt={`Antes: ${antes.alt}`} loading="lazy" decoding="async" />
+      ) : (
+        <div class="ba__content">
+          <span class="ba__label">Antes</span>
+          {note && <span class="ba__note">{note}</span>}
+        </div>
+      )
+    }
+  </div>
+
+  <div class="ba__layer ba__after">
+    {
+      despues ? (
+        <img class="ba__img" src={fotoUrl(despues.id, 1600)} srcset={fotoSrcset(despues.id, [800, 1200, 1600, 2000])} sizes={sizes} alt={`Después: ${despues.alt}`} loading="lazy" decoding="async" />
+      ) : (
+        <div class="ba__content" aria-hidden="true">
+          <Isotipo class="ba__mark" tone="light" />
+          <span class="ba__label">Después</span>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="ba__handle" aria-hidden="true">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 6l-6 6 6 6M15 6l6 6-6 6"></path>
+      </svg>
+    </span>
+  </div>
+
+  <span class="ba__chip ba__chip--before" aria-hidden="true">Antes</span>
+  <span class="ba__chip ba__chip--after" aria-hidden="true">Después</span>
+
+  <input
+    class="ba__range"
+    type="range"
+    min="0"
+    max="100"
+    value="50"
+    aria-label="Comparar antes y después"
+    aria-valuetext="50 % antes, 50 % después"
+  />
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-ba]').forEach((ba) => {
+    const range = ba.querySelector<HTMLInputElement>('.ba__range');
+    range?.addEventListener('input', () => {
+      ba.style.setProperty('--pos', `${range.value}%`);
+      range.setAttribute('aria-valuetext', `${range.value} % antes, ${100 - Number(range.value)} % después`);
+    });
+  });
+</script>
+
+<style>
+  .ba {
+    --pos: 50%;
+    position: relative;
+    aspect-ratio: 21 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    user-select: none;
+  }
+
+  .ba__layer {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .ba__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Cada rótulo se queda en su mitad para que el corte no lo tape */
+  .ba__before {
+    place-items: center start;
+    padding-left: 6%;
+    background: radial-gradient(120% 90% at 20% 20%, #fbfdfc 0%, var(--pine-50) 55%, var(--pine-100) 100%);
+    color: var(--green);
+  }
+
+  .ba__after {
+    background: radial-gradient(120% 90% at 80% 20%, var(--pine-600) 0%, var(--pine-800) 55%, var(--pine-950) 100%);
+    color: var(--on-dark-strong);
+    clip-path: inset(0 0 0 var(--pos));
+    place-items: center end;
+    padding-right: 6%;
+  }
+
+  /* Dark UI: huecos en grafito, sin verde */
+  :global([data-theme='dark']) .ba__before {
+    background: radial-gradient(120% 90% at 20% 20%, var(--g-700) 0%, var(--g-800) 55%, var(--g-900) 100%);
+    color: var(--text);
+  }
+
+  :global([data-theme='dark']) .ba__after {
+    background: radial-gradient(120% 90% at 80% 20%, var(--g-800) 0%, var(--g-900) 55%, #000000 100%);
+  }
+
+  .ba__content {
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+    width: min(38%, 36ch);
+    padding: 24px 0;
+    text-align: center;
+  }
+
+  .ba :global(.ba__mark) {
+    width: 44px;
+  }
+
+  .ba__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .ba__note {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .ba__handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    width: 1px;
+    background: var(--white);
+    pointer-events: none;
+  }
+
+  .ba__handle span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--green);
+    box-shadow: 0 10px 30px -10px rgba(14, 32, 27, 0.4);
+    transform: translate(-50%, -50%);
+  }
+
+  .ba__handle svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .ba__chip {
+    position: absolute;
+    top: 20px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  .ba__chip--before {
+    left: 20px;
+    background: var(--white);
+    color: var(--green);
+  }
+
+  .ba__chip--after {
+    right: 20px;
+    background: var(--green-2);
+    color: var(--white);
+  }
+
+  .ba__range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+  }
+
+  .ba__range:focus-visible ~ .ba__handle span,
+  .ba:has(.ba__range:focus-visible) .ba__handle span {
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 720px) {
+    .ba {
+      aspect-ratio: 4 / 5;
+    }
+    .ba__note {
+      display: none;
+    }
+  }
+</style>

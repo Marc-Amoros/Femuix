@@ -1,0 +1,51 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { site } from '../data/site';
+---
+
+<LegalPage
+  title="Política de privacidad"
+  description="Cómo trata Femuix los datos que dejas en el formulario del reto gratuito."
+  updated="septiembre de 2026"
+>
+  <h2>Quién trata tus datos</h2>
+  <dl>
+    <dt>Responsable</dt>
+    <dd>[Nombre y apellidos o razón social] (Femuix)</dd>
+    <dt>NIF</dt>
+    <dd>[NIF]</dd>
+    <dt>Contacto</dt>
+    <dd><a class="text-link" href={`mailto:${site.email}`}>{site.email}</a></dd>
+  </dl>
+
+  <h2>Qué datos y para qué</h2>
+  <p>
+    En el formulario del reto solo te pido tu nombre y tu email. Los uso para enviarte los emails
+    del reto y, después, emails sobre Femuix. No los vendo ni los cedo para publicidad de terceros.
+  </p>
+
+  <h2>Base legal</h2>
+  <p>Tu consentimiento, que das al marcar la casilla del formulario y que puedes retirar cuando quieras.</p>
+
+  <h2>Quién más los ve</h2>
+  <p>
+    Los emails se envían con [Systeme.io], que actúa como encargado del tratamiento. [Completar con
+    la ubicación de sus servidores y las garantías aplicables.]
+  </p>
+
+  <h2>Cuánto tiempo se guardan</h2>
+  <p>Hasta que te des de baja o pidas que se borren.</p>
+
+  <h2>Tus derechos</h2>
+  <ul>
+    <li>Darte de baja con el enlace que aparece en cada email.</li>
+    <li>
+      Acceder a tus datos, corregirlos, borrarlos, oponerte o limitar su uso, y pedir su
+      portabilidad, escribiendo a <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>.
+    </li>
+    <li>
+      Reclamar ante la Agencia Española de Protección de Datos{' '}
+      (<a class="text-link" href="https://www.aepd.es">aepd.es</a>) si crees que no se han respetado.
+    </li>
+  </ul>
+</LegalPage>

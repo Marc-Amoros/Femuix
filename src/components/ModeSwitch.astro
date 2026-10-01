@@ -1,0 +1,97 @@
+---
+// Interruptor modo día / modo noche. La lógica está en Header.astro (sincroniza todas las copias).
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['mode', className]} role="group" aria-label="Modo de color">
+  <button class="mode__opt" type="button" data-mode="light" aria-pressed="true" title="Modo día">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"></path>
+    </svg>
+    <span class="visually-hidden">Modo día</span>
+  </button>
+  <button class="mode__opt" type="button" data-mode="dark" aria-pressed="false" title="Modo noche">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"></path>
+    </svg>
+    <span class="visually-hidden">Modo noche</span>
+  </button>
+  <span class="mode__thumb" aria-hidden="true"></span>
+</div>
+
+<style>
+  /* Interruptor día / noche: el círculo marca el modo activo (verde pino en White,
+     blanco en Dark UI) */
+  .mode {
+    --opt: 34px;
+    --ms-line: var(--line-strong);
+    --ms-off: var(--muted);
+    --ms-hover: var(--text);
+    --ms-thumb: var(--pine-800);
+    --ms-on: var(--white);
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    padding: 3px;
+    border: 1px solid var(--ms-line);
+    border-radius: 999px;
+  }
+
+  :global([data-theme='dark']) .mode {
+    --ms-line: rgba(255, 255, 255, 0.28);
+    --ms-off: #c4c4c4;
+    --ms-hover: var(--white);
+    --ms-thumb: var(--white);
+    --ms-on: #000000;
+  }
+
+  .mode__opt {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: var(--opt);
+    height: var(--opt);
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ms-off);
+    cursor: pointer;
+    transition: color 0.4s var(--ease);
+  }
+
+  .mode__opt:hover {
+    color: var(--ms-hover);
+  }
+
+  .mode__opt svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .mode__opt[aria-pressed='true'] {
+    color: var(--ms-on);
+    cursor: default;
+  }
+
+  .mode__thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: var(--opt);
+    height: var(--opt);
+    border-radius: 50%;
+    background: var(--ms-thumb);
+    transition: transform 0.5s var(--ease);
+  }
+
+  :global([data-theme='dark']) .mode__thumb {
+    transform: translateX(var(--opt));
+  }
+</style>
