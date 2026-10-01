@@ -40,14 +40,22 @@ import { preguntas, site } from '../data/site';
         <div class="ask__body">
           <p class="ask__title">¿No encuentras tu pregunta?</p>
           <p class="ask__text">Escríbeme y te respondo yo, personalmente.</p>
+          <!-- Píldora: el email (abre el correo) y, a su lado, el botón de copiar con su etiqueta -->
           <div class="ask__row">
             <a class="ask__mail" href={`mailto:${site.email}`}>
+              <Icon name="mail" />
               <span>{site.email}</span>
-              <Icon name="arrow" />
             </a>
-            <button class="ask__copy" type="button" data-copy={site.email}>
-              <span data-copy-label>Copiar</span>
-              <span class="visually-hidden"> el email</span>
+            <button
+              class="ask__copy"
+              type="button"
+              data-copy={site.email}
+              aria-label="Copiar el email"
+              aria-describedby="ask-tip"
+            >
+              <span class="ask__icon ask__icon--copy"><Icon name="copy" /></span>
+              <span class="ask__icon ask__icon--done"><Icon name="check" /></span>
+              <span class="ask__tip" id="ask-tip" role="tooltip" data-copy-tip>Copiar email</span>
             </button>
           </div>
           <p class="visually-hidden" aria-live="polite" data-copy-status></p>
@@ -58,27 +66,38 @@ import { preguntas, site } from '../data/site';
 </section>
 
 <script>
-  // Copiar el email: el botón confirma con «Copiado» y lo anuncia a los lectores de pantalla
+  // Copiar el email: el icono pasa a un check, la etiqueta dice «Copiado» y se anuncia a los
+  // lectores de pantalla. La etiqueta se puede cerrar con Escape (WCAG 1.4.13).
   document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
-    const label = btn.querySelector<HTMLElement>('[data-copy-label]');
+    const tip = btn.querySelector<HTMLElement>('[data-copy-tip]');
     const status = btn.closest('.ask')?.querySelector<HTMLElement>('[data-copy-status]');
     let timer = 0;
+
+    const reset = () => {
+      btn.classList.remove('is-done');
+      if (tip) tip.textContent = 'Copiar email';
+      if (status) status.textContent = '';
+    };
+
     btn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(btn.dataset.copy ?? '');
       } catch {
         return;
       }
+      btn.classList.remove('tip-off');
       btn.classList.add('is-done');
-      if (label) label.textContent = 'Copiado';
+      if (tip) tip.textContent = '¡Copiado!';
       if (status) status.textContent = 'Email copiado';
       clearTimeout(timer);
-      timer = window.setTimeout(() => {
-        btn.classList.remove('is-done');
-        if (label) label.textContent = 'Copiar';
-        if (status) status.textContent = '';
-      }, 2200);
+      timer = window.setTimeout(reset, 2200);
     });
+
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') btn.classList.add('tip-off');
+    });
+    btn.addEventListener('mouseleave', () => btn.classList.remove('tip-off'));
+    btn.addEventListener('blur', () => btn.classList.remove('tip-off'));
   });
 </script>
 
@@ -152,84 +171,176 @@ import { preguntas, site } from '../data/site';
     color: var(--muted);
   }
 
+  /* Píldora blanca: email a la izquierda, botón de copiar a la derecha tras un filete */
   .ask__row {
-    display: flex;
-    flex-wrap: wrap;
+    display: inline-flex;
     align-items: center;
-    gap: 10px 16px;
-    margin-top: 12px;
+    justify-self: start;
+    max-width: 100%;
+    margin-top: 14px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    box-shadow: 0 10px 24px -18px rgba(14, 32, 27, 0.45);
   }
 
-  /* El email, en la cursiva de la marca; el filete se completa y la flecha avanza al señalarlo */
+  :global([data-theme='dark']) .ask__row {
+    border-color: rgba(131, 129, 130, 0.45);
+    box-shadow: none;
+  }
+
+  /* El email, en la cursiva de la marca; el subrayado se completa al señalarlo */
   .ask__mail {
     display: inline-flex;
     align-items: center;
     gap: 10px;
+    min-width: 0;
     min-height: 44px;
+    padding: 0 16px 0 14px;
     font-family: var(--serif);
-    font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
     font-style: italic;
     font-weight: 300;
-    color: var(--ink); /* verde pino: 10,8:1 sobre la bruma suave */
+    color: var(--ink); /* verde pino: 11:1 sobre blanco */
     text-decoration: none;
   }
 
   .ask__mail span {
-    background: linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: linear-gradient(currentColor, currentColor) left bottom / 0% 1px no-repeat;
     padding-bottom: 2px;
+    transition: background-size 0.6s var(--ease);
   }
 
   .ask__mail :global(svg) {
-    width: 16px;
-    height: 16px;
-    transition: transform 0.6s var(--ease);
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--gold-deep);
   }
 
-  .ask__mail:focus-visible :global(svg) {
-    transform: translateX(4px);
+  .ask__mail:focus-visible span {
+    background-size: 100% 1px;
   }
 
+  /* Botón redondo de copiar */
   .ask__copy {
-    display: inline-flex;
-    align-items: center;
-    min-height: 36px;
-    padding: 0 16px;
-    border: 1px solid var(--line-ui);
-    border-radius: 999px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-left: 1px solid var(--line);
+    border-radius: 0 999px 999px 0;
     background: transparent;
     color: var(--ink);
-    font: inherit;
-    font-size: 0.8125rem;
-    font-weight: 500;
     cursor: pointer;
+    transition: color 0.3s var(--ease);
+  }
+
+  .ask__icon {
+    grid-area: 1 / 1;
+    display: grid;
+    place-items: center;
     transition:
-      background-color 0.4s var(--ease),
-      color 0.4s var(--ease),
-      border-color 0.4s var(--ease);
+      opacity 0.3s var(--ease),
+      transform 0.4s var(--ease);
   }
 
-  .ask__copy:active {
-    transform: scale(0.97);
+  .ask__icon :global(svg) {
+    width: 18px;
+    height: 18px;
   }
 
-  /* Confirmación: se rellena del verde de la marca */
-  .ask__copy.is-done {
+  .ask__icon--done {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  /* Copiado: el icono se convierte en un check dentro de un círculo verde */
+  .ask__copy.is-done .ask__icon--copy {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  .ask__copy.is-done .ask__icon--done {
+    opacity: 1;
+    transform: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     background: var(--ink);
-    border-color: var(--ink);
     color: var(--bg);
   }
 
+  .ask__copy:active .ask__icon {
+    transform: scale(0.9);
+  }
+
+  /* Etiqueta (tooltip) encima del botón: al señalarlo, con el foco y al copiar */
+  .ask__tip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--text);
+    color: var(--bg);
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, 4px);
+    transition:
+      opacity 0.25s var(--ease),
+      transform 0.25s var(--ease);
+  }
+
+  .ask__tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 5px solid transparent;
+    border-top-color: var(--text);
+    transform: translateX(-50%);
+  }
+
+  .ask__copy:focus-visible .ask__tip,
+  .ask__copy.is-done .ask__tip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .ask__copy.tip-off .ask__tip {
+    opacity: 0;
+  }
+
   @media (hover: hover) {
-    .ask__mail:hover :global(svg) {
-      transform: translateX(4px);
+    .ask__mail:hover span {
+      background-size: 100% 1px;
     }
-    .ask__copy:hover {
-      border-color: var(--ink);
+    .ask__copy:hover .ask__tip {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    .ask__copy.tip-off:hover .ask__tip {
+      opacity: 0;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ask__mail :global(svg) {
+    .ask__mail span,
+    .ask__icon,
+    .ask__tip {
       transition: none;
     }
   }
