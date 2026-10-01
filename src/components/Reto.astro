@@ -108,9 +108,10 @@ const dias = [
       <div class="reto__alt">
         <span class="reto__or" aria-hidden="true">o</span>
         <p class="reto__alt-q">¿Prefieres hablar directamente?</p>
+        <!-- Texto corto en una sola línea: el email (o «Reservar una llamada» cuando haya agenda) -->
         <a class="reto__alt-link" href={llamada.href}>
           <Icon name="mail" />
-          <span>{llamada.enlace}</span>
+          <span>{llamada.activa ? llamada.reservar : site.email}</span>
           <Icon name="arrow" />
         </a>
       </div>
@@ -431,6 +432,7 @@ const dias = [
   }
 
   .reto__alt-link span {
+    white-space: nowrap;
     text-decoration: underline;
     text-decoration-color: var(--ink);
     text-decoration-thickness: 1px;
