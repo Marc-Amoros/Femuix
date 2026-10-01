@@ -96,7 +96,7 @@ const { base = '' } = Astro.props;
         sync();
       };
       try {
-        localStorage.setItem('femuix-theme', next);
+        sessionStorage.setItem('femuix-theme', next);
       } catch {}
 
       const doc = document as Document & {

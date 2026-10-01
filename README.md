@@ -110,8 +110,8 @@ rombo dorado. Las bandas de bruma usan `.band` y la de petróleo `.band--teal` (
 - El interruptor de la cabecera muestra las dos opciones, ☀ día y ☾ noche, y marca la activa
   con un círculo (verde en día, blanco en noche). Al cambiar, el nuevo modo se descubre en
   círculo desde la opción pulsada.
-- La web abre siempre en **modo día**; solo abre en noche si el visitante lo eligió (se recuerda
-  en su navegador). No sigue la apariencia automática del sistema, para que no cambie sola.
+- La web abre siempre en **modo día**. Si el visitante elige el modo noche, se mantiene solo
+  mientras navega por la web (sesión); al volver otro día, empieza de nuevo en día.
 - Los colores de cada modo están en `:root` y `:root[data-theme='dark']` de `global.css`.
 - `<Isotipo tone="auto">` (por defecto) muestra el símbolo verde en White y el negativo en Dark
   UI. El símbolo verde no se coloca nunca directamente sobre bruma, porque su pieza `#A4BCC2`

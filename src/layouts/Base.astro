@@ -47,10 +47,10 @@ const jsonLd = {
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
-        // Modo día por defecto; modo noche solo si el visitante lo eligió
+        // Siempre abre en modo día; el modo noche solo dura mientras se navega por la web (sesión)
         var theme = 'light';
         try {
-          if (localStorage.getItem('femuix-theme') === 'dark') theme = 'dark';
+          if (sessionStorage.getItem('femuix-theme') === 'dark') theme = 'dark';
         } catch (e) {}
         d.dataset.theme = theme;
         // La barra del navegador móvil sigue el color de la cabecera
