@@ -32,7 +32,7 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
       {
         usarMuestras ? (
           <div class="video__player" data-player>
-            <video preload="metadata" poster={video.poster} playsinline aria-label={video.descripcion}>
+            <video preload="none" poster={video.poster} playsinline aria-label={video.descripcion}>
               <source src={video.src} type="video/mp4" />
             </video>
             <span class="video__corners" aria-hidden="true" />
@@ -103,8 +103,20 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
       time.textContent = `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
       time.hidden = false;
     };
-    if (video && video.readyState >= 1) showDuration();
     video?.addEventListener('loadedmetadata', showDuration);
+    // La duración (metadatos) solo se pide cuando el vídeo se acerca a la pantalla
+    if (video) {
+      const near = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          near.disconnect();
+          video.preload = 'metadata';
+          video.load();
+        },
+        { rootMargin: '600px 0px' },
+      );
+      near.observe(video);
+    }
 
     play?.addEventListener('click', () => {
       if (!video) return;

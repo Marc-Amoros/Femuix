@@ -1,6 +1,10 @@
 ---
 import '../styles/global.css';
 import { site, url } from '../data/site';
+// Fuentes que se ven en la primera pantalla: se piden desde el principio para que no salten
+import serifUrl from '../fonts/merriweather.woff2?url';
+import serifItalicUrl from '../fonts/merriweather-italic.woff2?url';
+import sansUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -33,6 +37,11 @@ const jsonLd = {
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
     <meta name="theme-color" content="#ffffff" />
+    <link rel="preload" href={serifUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={serifItalicUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sansUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://videos.pexels.com" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />

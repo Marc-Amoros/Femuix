@@ -1,7 +1,8 @@
 @import '@fontsource-variable/inter/index.css';
 @import 'lenis/dist/lenis.css';
 
-/* Merriweather (títulos): peso ligero 300 con tamaño óptico variable, recortada a caracteres latinos */
+/* Merriweather (títulos): peso ligero 300 con tamaño óptico variable, recortada a los caracteres
+   del español (−55 % de peso) */
 @font-face {
   font-family: 'Merriweather';
   font-style: normal;
