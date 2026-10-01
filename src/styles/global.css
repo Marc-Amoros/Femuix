@@ -728,16 +728,17 @@ main .eyebrow::before {
   }
 }
 
-/* Enlace secundario: la misma letra que los botones (CTA) y un círculo con flecha que se
-   rellena al señalarlo. Acompaña a un botón principal sin competir con él. */
+/* Enlace secundario editorial: versalitas espaciadas y un círculo con flecha que se rellena
+   al señalarlo. Acompaña a un botón principal sin competir con él. */
 .more-link {
   display: inline-flex;
   align-items: center;
   gap: 14px;
   min-height: 44px;
-  font-family: var(--sans);
-  font-size: 0.9375rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--text);
   text-decoration: none;
 }
