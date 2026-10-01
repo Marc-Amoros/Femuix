@@ -728,6 +728,70 @@ main .eyebrow::before {
   }
 }
 
+/* Enlace secundario editorial: versalitas espaciadas y un círculo con flecha que se rellena
+   al señalarlo. Acompaña a un botón principal sin competir con él. */
+.more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 44px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.more-link__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-ui);
+  border-radius: 50%;
+  color: var(--ink);
+  transition:
+    background-color 0.4s var(--ease),
+    color 0.4s var(--ease),
+    border-color 0.4s var(--ease);
+}
+
+.more-link__icon svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.6s var(--ease);
+}
+
+.more-link:focus-visible .more-link__icon {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+
+.more-link:focus-visible .more-link__icon svg {
+  transform: translateX(3px);
+}
+
+@media (hover: hover) {
+  .more-link:hover .more-link__icon {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+  .more-link:hover .more-link__icon svg {
+    transform: translateX(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .more-link__icon,
+  .more-link__icon svg {
+    transition: none;
+  }
+}
+
 /* ---------- Animaciones de entrada ---------- */
 
 .js .reveal {
