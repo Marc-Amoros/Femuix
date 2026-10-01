@@ -102,19 +102,25 @@ const {
     object-fit: cover;
     /* Tono ligeramente apagado: unifica fotos de distinta procedencia con la paleta */
     filter: saturate(0.92) contrast(1.02);
-    transition: transform 1.8s var(--ease);
+    /* El parallax desplaza (translate) sin retardo; el acercamiento al pasar el ratón (scale)
+       va suave. Son propiedades separadas para que no se pisen. */
+    translate: 0 var(--py, 0px);
+    transition: scale 1.8s var(--ease);
   }
 
-  .ph--photo:hover .ph__img {
-    transform: scale(1.03);
+  @media (hover: hover) {
+    .ph--photo:hover .ph__img {
+      scale: 1.03;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .ph__img {
+      translate: none;
       transition: none;
     }
     .ph--photo:hover .ph__img {
-      transform: none;
+      scale: none;
     }
   }
 

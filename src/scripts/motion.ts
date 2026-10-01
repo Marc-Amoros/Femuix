@@ -199,11 +199,14 @@ function update() {
     el.style.setProperty('--p', clamp01((start - r.top) / (start - end)).toFixed(4));
   }
 
+  // Parallax de las fotos: se mueve la imagen dentro de su marco (--py), no el marco, y nunca
+  // más del margen que la foto tiene de sobra (4 % de 6 %), para que no asome un hueco
   for (const el of parallax) {
     const r = el.getBoundingClientRect();
     const factor = Number(el.dataset.parallax) || 0.1;
-    const offset = (r.top + r.height / 2 - vh / 2) * -factor;
-    el.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
+    const limit = r.height * 0.04;
+    const offset = Math.max(-limit, Math.min(limit, (r.top + r.height / 2 - vh / 2) * -factor));
+    el.style.setProperty('--py', `${offset.toFixed(1)}px`);
   }
 
   // Secciones verdes: de tarjeta con márgenes a ancho completo mientras entran

@@ -98,6 +98,38 @@ import { fotos, usarMuestras } from '../data/media';
     border-radius: var(--radius-lg);
   }
 
+  /* Entrada en tres tiempos: el paspartú sube y aparece, la foto se descubre de abajo arriba
+     mientras se aleja suavemente, y la tarjeta de la firma llega desde la derecha */
+  :global(.js) .sobre__frame {
+    opacity: 0;
+    translate: 0 40px;
+    transition:
+      opacity 1s var(--ease),
+      translate 1.2s var(--ease);
+  }
+
+  :global(.js) .sobre__frame:has(:global(.clip-reveal.is-visible)) {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .sobre__frame :global(.clip-reveal) {
+    transition-duration: 1.6s;
+  }
+
+  /* --base suma un retardo fijo al orden de aparición que calcula motion.ts */
+  :global(.js) .sobre__frame :global(.clip-reveal) {
+    --base: 250ms;
+  }
+
+  :global(.js) .sobre__sign:not(:global(.is-visible)) {
+    transform: translateX(48px);
+  }
+
+  :global(.js) .sobre__sign {
+    --base: 900ms;
+  }
+
   /* Tarjeta de firma que se apoya sobre la esquina de la foto */
   .sobre__sign {
     position: absolute;
@@ -221,6 +253,16 @@ import { fotos, usarMuestras } from '../data/media';
   }
 
   /* Hasta escritorio grande los compromisos van en lista: número a la izquierda */
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .sobre__frame,
+    :global(.js) .sobre__sign:not(:global(.is-visible)) {
+      opacity: 1;
+      translate: none;
+      transform: none;
+      transition: none;
+    }
+  }
+
   @media (max-width: 1280px) {
     .sobre__pacts {
       grid-template-columns: 1fr;
