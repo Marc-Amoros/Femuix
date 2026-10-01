@@ -362,14 +362,14 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
     color: var(--cta-fg);
   }
 
-  /* Anillo dorado que late suave alrededor del icono */
+  /* Anillo dorado que late suave alrededor del icono, solo al principio */
   .video__play-icon::after {
     content: '';
     position: absolute;
     inset: -6px;
     border: 1px solid var(--gold-line);
     border-radius: 50%;
-    animation: video-pulse 2.6s var(--ease) infinite;
+    animation: video-pulse 2.2s var(--ease) 2 both; /* dos latidos (4,4 s) y se para: WCAG 2.2.2 */
   }
 
   @keyframes video-pulse {
