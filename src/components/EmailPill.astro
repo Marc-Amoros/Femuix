@@ -77,8 +77,12 @@ const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
   /* Fantasma: transparente, con filete verde (≥3:1) y sin sombra */
   .pill--ghost .ask__row {
     border-color: var(--line-ui);
-    background: transparent;
+    background: rgba(255, 255, 255, 0.25); /* relleno suave para que se vea sobre la bruma */
     box-shadow: none;
+  }
+
+  :global([data-theme='dark']) .pill--ghost .ask__row {
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .pill--ghost .ask__copy {
@@ -87,10 +91,10 @@ const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
 
   @media (hover: hover) {
     .pill--ghost .ask__row:hover {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.45);
     }
     :global([data-theme='dark']) .pill--ghost .ask__row:hover {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.09);
     }
   }
 
