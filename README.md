@@ -132,8 +132,11 @@ sistema pide reducir el movimiento.
 
 Apariciones (`.reveal`, `.split`, `.clip-reveal`, en `src/scripts/motion.ts`): salen en orden de
 lectura y por tandas. Lo que ya se ve en la misma sección entra junto (rótulo, titular y
-entradilla), cada tanda espera a la anterior sin adelantarla nunca, y en un salto con el menú se
-espera a que la página se pare: lo que queda fuera aparece sin animación. Si un componente tiene
+entradilla), cada tanda espera a la anterior sin adelantarla nunca, y en un salto con el menú o
+un giro rápido de rueda se espera a que la página se pare: lo que queda fuera aparece sin
+animación. En el móvil (desplazamiento con el dedo) todo aparece en cuanto entra, también durante
+el gesto. Al tocar un botón, un enlace con flecha o una pregunta, hace un instante la misma
+animación que con el ratón (`.is-tapped`). Si un componente tiene
 su propia `transition` en un elemento `.reveal`, la de entrada manda hasta que termina
 (`.is-done`) y después vuelve la suya.
 

@@ -70,9 +70,13 @@ let slot = 0; // momento (performance.now) en que puede empezar el siguiente
 let firstPaint = true; // la coreografía fija (--delay) solo vale al cargar la página
 let scheduled = false;
 
+// Solo cuenta el desplazamiento suave (rueda, saltos del menú). En el móvil el dedo mueve la página
+// de forma nativa y lo que entra aparece en cuanto entra, también durante el gesto.
 const FAST = 24; // px por fotograma: por encima, la página «vuela» y aún no se lee
-const speed = () =>
-  Math.abs((window as unknown as { lenis?: { velocity: number } }).lenis?.velocity ?? 0);
+const speed = () => {
+  const lenis = (window as unknown as { lenis?: { velocity: number; isScrolling: string | false } }).lenis;
+  return lenis?.isScrolling === 'smooth' ? Math.abs(lenis.velocity) : 0;
+};
 
 function schedule() {
   if (scheduled) return;
@@ -339,5 +343,22 @@ if (!reduce) {
         node.append(roll(text));
       }
     }
+  });
+}
+
+/* ---------- Toques en pantallas táctiles ---------- */
+
+// Sin ratón no hay hover: al tocar un botón o un enlace, hace durante un instante la misma
+// animación que al pasar el ratón (relleno, texto que rueda, flecha que avanza).
+if (!reduce) {
+  const TAPPABLE = '.btn, .more-link, .reto__alt-link, .ask__mail, .faq__item summary, .vpanel__alt summary';
+  let pointer = 'mouse';
+  document.addEventListener('pointerdown', (e) => (pointer = e.pointerType), { passive: true });
+  document.addEventListener('click', (e) => {
+    if (pointer !== 'touch') return;
+    const el = (e.target as Element | null)?.closest<HTMLElement>(TAPPABLE);
+    if (!el) return;
+    el.classList.add('is-tapped');
+    setTimeout(() => el.classList.remove('is-tapped'), 650);
   });
 }

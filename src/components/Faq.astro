@@ -172,7 +172,8 @@ import { preguntas, site } from '../data/site';
     transition: transform 0.6s var(--ease);
   }
 
-  summary:focus-visible .faq__q {
+  summary:focus-visible .faq__q,
+  summary.is-tapped .faq__q {
     transform: translateX(8px);
   }
 

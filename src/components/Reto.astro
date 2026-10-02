@@ -458,11 +458,13 @@ const dias = [
     transition: transform 0.6s var(--ease);
   }
 
-  .reto__alt-link:focus-visible span {
+  .reto__alt-link:focus-visible span,
+  .reto__alt-link.is-tapped span {
     text-decoration-thickness: 2px;
   }
 
-  .reto__alt-link:focus-visible :global(svg:last-child) {
+  .reto__alt-link:focus-visible :global(svg:last-child),
+  .reto__alt-link.is-tapped :global(svg:last-child) {
     transform: translateX(4px);
   }
 
