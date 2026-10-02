@@ -376,10 +376,10 @@ import { fases, principios } from '../data/site';
 
   @media (max-width: 760px) {
     .principios {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .portal__body {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .portal__side {
       display: none;
@@ -388,7 +388,7 @@ import { fases, principios } from '../data/site';
       grid-template-columns: repeat(2, 1fr);
     }
     .portal__row {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

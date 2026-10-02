@@ -453,6 +453,14 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
     transform: translate(-50%, -50%) scale(1.04);
   }
 
+  /* El anillo de foco va sobre la foto: un halo del color del botón lo separa de ella para que
+     contraste igual sobre zonas claras u oscuras (WCAG 1.4.11) */
+  .video__play:focus-visible {
+    box-shadow:
+      0 0 0 3px var(--surface),
+      0 24px 60px -24px rgba(0, 0, 0, 0.55);
+  }
+
   .video__play-icon {
     position: relative;
     display: grid;
@@ -546,7 +554,7 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
     }
     /* Móvil: los tres temas en lista, separados por filetes */
     .vpanel__chapters {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       padding-bottom: 8px;
     }
     .vpanel__chapters li,

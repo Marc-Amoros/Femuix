@@ -115,7 +115,7 @@ const { title, description, updated, draft = true } = Astro.props;
 
   @media (max-width: 560px) {
     .legal__body :global(dl) {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 2px 0;
     }
     .legal__body :global(dd) {

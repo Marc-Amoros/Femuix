@@ -460,7 +460,7 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
 
   @media (max-width: 900px) {
     .hero__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     /* Tablet: imagen apaisada a todo el ancho para que no ocupe una pantalla entera */
     .hero__media {
@@ -492,7 +492,7 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
       width: 100%;
     }
     .hero__facts {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       padding: 4px 0;
     }
     .fact,

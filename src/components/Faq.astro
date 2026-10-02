@@ -96,7 +96,7 @@ import { preguntas, site } from '../data/site';
   /* En el móvil el símbolo va encima, para dejar todo el ancho al texto y al email */
   @media (max-width: 480px) {
     .ask {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 14px;
     }
   }
@@ -256,7 +256,7 @@ import { preguntas, site } from '../data/site';
 
   @media (max-width: 900px) {
     .faq__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .faq__head {
       position: static;
