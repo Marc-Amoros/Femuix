@@ -322,6 +322,23 @@ html.is-end {
   background-color: var(--deep);
 }
 
+/* Chrome en iPhone rebota igualmente (lo necesita para sus gestos) y pinta de blanco el hueco
+   que se abre bajo el pie. Esta capa fija espera justo debajo de la pantalla con el color del
+   pie: en el rebote se desplaza con la página, como la cabecera, y rellena ese hueco, así que el
+   pie parece continuar. Va detrás del contenido (z-index -1), de modo que en el scroll normal
+   nunca tapa nada, y es solo un color plano para que el móvil la pinte al instante. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 100vh;
+  background-color: var(--deep);
+  pointer-events: none;
+}
+
 html.lenis {
   scroll-behavior: auto;
 }

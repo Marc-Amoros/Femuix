@@ -166,6 +166,12 @@ Revisada sin desplazamiento horizontal ni solapes a 320, 375, 414, 600, 768, 834
 El menú (`Header.astro`) se cierra con Escape, al elegir una sección o al pasar a escritorio, y
 mientras está abierto deja la página de detrás inactiva (`inert`) para que el foco no se pierda.
 
+**Final de la página en el iPhone.** Chrome para iOS siempre rebota al llegar al final (no hace
+caso de `overscroll-behavior`) y pinta de blanco el hueco que se abre bajo el pie, con lo que
+parecía que la página seguía. En `global.css`, `body::before` es una capa fija del color del pie
+que espera justo debajo de la pantalla: en el rebote sube con la página y rellena el hueco. No la
+quites ni le pongas degradados (un color plano es lo que el móvil pinta al instante).
+
 ## Accesibilidad y usabilidad (WCAG 2.2 AA)
 
 ### Última auditoría
