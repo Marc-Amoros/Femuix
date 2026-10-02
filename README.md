@@ -130,6 +130,13 @@ fases y sello que se mueven con el scroll, vídeo que crece con el scroll, frase
 portal en 3D, comparador antes/después y logotipo gigante en el pie. Todo se desactiva si el
 sistema pide reducir el movimiento.
 
+Apariciones (`.reveal`, `.split`, `.clip-reveal`, en `src/scripts/motion.ts`): salen en orden de
+lectura y por tandas. Lo que ya se ve en la misma sección entra junto (rótulo, titular y
+entradilla), cada tanda espera a la anterior sin adelantarla nunca, y en un salto con el menú se
+espera a que la página se pare: lo que queda fuera aparece sin animación. Si un componente tiene
+su propia `transition` en un elemento `.reveal`, la de entrada manda hasta que termina
+(`.is-done`) y después vuelve la suya.
+
 Acabados: grano de papel (en modo overlay, no altera el blanco), apariciones con desenfoque,
 secciones verdes que se abren de tarjeta a ancho completo (`data-expand`), índice numerado en
 las etiquetas de sección, texto que rueda en los botones, huecos de imagen con paspartú,

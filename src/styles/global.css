@@ -816,6 +816,16 @@ main .eyebrow::before {
   filter: none;
 }
 
+/* Mientras entra, la transición de entrada manda aunque el componente tenga la suya (preguntas,
+   sello…); al terminar (.is-done) vuelven las del componente, como el hover */
+.js .reveal.is-visible:not(.is-done) {
+  transition:
+    opacity 1.4s var(--ease),
+    transform 1.4s var(--ease),
+    filter 1.4s var(--ease);
+  transition-delay: calc(var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
+}
+
 /* Imagen que se descubre de abajo arriba */
 .js .clip-reveal {
   clip-path: inset(100% 0 0 0);
@@ -871,6 +881,7 @@ main .eyebrow::before {
     scroll-behavior: auto;
   }
   .js .reveal,
+  .js .reveal.is-visible:not(.is-done),
   .js .clip-reveal,
   .js .clip-reveal > *,
   .js .split .w > span {

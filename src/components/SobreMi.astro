@@ -25,7 +25,7 @@ import { fotos, usarMuestras } from '../data/media';
         </div>
       </div>
 
-      <p class="sobre__sign reveal">
+      <p class="sobre__sign">
         <Isotipo class="sobre__mark" />
         <span class="sobre__sign-text">
           <span class="sobre__name">Andrea</span>
@@ -125,12 +125,24 @@ import { fotos, usarMuestras } from '../data/media';
     --base: 250ms;
   }
 
-  :global(.js) .sobre__sign:not(:global(.is-visible)) {
-    transform: translateX(48px);
-  }
+  /* La firma va ligada a la foto: llega desde la derecha cuando la foto ya se está descubriendo,
+     también si se ve antes que el texto de al lado */
+  @supports selector(:has(*)) {
+    :global(.js) .sobre__sign {
+      opacity: 0;
+      transform: translateX(48px);
+      filter: blur(8px);
+      transition:
+        opacity 1.2s var(--ease) 1.1s,
+        transform 1.4s var(--ease) 1.1s,
+        filter 1.2s var(--ease) 1.1s;
+    }
 
-  :global(.js) .sobre__sign {
-    --base: 900ms;
+    :global(.js) .sobre__media:has(:global(.clip-reveal.is-visible)) .sobre__sign {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
   }
 
   /* Tarjeta de firma que se apoya sobre la esquina de la foto */
@@ -262,10 +274,11 @@ import { fotos, usarMuestras } from '../data/media';
   /* Hasta escritorio grande los compromisos van en lista: número a la izquierda */
   @media (prefers-reduced-motion: reduce) {
     :global(.js) .sobre__frame,
-    :global(.js) .sobre__sign:not(:global(.is-visible)) {
+    :global(.js) .sobre__sign {
       opacity: 1;
       translate: none;
       transform: none;
+      filter: none;
       transition: none;
     }
   }

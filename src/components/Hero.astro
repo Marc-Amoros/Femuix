@@ -185,9 +185,10 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
     :global(.js) .hero__media::after {
       opacity: 0;
       transform: translate(14px, -14px);
+      /* Tras la foto (250 ms + lo que tarda en descubrirse), también con la intro (--base) */
       transition:
-        opacity 1.2s var(--ease) 0.9s,
-        transform 1.5s var(--ease) 0.9s;
+        opacity 1.2s var(--ease) calc(var(--base, 0ms) + 1.15s),
+        transform 1.5s var(--ease) calc(var(--base, 0ms) + 1.15s);
     }
 
     :global(.js) .hero__media:has(.clip-reveal.is-visible)::after {

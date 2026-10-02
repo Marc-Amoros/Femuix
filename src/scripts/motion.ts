@@ -35,15 +35,21 @@ function countUp(el: HTMLElement) {
 
 /* ---------- Apariciones al entrar en pantalla ---------- */
 
-// Lo que entra a la vez aparece en orden de lectura, uno tras otro; lo que entra solo, al momento.
-// Si un elemento ya trae su retardo (--delay en línea, coreografía de la portada), se respeta y
-// lo que va detrás en el documento espera a que termine.
+// Todo aparece en orden de lectura (el del documento: columna de texto antes que la imagen o el
+// formulario de al lado), uno tras otro, y cada tanda espera a que termine la anterior.
+// - Cuando algo entra, lo que ya está a la vista en su misma sección entra con él: el rótulo, el
+//   titular y la entradilla salen juntos y en orden, no a trozos según cruzan la línea.
+// - Durante un desplazamiento rápido (un salto con el menú) se espera a que la página se pare: lo
+//   que se ha quedado fuera de pantalla aparece al momento y no hace esperar a lo que sí se ve.
+// - Si un elemento trae su retardo (--delay en línea, coreografía de la portada), se respeta al
+//   cargar la página y lo que va detrás en el documento espera a que termine.
 // El recorte (clip-path) de .clip-reveal cuenta para IntersectionObserver y nunca "entraría":
 // se observa su contenedor y se marca el hijo.
-const proxies = new Map<Element, HTMLElement>();
+const waiting = new Map<Element, HTMLElement>(); // lo observado → lo que aparece
 
 const STEP = 110; // ms entre un elemento y el siguiente
 const MAX_STAGGER = 900; // una tanda larga se comprime para no hacer esperar
+const DURATION = 1600; // lo que dura la entrada más larga (.reveal 1,4 s; .clip-reveal 1,5–1,6 s)
 
 // Cuánto ocupa cada elemento en la secuencia: un titular, lo que tardan sus palabras
 function stepOf(el: HTMLElement) {
@@ -57,79 +63,134 @@ function stepOf(el: HTMLElement) {
 const baseOf = (el: HTMLElement) =>
   root.classList.contains('intro') && el.closest('.hero') ? 1600 : 0;
 
+const scopeOf = (el: Element) => el.closest('section, footer') ?? document.body;
+
 let pending: HTMLElement[] = [];
 let slot = 0; // momento (performance.now) en que puede empezar el siguiente
 let firstPaint = true; // la coreografía fija (--delay) solo vale al cargar la página
+let scheduled = false;
+
+const FAST = 24; // px por fotograma: por encima, la página «vuela» y aún no se lee
+const speed = () =>
+  Math.abs((window as unknown as { lenis?: { velocity: number } }).lenis?.velocity ?? 0);
+
+function schedule() {
+  if (scheduled) return;
+  scheduled = true;
+  requestAnimationFrame(() => {
+    scheduled = false;
+    flush();
+  });
+}
+
+function take(target: Element) {
+  const el = waiting.get(target);
+  if (!el) return;
+  waiting.delete(target);
+  io.unobserve(target);
+  pending.push(el);
+}
+
+function show(el: HTMLElement, delay: number) {
+  el.classList.add('is-visible');
+  // Al terminar la entrada vuelven las transiciones propias del componente (hover, abrir…)
+  setTimeout(() => el.classList.add('is-done'), baseOf(el) + delay + DURATION);
+
+  // Las cifras cuentan cuando su bloque ya está a la vista, desde cero
+  const counters = el.matches('[data-count]') ? [el] : [...el.querySelectorAll<HTMLElement>('[data-count]')];
+  for (const c of counters) {
+    if (c.dataset.counted) continue;
+    c.dataset.counted = 'true';
+    c.classList.add('is-visible');
+    if (!reduce) c.textContent = (c.dataset.prefix ?? '') + '0';
+    setTimeout(() => countUp(c), baseOf(el) + delay + 300);
+  }
+}
 
 function flush() {
   if (!pending.length) return;
+  if (speed() > FAST) {
+    schedule();
+    return;
+  }
   const batch = pending.sort((a, b) =>
     a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
   );
   pending = [];
   const now = performance.now();
-  let cursor = Math.max(0, slot - now);
+  const start = Math.max(0, slot - now); // espera a que termine la tanda anterior
+  let cursor = start;
 
   // Primera pasada: el orden y el hueco de cada uno
-  const plan = batch.map((el) => {
+  const plan: { el: HTMLElement; delay: number; fixed: boolean }[] = [];
+  const vh = window.innerHeight;
+  for (const el of batch) {
+    const r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > vh) {
+      el.style.setProperty('--delay', '0ms');
+      el.style.setProperty('--stagger', '0ms');
+      show(el, 0);
+      continue;
+    }
     const own = parseFloat(el.style.getPropertyValue('--delay'));
     const fixed = firstPaint && !Number.isNaN(own);
     const delay = fixed ? own : cursor;
     cursor = Math.max(cursor, delay + stepOf(el));
-    return { el, delay, fixed };
-  });
-  const autoMax = Math.max(0, ...plan.filter((p) => !p.fixed).map((p) => p.delay));
-  const scale = autoMax > MAX_STAGGER ? MAX_STAGGER / autoMax : 1;
-  slot = now + cursor * scale;
+    plan.push({ el, delay, fixed });
+  }
+  // Una tanda larga se comprime, pero solo su propio reparto: la espera heredada se mantiene
+  // para que nada empiece antes que lo último de la tanda anterior
+  const spread = Math.max(0, ...plan.filter((p) => !p.fixed).map((p) => p.delay - start));
+  const scale = spread > MAX_STAGGER ? MAX_STAGGER / spread : 1;
+  const squeeze = (d: number) => start + (d - start) * scale;
+  if (plan.length) slot = now + squeeze(cursor);
   firstPaint = false;
 
   for (const p of plan) {
-    const { el } = p;
     let delay = p.delay;
     if (!p.fixed) {
-      delay = Math.round(delay * scale);
-      el.style.setProperty('--delay', '0ms');
-      el.style.setProperty('--stagger', `${delay}ms`);
+      delay = Math.round(squeeze(delay));
+      p.el.style.setProperty('--delay', '0ms');
+      p.el.style.setProperty('--stagger', `${delay}ms`);
     }
-    el.classList.add('is-visible');
-
-    // Las cifras cuentan cuando su bloque ya está a la vista, desde cero
-    const counters = el.matches('[data-count]') ? [el] : [...el.querySelectorAll<HTMLElement>('[data-count]')];
-    for (const c of counters) {
-      if (c.dataset.counted) continue;
-      c.dataset.counted = 'true';
-      c.classList.add('is-visible');
-      if (!reduce) c.textContent = (c.dataset.prefix ?? '') + '0';
-      setTimeout(() => countUp(c), baseOf(el) + delay + 300);
-    }
+    show(p.el, delay);
   }
 }
 
 const io = new IntersectionObserver(
   (entries) => {
     for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      pending.push(proxies.get(entry.target) ?? (entry.target as HTMLElement));
-      io.unobserve(entry.target);
+      if (entry.isIntersecting) take(entry.target);
     }
-    if (pending.length) requestAnimationFrame(flush);
+    if (!pending.length) return;
+
+    // Lo que ya se ve en la misma sección entra en la misma tanda
+    const scopes = new Set(pending.map(scopeOf));
+    const vh = window.innerHeight;
+    for (const target of [...waiting.keys()]) {
+      if (!scopes.has(scopeOf(target))) continue;
+      const r = target.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) take(target);
+    }
+    schedule();
   },
   { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
 );
 
-document
-  .querySelectorAll<HTMLElement>('.reveal, .split')
-  .forEach((el) => io.observe(el));
+function watch(target: Element, el = target as HTMLElement) {
+  waiting.set(target, el);
+  io.observe(target);
+}
+
+document.querySelectorAll<HTMLElement>('.reveal, .split').forEach((el) => watch(el));
 
 // Cifras sueltas, fuera de un bloque que aparece
 document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
-  if (!el.closest('.reveal')) io.observe(el);
+  if (!el.closest('.reveal')) watch(el);
 });
 
 document.querySelectorAll<HTMLElement>('.clip-reveal').forEach((el) => {
-  const target = el.parentElement ?? el;
-  proxies.set(target, el);
-  io.observe(target);
+  watch(el.parentElement ?? el, el);
 });
 
 /* ---------- Efectos ligados al scroll ---------- */
