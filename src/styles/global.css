@@ -780,16 +780,12 @@ main .eyebrow::before {
   height: 40px;
   border: 1px solid var(--line-ui);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.25); /* relleno suave para que se vea sobre la bruma */
+  background: transparent; /* sin relleno: el círculo toma el fondo de la sección, como el del pie */
   color: var(--ink);
   transition:
     background-color var(--t-color) var(--ease),
     color var(--t-color) var(--ease),
     border-color var(--t-color) var(--ease);
-}
-
-:root[data-theme='dark'] .more-link__icon {
-  background: rgba(255, 255, 255, 0.05);
 }
 
 .more-link__icon svg {
