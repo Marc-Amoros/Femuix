@@ -105,7 +105,7 @@ const {
     /* El parallax desplaza (translate) sin retardo; el acercamiento al pasar el ratón (scale)
        va suave. Son propiedades separadas para que no se pisen. */
     translate: 0 var(--py, 0px);
-    transition: scale 1.8s var(--ease);
+    transition: scale calc(var(--t-media) + 0.4s) var(--ease);
   }
 
   @media (hover: hover) {
@@ -170,7 +170,7 @@ const {
     border-radius: 50%;
     background: var(--white);
     color: var(--green);
-    transition: transform 0.6s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .ph__play svg {

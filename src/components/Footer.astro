@@ -26,7 +26,7 @@ const legal = [
 <footer class="footer on-dark" data-expand>
   <div class="container">
     <!-- Cierre: la última invitación a dar el primer paso -->
-    <div class="footer__cta">
+    <div class="footer__cta" data-reveal-unit>
       <div class="footer__cta-copy">
         <span class="footer__kicker reveal">El primer paso es gratis</span>
         <SplitText
@@ -60,7 +60,7 @@ const legal = [
 
     <div class="footer__grid">
       <!-- Identidad y contacto -->
-      <div class="footer__brand">
+      <div class="footer__brand reveal">
         <a href={`${base}#top`} class="footer__logo" aria-label="Femuix, volver arriba">
           <Logo tone="light" class="only-light" />
           <Logo tone="gray" class="only-dark" />
@@ -85,11 +85,11 @@ const legal = [
 
       <!-- Navegación: lista editorial, como el menú -->
       <nav class="footer__nav" aria-labelledby="ft-secciones">
-        <span class="footer__title" id="ft-secciones">Secciones</span>
+        <span class="footer__title reveal" id="ft-secciones">Secciones</span>
         <ul>
           {
             [...nav, { label: 'Reto gratuito', href: '#reto' }].map((item, i) => (
-              <li>
+              <li class="reveal">
                 <a href={`${base}${item.href}`}>
                   <span class="footer__n">0{i + 1}</span>
                   <span class="footer__label">{item.label}</span>
@@ -104,7 +104,7 @@ const legal = [
   </div>
 
   <div class="container">
-    <div class="footer__bottom">
+    <div class="footer__bottom reveal">
       <span>© {year} Femuix · Interiorismo y reformas de vivienda</span>
       <nav class="footer__legal" aria-label="Legal">
         {legal.map((l) => <a href={l.href}>{l.label}</a>)}
@@ -299,7 +299,7 @@ const legal = [
     text-decoration-color: var(--ft-line);
     text-decoration-thickness: 1px;
     text-underline-offset: 8px;
-    transition: text-decoration-color 0.4s var(--ease);
+    transition: text-decoration-color var(--t-color) var(--ease);
   }
 
   .footer__mail:hover {
@@ -367,7 +367,7 @@ const legal = [
     padding: 16px 0;
     color: var(--ft-link);
     text-decoration: none;
-    transition: color 0.4s var(--ease);
+    transition: color var(--t-color) var(--ease);
   }
 
   .footer__n {
@@ -384,7 +384,7 @@ const legal = [
     font-size: clamp(1.3rem, 2vw, 1.75rem);
     font-weight: 300;
     line-height: 1.2;
-    transition: transform 0.6s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .footer__nav a :global(svg) {
@@ -395,8 +395,8 @@ const legal = [
     opacity: 0;
     transform: translateX(-10px);
     transition:
-      opacity 0.4s var(--ease),
-      transform 0.6s var(--ease);
+      opacity var(--t-color) var(--ease),
+      transform var(--t-move) var(--ease);
   }
 
   .footer__nav a:hover {
@@ -437,7 +437,7 @@ const legal = [
     padding-block: 10px; /* objetivo de 40 px de alto */
     color: var(--ft-soft);
     text-decoration: none;
-    transition: color 0.3s var(--ease);
+    transition: color var(--t-color) var(--ease);
   }
 
   .footer__legal a:hover {
@@ -462,16 +462,16 @@ const legal = [
     border: 1px solid var(--ft-line);
     border-radius: 50%;
     transition:
-      background-color 0.4s var(--ease),
-      border-color 0.4s var(--ease),
-      color 0.4s var(--ease);
+      background-color var(--t-color) var(--ease),
+      border-color var(--t-color) var(--ease),
+      color var(--t-color) var(--ease);
   }
 
   .footer__top-icon :global(svg) {
     width: 16px;
     height: 16px;
     transform: rotate(-90deg);
-    transition: transform 0.5s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .footer__top-link:hover .footer__top-icon {

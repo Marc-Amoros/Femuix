@@ -129,6 +129,18 @@
   --radius-lg: clamp(8px, 0.8vw, 12px); /* esquinas más arquitectónicas */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.18, 1);
+
+  /* Movimiento: una sola escala para toda la web. Todo entra subiendo (el sentido del scroll),
+     las imágenes se descubren de abajo arriba y los filetes se dibujan de izquierda a derecha.
+     --t-color  colores, fondos, bordes y subrayados
+     --t-move   microinteracciones: rellenos, flechas, iconos y desplazamientos cortos
+     --t-enter  entradas de texto y bloques, y filetes que se dibujan al entrar
+     --t-media  imágenes que se descubren */
+  --t-color: 0.4s;
+  --t-move: 0.6s;
+  --t-enter: 1.1s;
+  --t-media: 1.4s;
+  --stagger-step: 110ms;
 }
 
 /* Dark UI «grafito y oro»: negro puro, los grises del símbolo FEMUIX black 2 y el dorado.
@@ -394,7 +406,7 @@ a {
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
   background: linear-gradient(var(--mark), var(--mark)) left bottom / 100% 0 no-repeat;
-  transition: background-size 0.4s var(--ease);
+  transition: background-size var(--t-color) var(--ease);
 }
 
 .text-link:hover {
@@ -597,9 +609,9 @@ main .eyebrow::before {
   cursor: pointer;
   isolation: isolate;
   transition:
-    color 0.5s var(--ease),
-    border-color 0.5s var(--ease),
-    transform 0.5s var(--ease);
+    color var(--t-color) var(--ease),
+    border-color var(--t-color) var(--ease),
+    transform var(--t-move) var(--ease);
 }
 
 /* Microinteracciones de los botones, con una sola lógica:
@@ -614,7 +626,7 @@ main .eyebrow::before {
   z-index: -1;
   transform: scaleY(0);
   transform-origin: 50% 0;
-  transition: transform 0.6s var(--ease);
+  transition: transform var(--t-move) var(--ease);
 }
 
 .roll {
@@ -629,13 +641,13 @@ main .eyebrow::before {
 .roll__in {
   display: flex;
   flex-direction: column;
-  transition: transform 0.6s var(--ease);
+  transition: transform var(--t-move) var(--ease);
 }
 
 .btn svg {
   width: 16px;
   height: 16px;
-  transition: transform 0.6s var(--ease);
+  transition: transform var(--t-move) var(--ease);
 }
 
 .btn:active {
@@ -762,9 +774,9 @@ main .eyebrow::before {
   background: rgba(255, 255, 255, 0.25); /* relleno suave para que se vea sobre la bruma */
   color: var(--ink);
   transition:
-    background-color 0.4s var(--ease),
-    color 0.4s var(--ease),
-    border-color 0.4s var(--ease);
+    background-color var(--t-color) var(--ease),
+    color var(--t-color) var(--ease),
+    border-color var(--t-color) var(--ease);
 }
 
 :root[data-theme='dark'] .more-link__icon {
@@ -774,7 +786,7 @@ main .eyebrow::before {
 .more-link__icon svg {
   width: 15px;
   height: 15px;
-  transition: transform 0.6s var(--ease);
+  transition: transform var(--t-move) var(--ease);
 }
 
 .more-link:focus-visible .more-link__icon,
@@ -811,12 +823,12 @@ main .eyebrow::before {
 
 .js .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  filter: blur(8px);
+  transform: translateY(28px);
+  filter: blur(6px);
   transition:
-    opacity 1.4s var(--ease),
-    transform 1.4s var(--ease),
-    filter 1.4s var(--ease);
+    opacity var(--t-enter) var(--ease),
+    transform var(--t-enter) var(--ease),
+    filter var(--t-enter) var(--ease);
   transition-delay: calc(var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
 }
 
@@ -830,22 +842,22 @@ main .eyebrow::before {
    sello…); al terminar (.is-done) vuelven las del componente, como el hover */
 .js .reveal.is-visible:not(.is-done) {
   transition:
-    opacity 1.4s var(--ease),
-    transform 1.4s var(--ease),
-    filter 1.4s var(--ease);
+    opacity var(--t-enter) var(--ease),
+    transform var(--t-enter) var(--ease),
+    filter var(--t-enter) var(--ease);
   transition-delay: calc(var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
 }
 
 /* Imagen que se descubre de abajo arriba */
 .js .clip-reveal {
   clip-path: inset(100% 0 0 0);
-  transition: clip-path 1.5s var(--ease-in-out);
+  transition: clip-path var(--t-media) var(--ease-in-out);
   transition-delay: calc(var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
 }
 
 .js .clip-reveal > * {
-  transform: scale(1.18);
-  transition: transform 2s var(--ease);
+  transform: scale(1.12);
+  transition: transform calc(var(--t-media) + 0.4s) var(--ease);
   transition-delay: calc(var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
 }
 
@@ -874,7 +886,7 @@ main .eyebrow::before {
 
 .js .split .w > span {
   transform: translateY(110%);
-  transition: transform 1.2s var(--ease);
+  transition: transform var(--t-enter) var(--ease);
   transition-delay: calc(var(--i) * 45ms + var(--stagger, 0ms) + var(--delay, 0ms) + var(--base, 0ms));
 }
 

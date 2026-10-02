@@ -139,7 +139,7 @@ const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
     white-space: nowrap;
     background: linear-gradient(currentColor, currentColor) left bottom / 0% 1px no-repeat;
     padding-bottom: 2px;
-    transition: background-size 0.6s var(--ease);
+    transition: background-size var(--t-color) var(--ease);
   }
 
   .ask__mail :global(svg) {
@@ -168,7 +168,7 @@ const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
     background: transparent;
     color: var(--ink);
     cursor: pointer;
-    transition: color 0.3s var(--ease);
+    transition: color var(--t-color) var(--ease);
   }
 
   .ask__icon {
@@ -176,8 +176,8 @@ const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
     display: grid;
     place-items: center;
     transition:
-      opacity 0.3s var(--ease),
-      transform 0.4s var(--ease);
+      opacity var(--t-color) var(--ease),
+      transform var(--t-move) var(--ease);
   }
 
   .ask__icon :global(svg) {
@@ -227,8 +227,8 @@ const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
     opacity: 0;
     transform: translate(-50%, 4px);
     transition:
-      opacity 0.25s var(--ease),
-      transform 0.25s var(--ease);
+      opacity var(--t-color) var(--ease),
+      transform var(--t-move) var(--ease);
   }
 
   .ask__tip::after {

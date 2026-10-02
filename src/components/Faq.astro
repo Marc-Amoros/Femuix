@@ -133,7 +133,7 @@ import { preguntas, site } from '../data/site';
 
   .faq__item {
     border-bottom: 1px solid var(--line-strong);
-    transition: border-color 0.5s var(--ease);
+    transition: border-color var(--t-color) var(--ease);
   }
 
   /* La pregunta abierta se marca con un filete dorado y la cursiva de la marca */
@@ -169,7 +169,7 @@ import { preguntas, site } from '../data/site';
     font-weight: 300;
     line-height: 1.35;
     color: var(--text);
-    transition: transform 0.6s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   summary:focus-visible .faq__q,
@@ -193,8 +193,8 @@ import { preguntas, site } from '../data/site';
       height: 0;
       overflow: clip;
       transition:
-        height 0.6s var(--ease),
-        content-visibility 0.6s allow-discrete;
+        height var(--t-move) var(--ease),
+        content-visibility var(--t-move) allow-discrete;
     }
     .faq__item[open]::details-content {
       height: auto;
@@ -211,9 +211,9 @@ import { preguntas, site } from '../data/site';
     border-radius: 50%;
     color: var(--ink);
     transition:
-      transform 0.5s var(--ease),
-      background-color 0.4s var(--ease),
-      color 0.4s var(--ease);
+      transform var(--t-move) var(--ease),
+      background-color var(--t-color) var(--ease),
+      color var(--t-color) var(--ease);
   }
 
   .faq__icon :global(svg) {

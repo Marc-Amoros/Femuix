@@ -19,10 +19,10 @@ import { fases } from '../data/site';
         </p>
 
         <nav aria-label="Fases del método">
-          <ol class="metodo__index reveal">
+          <ol class="metodo__index">
             {
               fases.map((f, i) => (
-                <li>
+                <li class="reveal">
                   <a
                     href={`#fase-${f.n}`}
                     data-phase-link={i}
@@ -44,16 +44,16 @@ import { fases } from '../data/site';
     <ol class="fases">
       {
         fases.map((f, i) => (
-          <li class="fase" id={`fase-${f.n}`} style={`--i: ${i}`} data-phase={i}>
-            <div class="fase__top">
+          <li class="fase" id={`fase-${f.n}`} style={`--i: ${i}`} data-phase={i} data-reveal-unit>
+            <div class="fase__top reveal">
               <span class="fase__label">Fase {f.n}</span>
               <span class="fase__n" aria-hidden="true">
                 {f.n}
               </span>
             </div>
-            <h3 class="fase__name">{f.nombre}</h3>
-            <p class="fase__text">{f.texto}</p>
-            <p class="fase__deliver">
+            <h3 class="fase__name reveal">{f.nombre}</h3>
+            <p class="fase__text reveal">{f.texto}</p>
+            <p class="fase__deliver reveal">
               <span>Te llevas</span>
               {f.entregable}
             </p>
@@ -167,9 +167,9 @@ import { fases } from '../data/site';
     color: var(--text);
     text-decoration: none;
     transition:
-      background-color 0.4s var(--ease),
-      color 0.4s var(--ease),
-      padding 0.5s var(--ease);
+      background-color var(--t-color) var(--ease),
+      color var(--t-color) var(--ease),
+      padding var(--t-color) var(--ease);
   }
 
   .metodo__index a:hover {
@@ -195,7 +195,7 @@ import { fases } from '../data/site';
     background: var(--warm);
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.5s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .metodo__index a.is-active {
@@ -261,7 +261,7 @@ import { fases } from '../data/site';
       0 30px 60px -40px rgba(14, 32, 27, 0.55);
     transform: scale(calc(1 - var(--depth, 0) * 0.035));
     transform-origin: 50% 0;
-    transition: transform 0.7s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   :global([data-theme='dark']) .fase {

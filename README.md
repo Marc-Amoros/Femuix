@@ -130,9 +130,15 @@ fases y sello que se mueven con el scroll, vídeo que crece con el scroll, frase
 portal en 3D, comparador antes/después y logotipo gigante en el pie. Todo se desactiva si el
 sistema pide reducir el movimiento.
 
+Escala de movimiento (tokens en `global.css`): `--t-color` 0,4 s para colores y subrayados,
+`--t-move` 0,6 s para microinteracciones, `--t-enter` 1,1 s para entradas y filetes que se dibujan,
+`--t-media` 1,4 s para imágenes que se descubren. Todo entra subiendo, las imágenes se descubren de
+abajo arriba y los filetes se dibujan de izquierda a derecha.
+
 Apariciones (`.reveal`, `.split`, `.clip-reveal`, en `src/scripts/motion.ts`): salen en orden de
 lectura y por tandas. Lo que ya se ve en la misma sección entra junto (rótulo, titular y
-entradilla), cada tanda espera a la anterior sin adelantarla nunca, y en un salto con el menú o
+entradilla); un bloque con `data-reveal-unit` (tarjeta del método, cierre del pie) se presenta
+entero y de arriba abajo; al final de la página aparece lo que quede pendiente, cada tanda espera a la anterior sin adelantarla nunca, y en un salto con el menú o
 un giro rápido de rueda se espera a que la página se pare: lo que queda fuera aparece sin
 animación. En el móvil (desplazamiento con el dedo) todo aparece en cuanto entra, también durante
 el gesto. Al tocar un botón, un enlace con flecha o una pregunta, hace un instante la misma

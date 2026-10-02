@@ -184,7 +184,7 @@ const { base = '' } = Astro.props;
     box-shadow: inset 0 -1px 0 var(--hd-line);
     -webkit-backdrop-filter: saturate(1.4) blur(14px);
     backdrop-filter: saturate(1.4) blur(14px);
-    transition: box-shadow 0.5s var(--ease);
+    transition: box-shadow var(--t-color) var(--ease);
   }
 
   :global([data-theme='dark']) .header {
@@ -273,7 +273,7 @@ const { base = '' } = Astro.props;
     text-transform: uppercase;
     text-decoration: none;
     color: var(--hd-soft);
-    transition: color 0.4s var(--ease);
+    transition: color var(--t-color) var(--ease);
   }
 
   .header__nav a:hover,
@@ -292,7 +292,7 @@ const { base = '' } = Astro.props;
     height: 1px;
     background: var(--gold-deep);
     transform: scaleX(0);
-    transition: transform 0.6s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .header__nav a::before {
@@ -304,7 +304,7 @@ const { base = '' } = Astro.props;
     height: 5px;
     background: var(--gold-deep);
     transform: rotate(45deg) scale(0);
-    transition: transform 0.6s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .header__nav a:focus-visible:not([aria-current])::after {
@@ -326,8 +326,8 @@ const { base = '' } = Astro.props;
     .header__bar,
     .header__logo {
       transition:
-        height 0.6s var(--ease),
-        width 0.6s var(--ease);
+        height var(--t-move) var(--ease),
+        width var(--t-move) var(--ease);
     }
     .header.is-scrolled {
       --header-h: 68px;
@@ -377,8 +377,8 @@ const { base = '' } = Astro.props;
     color: var(--hd-fg);
     cursor: pointer;
     transition:
-      border-color 0.4s var(--ease),
-      background-color 0.4s var(--ease);
+      border-color var(--t-color) var(--ease),
+      background-color var(--t-color) var(--ease);
   }
 
   .menu-btn:hover {
@@ -396,7 +396,7 @@ const { base = '' } = Astro.props;
     height: 1.5px;
     border-radius: 1px;
     background: currentColor;
-    transition: transform 0.45s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .menu-btn[aria-expanded='true'] .menu-btn__lines i:first-child {
@@ -487,7 +487,7 @@ const { base = '' } = Astro.props;
     font-weight: 300;
     line-height: 1.15;
     letter-spacing: -0.02em;
-    transition: transform 0.6s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .menu__n {
@@ -505,8 +505,8 @@ const { base = '' } = Astro.props;
     color: var(--muted);
     opacity: 0.6;
     transition:
-      transform 0.6s var(--ease),
-      opacity 0.4s var(--ease);
+      transform var(--t-move) var(--ease),
+      opacity var(--t-color) var(--ease);
   }
 
   .menu__nav a:focus-visible .menu__label {

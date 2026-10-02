@@ -39,6 +39,9 @@ function countUp(el: HTMLElement) {
 // formulario de al lado), uno tras otro, y cada tanda espera a que termine la anterior.
 // - Cuando algo entra, lo que ya está a la vista en su misma sección entra con él: el rótulo, el
 //   titular y la entradilla salen juntos y en orden, no a trozos según cruzan la línea.
+// - Un bloque compacto marcado con data-reveal-unit (una tarjeta del método, el cierre del pie) se
+//   presenta entero y de arriba abajo, aunque su parte de abajo aún no se vea.
+// - Al llegar al final de la página aparece lo que queda pendiente (ya no puede cruzar la línea).
 // - Durante un desplazamiento rápido (un salto con el menú) se espera a que la página se pare: lo
 //   que se ha quedado fuera de pantalla aparece al momento y no hace esperar a lo que sí se ve.
 // - Si un elemento trae su retardo (--delay en línea, coreografía de la portada), se respeta al
@@ -49,7 +52,7 @@ const waiting = new Map<Element, HTMLElement>(); // lo observado → lo que apar
 
 const STEP = 110; // ms entre un elemento y el siguiente
 const MAX_STAGGER = 900; // una tanda larga se comprime para no hacer esperar
-const DURATION = 1600; // lo que dura la entrada más larga (.reveal 1,4 s; .clip-reveal 1,5–1,6 s)
+const DURATION = 1300; // lo que dura una entrada (.reveal, --t-enter 1,1 s) con margen
 
 // Cuánto ocupa cada elemento en la secuencia: un titular, lo que tardan sus palabras
 function stepOf(el: HTMLElement) {
@@ -64,6 +67,8 @@ const baseOf = (el: HTMLElement) =>
   root.classList.contains('intro') && el.closest('.hero') ? 1600 : 0;
 
 const scopeOf = (el: Element) => el.closest('section, footer') ?? document.body;
+const unitOf = (el: Element) => el.closest('[data-reveal-unit]');
+const inUnit = new Set<HTMLElement>(); // entran con su bloque aunque estén por debajo de la pantalla
 
 let pending: HTMLElement[] = [];
 let slot = 0; // momento (performance.now) en que puede empezar el siguiente
@@ -130,7 +135,7 @@ function flush() {
   const vh = window.innerHeight;
   for (const el of batch) {
     const r = el.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > vh) {
+    if (r.bottom < 0 || (r.top > vh && !inUnit.has(el))) {
       el.style.setProperty('--delay', '0ms');
       el.style.setProperty('--stagger', '0ms');
       show(el, 0);
@@ -176,6 +181,16 @@ const io = new IntersectionObserver(
       const r = target.getBoundingClientRect();
       if (r.top < vh && r.bottom > 0) take(target);
     }
+
+    // Y todo lo de su mismo bloque compacto, en orden
+    const units = new Set(pending.map(unitOf).filter(Boolean));
+    for (const target of [...waiting.keys()]) {
+      const unit = unitOf(target);
+      if (!unit || !units.has(unit)) continue;
+      const el = waiting.get(target);
+      if (el) inUnit.add(el);
+      take(target);
+    }
     schedule();
   },
   { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
@@ -196,6 +211,17 @@ document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
 document.querySelectorAll<HTMLElement>('.clip-reveal').forEach((el) => {
   watch(el.parentElement ?? el, el);
 });
+
+// Al final de la página lo último ya no puede cruzar la línea de entrada: aparece lo que se vea
+function revealRest() {
+  if (!waiting.size) return;
+  const vh = window.innerHeight;
+  for (const target of [...waiting.keys()]) {
+    const r = target.getBoundingClientRect();
+    if (r.top < vh && r.bottom > 0) take(target);
+  }
+  if (pending.length) schedule();
+}
 
 /* ---------- Efectos ligados al scroll ---------- */
 
@@ -230,6 +256,8 @@ function update() {
     header.style.setProperty('--scroll', String(max > 0 ? y / max : 0));
     header.classList.toggle('is-scrolled', y > 24);
   }
+
+  if (y + vh >= root.scrollHeight - 4) revealRest();
 
   // Menú: marca la sección que cruza la línea de lectura (40 % de la pantalla); fuera de ellas, ninguna
   if (spySections.length) {

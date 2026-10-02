@@ -84,7 +84,7 @@ const palabras = frase.flatMap((p) => p.text.split(' ').map((w) => ({ w, em: p.e
     background: var(--ink);
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.8s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .suena__list li.is-on::after {
@@ -105,7 +105,7 @@ const palabras = frase.flatMap((p) => p.text.split(' ').map((w) => ({ w, em: p.e
     font-weight: 300;
     line-height: 1.25;
     letter-spacing: -0.015em;
-    transition: transform 0.7s var(--ease);
+    transition: transform var(--t-move) var(--ease);
   }
 
   .suena__list li.is-on .suena__text {
@@ -121,17 +121,17 @@ const palabras = frase.flatMap((p) => p.text.split(' ').map((w) => ({ w, em: p.e
     border-radius: 50%;
     color: var(--ink);
     transition:
-      background-color 0.5s var(--ease),
-      color 0.5s var(--ease),
-      border-color 0.5s var(--ease);
+      background-color var(--t-color) var(--ease),
+      color var(--t-color) var(--ease),
+      border-color var(--t-color) var(--ease);
   }
 
   :global(.js) .suena__icon :global(svg) {
     transform: scale(0.4);
     opacity: 0;
     transition:
-      transform 0.5s var(--ease) 0.15s,
-      opacity 0.3s var(--ease) 0.15s;
+      transform var(--t-move) var(--ease) 0.15s,
+      opacity var(--t-color) var(--ease) 0.15s;
   }
 
   .suena__list li.is-on .suena__icon :global(svg) {
@@ -164,7 +164,7 @@ const palabras = frase.flatMap((p) => p.text.split(' ').map((w) => ({ w, em: p.e
   /* Antes de encenderse ya cumple 3:1 (texto grande, WCAG 1.4.3) */
   .fw {
     color: var(--fill-dim);
-    transition: color 0.4s var(--ease);
+    transition: color var(--t-color) var(--ease);
   }
 
   .fw.is-lit {

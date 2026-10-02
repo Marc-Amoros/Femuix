@@ -187,8 +187,8 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
       transform: translate(14px, -14px);
       /* Tras la foto (250 ms + lo que tarda en descubrirse), también con la intro (--base) */
       transition:
-        opacity 1.2s var(--ease) calc(var(--base, 0ms) + 1.15s),
-        transform 1.5s var(--ease) calc(var(--base, 0ms) + 1.15s);
+        opacity var(--t-enter) var(--ease) calc(var(--base, 0ms) + 1s),
+        transform var(--t-enter) var(--ease) calc(var(--base, 0ms) + 1s);
     }
 
     :global(.js) .hero__media:has(.clip-reveal.is-visible)::after {
@@ -269,7 +269,7 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
     background: var(--deep);
     color: var(--white);
     text-decoration: none;
-    transition: background-color 0.5s var(--ease);
+    transition: background-color var(--t-color) var(--ease);
   }
 
   .badge:hover {
@@ -280,8 +280,8 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
   :global([data-theme='dark']) .badge {
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
     transition:
-      background-color 0.5s var(--ease),
-      box-shadow 0.5s var(--ease);
+      background-color var(--t-color) var(--ease),
+      box-shadow var(--t-color) var(--ease);
   }
 
   :global([data-theme='dark']) .badge:hover {
@@ -398,7 +398,7 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
     background: var(--gold-line);
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 1.2s var(--ease) calc(var(--stagger, 0ms) + var(--base, 0ms) + 300ms);
+    transition: transform var(--t-enter) var(--ease) calc(var(--stagger, 0ms) + var(--base, 0ms) + 300ms);
   }
 
   .fact.is-visible .fact__k::after {

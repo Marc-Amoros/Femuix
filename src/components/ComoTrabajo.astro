@@ -127,7 +127,7 @@ import { fases, principios } from '../data/site';
     background: var(--line-strong);
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 1.4s var(--ease) calc(var(--stagger, 0ms) + 150ms);
+    transition: transform var(--t-enter) var(--ease) calc(var(--stagger, 0ms) + 150ms);
   }
 
   .principios li:global(.is-visible)::before {
