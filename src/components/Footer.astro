@@ -141,6 +141,8 @@ const legal = [
     --ft-dot: var(--warm);
     padding-top: clamp(96px, 12vw, 168px);
     font-size: 0.9375rem;
+    /* Lo que aún no ha entrado (desplazado hacia abajo) no alarga la página más allá del pie */
+    overflow: clip;
   }
 
   /* Dark UI: pie en #101820 (Pantone Black 6 C) con la escala de grises de black 2 */

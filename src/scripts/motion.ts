@@ -258,6 +258,7 @@ function update() {
   }
 
   if (y + vh >= root.scrollHeight - 4) revealRest();
+  root.classList.toggle('is-end', y > (root.scrollHeight - vh) / 2);
 
   // Menú: marca la sección que cruza la línea de lectura (40 % de la pantalla); fuera de ellas, ninguna
   if (spySections.length) {

@@ -311,6 +311,15 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
   -webkit-text-size-adjust: 100%;
+  /* La página termina en el pie: sin el rebote elástico del móvil, que al final dejaba ver un
+     fondo blanco vacío debajo y parecía que la página no se acababa */
+  overscroll-behavior-y: none;
+  background-color: var(--bg);
+}
+
+/* Donde el navegador aún rebota (iOS antiguos), lo que asoma bajo el pie es del color del pie */
+html.is-end {
+  background-color: var(--deep);
 }
 
 html.lenis {
