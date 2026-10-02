@@ -19,15 +19,6 @@
   src: url('../fonts/merriweather-italic.woff2') format('woff2');
 }
 
-/* Negrita solo para destacar alguna palabra en los titulares: fija al tamaño óptico de display */
-@font-face {
-  font-family: 'Merriweather';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('../fonts/merriweather-bold.woff2') format('woff2');
-}
-
 /*
   Paleta 60 / 30 / 10
   60 % blanco      #FFFFFF → fondo y espacio en blanco
@@ -859,11 +850,6 @@ main .eyebrow::before {
 
 .split .w > span {
   display: inline-block;
-}
-
-/* Palabra destacada en negrita (Merriweather 700), p. ej. el nombre de la marca */
-.split strong {
-  font-weight: 700;
 }
 
 .js .split .w > span {
