@@ -152,7 +152,6 @@ const fills = [...document.querySelectorAll<HTMLElement>('[data-fill]')].map((el
   words: [...el.querySelectorAll<HTMLElement>('.fw')],
 }));
 
-let lastY = window.scrollY;
 let ticking = false;
 
 function update() {
@@ -160,15 +159,12 @@ function update() {
   const y = window.scrollY;
   const vh = window.innerHeight;
 
-  // Cabecera: fondo, barra de progreso y ocultar al bajar
+  // Cabecera: siempre fija y visible; solo cambian el fondo y la barra de progreso
   if (header) {
     const max = root.scrollHeight - vh;
     header.style.setProperty('--scroll', String(max > 0 ? y / max : 0));
     header.classList.toggle('is-scrolled', y > 24);
-    const goingDown = y > lastY;
-    header.classList.toggle('is-hidden', goingDown && y > vh * 0.6);
   }
-  lastY = y;
 
   // Menú: marca la sección que cruza la línea de lectura (40 % de la pantalla); fuera de ellas, ninguna
   if (spySections.length) {
