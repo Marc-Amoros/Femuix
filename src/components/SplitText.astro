@@ -1,8 +1,9 @@
 ---
-// Titular que aparece palabra a palabra. Cada parte puede ir en cursiva (em).
+// Titular que aparece palabra a palabra. Cada parte puede ir en cursiva (em) o en negrita (strong).
 interface Part {
   text: string;
   em?: boolean;
+  strong?: boolean;
   br?: boolean; // empieza en una línea nueva
 }
 
@@ -21,7 +22,7 @@ const words = parts.flatMap((part) =>
   part.text
     .split(/\s+/)
     .filter(Boolean)
-    .map((w, n) => ({ w, em: part.em, br: part.br && n === 0, i: i++ })),
+    .map((w, n) => ({ w, em: part.em, strong: part.strong, br: part.br && n === 0, i: i++ })),
 );
 const label = parts.map((p) => p.text).join(' ');
 ---
@@ -34,7 +35,7 @@ const label = parts.map((p) => p.text).join(' ');
     words.map((word, idx) => (
       <>
         <span class="w" aria-hidden="true">
-          <span style={`--i: ${word.i}`}>{word.em ? <em>{word.w}</em> : word.w}</span>
+          <span style={`--i: ${word.i}`}>{word.em ? <em>{word.w}</em> : word.strong ? <strong>{word.w}</strong> : word.w}</span>
         </span>
         {idx < words.length - 1 && (words[idx + 1].br ? <br /> : ' ')}
       </>
