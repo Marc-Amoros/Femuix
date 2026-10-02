@@ -120,7 +120,9 @@ rombo dorado. Las bandas de bruma usan `.band` y la de petróleo `.band--teal` (
 ## Tipografía
 
 - **Títulos:** Merriweather (en `src/fonts/`), peso ligero 300 con tamaño óptico variable. Está
-  recortada a caracteres latinos (≈200 KB por estilo en lugar de 4,5 MB). Licencia OFL incluida.
+  recortada a los caracteres del español (≈90 KB por estilo en lugar de 4,5 MB). Licencia OFL incluida.
+  Para destacar una palabra en un titular hay una negrita 700 fija al tamaño de display
+  (`merriweather-bold.woff2`, 44 KB): en `SplitText`, `{ text: 'Femuix:', strong: true }`.
 - **Texto:** Inter Variable.
 
 ## Movimiento
