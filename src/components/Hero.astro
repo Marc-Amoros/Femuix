@@ -294,8 +294,21 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
     inset: 0;
     width: 100%;
     height: 100%;
-    /* Gira con el scroll (motion.ts escribe --rot), no solo: WCAG 2.2.2 */
+    /* Gira siempre, despacio (rotate), y el scroll le suma su propio giro (motion.ts escribe --rot
+       en transform; las dos rotaciones se acumulan). Quieto si el sistema pide reducir el movimiento. */
     transform: rotate(var(--rot, 0deg));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .badge__ring {
+      animation: badge-spin 24s linear infinite;
+    }
+  }
+
+  @keyframes badge-spin {
+    to {
+      rotate: 360deg;
+    }
   }
 
   .badge__ring text {

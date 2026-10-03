@@ -305,7 +305,7 @@ function update() {
     el.style.setProperty('--e', clamp01((vh - top) / (vh * 0.75)).toFixed(4));
   }
 
-  // Sello de la portada: gira con el scroll, nunca solo
+  // Sello de la portada: gira solo y despacio (CSS); el scroll le suma este giro
   for (const el of rotators) el.style.setProperty('--rot', `${(y * 0.12).toFixed(1)}deg`);
 
   // Franjas de fases: avanzan en sentidos opuestos mientras cruzan la pantalla.
