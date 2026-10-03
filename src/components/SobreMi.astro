@@ -102,7 +102,7 @@ import { fotos, usarMuestras } from '../data/media';
   }
 
   /* Entrada en tres tiempos: el paspartú sube y aparece, la foto se descubre de abajo arriba
-     mientras se aleja suavemente, y la tarjeta de la firma llega desde la derecha */
+     mientras se aleja suavemente y, cuando ya está entera, llega la tarjeta de la firma */
   :global(.js) .sobre__frame {
     opacity: 0;
     translate: 0 40px;
@@ -121,17 +121,18 @@ import { fotos, usarMuestras } from '../data/media';
     --base: 250ms;
   }
 
-  /* La firma va ligada a la foto: llega desde la derecha cuando la foto ya se está descubriendo,
-     también si se ve antes que el texto de al lado */
+  /* La firma va ligada a la foto: primero la foto se descubre entera (el retardo de 250 ms más lo
+     que dura) y después llega la tarjeta desde la derecha, también si se ve antes que el texto */
   @supports selector(:has(*)) {
     :global(.js) .sobre__sign {
+      --wait: calc(var(--t-media) + 250ms);
       opacity: 0;
       transform: translateX(48px);
       filter: blur(8px);
       transition:
-        opacity var(--t-enter) var(--ease) 0.9s,
-        transform var(--t-enter) var(--ease) 0.9s,
-        filter var(--t-enter) var(--ease) 0.9s;
+        opacity var(--t-enter) var(--ease) var(--wait),
+        transform var(--t-enter) var(--ease) var(--wait),
+        filter var(--t-enter) var(--ease) var(--wait);
     }
 
     :global(.js) .sobre__media:has(:global(.clip-reveal.is-visible)) .sobre__sign {
