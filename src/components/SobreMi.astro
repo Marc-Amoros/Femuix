@@ -10,7 +10,7 @@ import { fotos, usarMuestras } from '../data/media';
 <section class="section band tex-none sobre" id="sobre-mi" data-expand aria-labelledby="sobre-title">
   <div class="container sobre__grid">
     <!-- Retrato con la firma superpuesta, como una tarjeta de visita -->
-    <div class="sobre__media">
+    <div class="sobre__media" data-stagger-scope>
       <div class="sobre__frame">
         <div class="clip-reveal">
           <div data-parallax="0.08">
@@ -51,7 +51,7 @@ import { fotos, usarMuestras } from '../data/media';
         {
           sobreMi.compromisos.map((c, i) => (
             <li class="reveal">
-              <span class="sobre__n">0{i + 1}</span>
+              <span class="sobre__n"><span>0{i + 1}</span></span>
               <h3>{c.titulo}</h3>
               <p>{c.texto}</p>
             </li>
@@ -101,45 +101,9 @@ import { fotos, usarMuestras } from '../data/media';
     border-radius: var(--radius-lg);
   }
 
-  /* Entrada en tres tiempos: el paspartú sube y aparece, la foto se descubre de abajo arriba
-     mientras se aleja suavemente y, cuando ya está entera, llega la tarjeta de la firma */
-  :global(.js) .sobre__frame {
-    opacity: 0;
-    translate: 0 40px;
-    transition:
-      opacity var(--t-enter) var(--ease),
-      translate var(--t-enter) var(--ease);
-  }
-
-  :global(.js) .sobre__frame:has(:global(.clip-reveal.is-visible)) {
-    opacity: 1;
-    translate: 0 0;
-  }
-
   /* --base suma un retardo fijo al orden de aparición que calcula motion.ts */
   :global(.js) .sobre__frame :global(.clip-reveal) {
     --base: 250ms;
-  }
-
-  /* La firma va ligada a la foto: primero la foto se descubre entera (el retardo de 250 ms más lo
-     que dura) y después llega la tarjeta desde la derecha, también si se ve antes que el texto */
-  @supports selector(:has(*)) {
-    :global(.js) .sobre__sign {
-      --wait: calc(var(--t-media) + 250ms);
-      opacity: 0;
-      transform: translateX(48px);
-      filter: blur(8px);
-      transition:
-        opacity var(--t-enter) var(--ease) var(--wait),
-        transform var(--t-enter) var(--ease) var(--wait),
-        filter var(--t-enter) var(--ease) var(--wait);
-    }
-
-    :global(.js) .sobre__media:has(:global(.clip-reveal.is-visible)) .sobre__sign {
-      opacity: 1;
-      transform: none;
-      filter: none;
-    }
   }
 
   /* Tarjeta de firma que se apoya sobre la esquina de la foto */
@@ -192,10 +156,22 @@ import { fotos, usarMuestras } from '../data/media';
   }
 
   /* Cita: la idea que guía el estudio */
+  /* El filete dorado es un borde de un pseudoelemento para poder dibujarlo al entrar; al ser borde,
+     se sigue viendo con los colores forzados de Windows */
   .sobre__quote {
+    position: relative;
     margin: 4px 0 0;
-    padding: 2px 0 2px 16px;
+    padding: 2px 0 2px 18px;
+  }
+
+  .sobre__quote::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
     border-left: 2px solid var(--gold-line);
+    transform-origin: top;
   }
 
   .sobre__quote p {
@@ -236,13 +212,19 @@ import { fotos, usarMuestras } from '../data/media';
     background: rgba(0, 0, 0, 0.35);
   }
 
+  /* El número sube desde su línea base: se recorta solo por debajo */
   .sobre__n {
+    clip-path: inset(-50% -50% 0 -50%);
     font-family: var(--serif);
     font-size: 1.5rem;
     font-style: italic;
     font-weight: 300;
     line-height: 1;
     color: var(--number);
+  }
+
+  .sobre__n > span {
+    display: inline-block;
   }
 
   .sobre__pacts h3 {
@@ -258,6 +240,7 @@ import { fotos, usarMuestras } from '../data/media';
 
   /* Acciones: el botón principal y, tras un filete fino, el enlace secundario editorial */
   .sobre__actions {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -265,21 +248,171 @@ import { fotos, usarMuestras } from '../data/media';
     width: 100%;
     margin-top: 8px;
     padding-top: 28px;
-    border-top: 1px solid var(--line);
   }
 
-  /* Hasta escritorio grande los compromisos van en lista: número a la izquierda */
-  @media (prefers-reduced-motion: reduce) {
-    :global(.js) .sobre__frame,
-    :global(.js) .sobre__sign {
+  .sobre__actions::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--line);
+    transform-origin: left;
+  }
+
+  /* ---------- Entrada ----------
+     1. El paspartú sube y se asienta; dentro, la foto se descubre de abajo arriba mientras se aleja.
+     2. Cuando la foto ya está entera llega la tarjeta de la firma y, tras ella, su rombo, el nombre
+        y el cargo, uno detrás de otro.
+     3. A la derecha, en orden: rótulo, titular, entradilla; el filete dorado de la cita se dibuja de
+        arriba abajo y la frase aparece de izquierda a derecha, como si se escribiera; cada
+        compromiso sube con su número, su título y su texto escalonados, y el filete de las
+        acciones se dibuja antes de que lleguen los botones.
+     --stagger (motion.ts) marca cuándo empieza cada bloque; lo de dentro se apoya en él.
+     Si el sistema pide reducir el movimiento no se aplica nada de esto: todo está quieto y a la vista. */
+  @media (prefers-reduced-motion: no-preference) {
+    /* --stagger llega de la foto (data-stagger-scope): el paspartú sube justo antes de que se descubra */
+    :global(.js) .sobre__frame {
+      opacity: 0;
+      translate: 0 40px;
+      scale: 0.97;
+      transition:
+        opacity var(--t-enter) var(--ease) var(--stagger, 0ms),
+        translate var(--t-media) var(--ease) var(--stagger, 0ms),
+        scale var(--t-media) var(--ease) var(--stagger, 0ms);
+    }
+
+    :global(.js) .sobre__frame:has(:global(.clip-reveal.is-visible)) {
       opacity: 1;
-      translate: none;
+      translate: 0 0;
+      scale: 1;
+    }
+
+    @supports selector(:has(*)) {
+      :global(.js) .sobre__sign {
+        --wait: calc(var(--stagger, 0ms) + var(--t-media) + 250ms);
+        opacity: 0;
+        translate: 40px 0;
+        transition:
+          opacity var(--t-enter) var(--ease) var(--wait),
+          translate var(--t-enter) var(--ease) var(--wait);
+      }
+
+      :global(.js) .sobre__sign :global(.sobre__mark),
+      :global(.js) .sobre__name,
+      :global(.js) .sobre__role {
+        opacity: 0;
+        transition:
+          opacity var(--t-enter) var(--ease) calc(var(--wait) + var(--in)),
+          translate var(--t-enter) var(--ease) calc(var(--wait) + var(--in)),
+          scale var(--t-enter) var(--ease) calc(var(--wait) + var(--in));
+      }
+
+      :global(.js) .sobre__sign :global(.sobre__mark) {
+        --in: 200ms;
+        scale: 0.6;
+      }
+
+      :global(.js) .sobre__name {
+        --in: 320ms;
+        translate: 0 10px;
+      }
+
+      :global(.js) .sobre__role {
+        --in: 420ms;
+        translate: 0 10px;
+      }
+
+      :global(.js) .sobre__media:has(:global(.clip-reveal.is-visible)) .sobre__sign,
+      :global(.js) .sobre__media:has(:global(.clip-reveal.is-visible)) .sobre__sign :global(.sobre__mark),
+      :global(.js) .sobre__media:has(:global(.clip-reveal.is-visible)) .sobre__name,
+      :global(.js) .sobre__media:has(:global(.clip-reveal.is-visible)) .sobre__role {
+        opacity: 1;
+        translate: 0 0;
+        scale: 1;
+      }
+    }
+
+    /* Cita: el bloque no sube ni se difumina; se dibuja el filete y se escribe la frase */
+    :global(.js) .sobre__quote.reveal {
+      opacity: 1;
       transform: none;
       filter: none;
-      transition: none;
+    }
+
+    :global(.js) .sobre__quote::before {
+      transform: scaleY(0);
+      transition: transform var(--t-enter) var(--ease-in-out) var(--stagger, 0ms);
+    }
+
+    :global(.js) .sobre__quote p {
+      -webkit-mask-image: linear-gradient(90deg, #000 33.3%, transparent 66.6%);
+      mask-image: linear-gradient(90deg, #000 33.3%, transparent 66.6%);
+      -webkit-mask-size: 300% 100%;
+      mask-size: 300% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+      transition:
+        -webkit-mask-position 1.8s var(--ease) calc(var(--stagger, 0ms) + 350ms),
+        mask-position 1.8s var(--ease) calc(var(--stagger, 0ms) + 350ms);
+    }
+
+    :global(.js) .sobre__quote.is-visible::before {
+      transform: none;
+    }
+
+    :global(.js) .sobre__quote.is-visible p {
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
+
+    /* Compromisos: la tarjeta sube y, dentro, número, título y texto llegan escalonados */
+    :global(.js) .sobre__n > span,
+    :global(.js) .sobre__pacts h3,
+    :global(.js) .sobre__pacts p {
+      transition:
+        opacity var(--t-enter) var(--ease) calc(var(--stagger, 0ms) + var(--in)),
+        translate var(--t-enter) var(--ease) calc(var(--stagger, 0ms) + var(--in));
+    }
+
+    :global(.js) .sobre__n > span {
+      --in: 180ms;
+      translate: 0 105%;
+    }
+
+    :global(.js) .sobre__pacts h3 {
+      --in: 280ms;
+      opacity: 0;
+      translate: 0 12px;
+    }
+
+    :global(.js) .sobre__pacts p {
+      --in: 380ms;
+      opacity: 0;
+      translate: 0 12px;
+    }
+
+    :global(.js) .sobre__pacts :global(.is-visible) .sobre__n > span,
+    :global(.js) .sobre__pacts :global(.is-visible) h3,
+    :global(.js) .sobre__pacts :global(.is-visible) p {
+      opacity: 1;
+      translate: 0 0;
+    }
+
+    /* Acciones: el filete se dibuja de izquierda a derecha mientras suben los botones */
+    :global(.js) .sobre__actions::before {
+      transform: scaleX(0);
+      transition: transform var(--t-media) var(--ease-in-out) var(--stagger, 0ms);
+    }
+
+    :global(.js) .sobre__actions.is-visible::before {
+      transform: none;
     }
   }
 
+  /* Hasta escritorio grande los compromisos van en lista: número a la izquierda */
   @media (max-width: 1280px) {
     .sobre__pacts {
       grid-template-columns: minmax(0, 1fr);

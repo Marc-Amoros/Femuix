@@ -48,6 +48,8 @@ function countUp(el: HTMLElement) {
 //   cargar la página y lo que va detrás en el documento espera a que termine.
 // El recorte (clip-path) de .clip-reveal cuenta para IntersectionObserver y nunca "entraría":
 // se observa su contenedor y se marca el hijo.
+// - Un contenedor con data-stagger-scope recibe también el --stagger de lo que entra dentro, para
+//   que sus otras piezas (el paspartú y la firma del retrato) vayan a su compás.
 const waiting = new Map<Element, HTMLElement>(); // lo observado → lo que aparece
 
 const STEP = 110; // ms entre un elemento y el siguiente
@@ -100,6 +102,11 @@ function take(target: Element) {
   pending.push(el);
 }
 
+function setStagger(el: HTMLElement, ms: number) {
+  el.style.setProperty('--stagger', `${ms}ms`);
+  el.parentElement?.closest<HTMLElement>('[data-stagger-scope]')?.style.setProperty('--stagger', `${ms}ms`);
+}
+
 function show(el: HTMLElement, delay: number) {
   el.classList.add('is-visible');
   // Al terminar la entrada vuelven las transiciones propias del componente (hover, abrir…)
@@ -137,7 +144,7 @@ function flush() {
     const r = el.getBoundingClientRect();
     if (r.bottom < 0 || (r.top > vh && !inUnit.has(el))) {
       el.style.setProperty('--delay', '0ms');
-      el.style.setProperty('--stagger', '0ms');
+      setStagger(el, 0);
       show(el, 0);
       continue;
     }
@@ -160,7 +167,7 @@ function flush() {
     if (!p.fixed) {
       delay = Math.round(squeeze(delay));
       p.el.style.setProperty('--delay', '0ms');
-      p.el.style.setProperty('--stagger', `${delay}ms`);
+      setStagger(p.el, delay);
     }
     show(p.el, delay);
   }

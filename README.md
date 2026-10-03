@@ -127,7 +127,8 @@ rombo dorado. Las bandas de bruma usan `.band` y la de petróleo `.band--teal` (
 
 Intro con el isotipo (una vez por sesión), titulares palabra a palabra, scroll suave, franja de
 fases que se mueve con el scroll, sello que gira siempre despacio (y más rápido con el scroll), vídeo que crece con el scroll, frase que se ilumina, tarjetas del método apiladas,
-portal en 3D, comparador antes/después y logotipo gigante en el pie. Todo se desactiva si el
+portal en 3D, comparador antes/después, «Sobre mí» en tres tiempos (foto, firma y texto, con la cita
+que se escribe y filetes que se dibujan) y logotipo gigante en el pie. Todo se desactiva si el
 sistema pide reducir el movimiento.
 
 Escala de movimiento (tokens en `global.css`): `--t-color` 0,4 s para colores y subrayados,
