@@ -171,7 +171,9 @@ mientras está abierto deja la página de detrás inactiva (`inert`) para que el
 caso de `overscroll-behavior`) y pinta de blanco el hueco que se abre bajo el pie, con lo que
 parecía que la página seguía. En `global.css`, `body::before` es una capa fija del color del pie
 que espera justo debajo de la pantalla: en el rebote sube con la página y rellena el hueco. No la
-quites ni le pongas degradados (un color plano es lo que el móvil pinta al instante).
+quites ni le pongas degradados (un color plano es lo que el móvil pinta al instante), y no le
+quites `will-change: transform`: sin capa propia WebKit la pinta dentro de la página, cortada donde
+acaba el documento, y en el hueco no aparece (fue lo que falló en el primer intento).
 
 ## Accesibilidad y usabilidad (WCAG 2.2 AA)
 
