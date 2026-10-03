@@ -40,7 +40,11 @@ import { preguntas, site } from '../data/site';
         <Isotipo class="ask__mark" />
         <div class="ask__body">
           <p class="ask__title">¿No encuentras tu pregunta?</p>
-          <p class="ask__text">Escríbeme y te respondo yo, personalmente.</p>
+          <p class="ask__text">
+            Cuéntame por email qué te gustaría reformar, dónde está la vivienda y cuándo querrías empezar.
+            Leo cada mensaje personalmente y te respondo con una orientación clara sobre los siguientes pasos,
+            sin ningún compromiso.
+          </p>
           <EmailPill email={site.email} class="ask__pill" />
         </div>
       </div>
@@ -122,9 +126,12 @@ import { preguntas, site } from '../data/site';
   }
 
   .ask__text {
+    max-width: 60ch;
     margin: 0;
     font-size: 0.9375rem;
+    line-height: 1.65;
     color: var(--muted);
+    text-wrap: pretty;
   }
 
   .faq__list {
