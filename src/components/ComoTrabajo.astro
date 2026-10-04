@@ -32,13 +32,13 @@ import { fases, principios } from '../data/site';
     <figure class="portal on-dark">
       <div class="portal__stage" data-scrub aria-hidden="true">
         <div class="portal__window">
-          <div class="portal__bar" aria-hidden="true">
+          <div class="portal__bar">
             <span></span><span></span><span></span>
             <div class="portal__url">portal.femuix.com</div>
           </div>
 
           <div class="portal__body">
-            <aside class="portal__side" aria-hidden="true">
+            <aside class="portal__side">
               <div class="portal__brand"></div>
               <div class="portal__nav is-active">Plan por fases</div>
               <div class="portal__nav">Cronograma</div>
@@ -65,7 +65,7 @@ import { fases, principios } from '../data/site';
               <div class="portal__row">
                 <div class="portal__card">
                   <div class="portal__card-title">Cronograma</div>
-                  <div class="portal__gantt" aria-hidden="true">
+                  <div class="portal__gantt">
                     <i style="--s: 0%; --w: 22%"></i>
                     <i style="--s: 20%; --w: 30%"></i>
                     <i style="--s: 48%; --w: 28%"></i>
@@ -74,7 +74,7 @@ import { fases, principios } from '../data/site';
                 </div>
                 <div class="portal__card">
                   <div class="portal__card-title">Documentos</div>
-                  <ul class="portal__docs" aria-hidden="true">
+                  <ul class="portal__docs">
                     <li>Contrato firmado</li>
                     <li>Planos de estado actual</li>
                     <li>Propuesta de distribución</li>
@@ -193,7 +193,7 @@ import { fases, principios } from '../data/site';
     will-change: transform;
   }
 
-  /* Dark UI: ventana negra sobre #101820, separada con un filo */
+  /* Dark UI: ventana negra sobre el grafito, separada con un filo */
   :global([data-theme='dark']) .portal__window {
     box-shadow:
       0 0 0 1px var(--line-strong),

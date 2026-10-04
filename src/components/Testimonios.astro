@@ -32,7 +32,7 @@ const huecos = [
     <div class="testimonios">
       {
         testimonios.length > 0
-          ? testimonios.map((t, i) => (
+          ? testimonios.map((t) => (
               <blockquote class="quote reveal">
                 <span class="quote__mark" aria-hidden="true">
                   “
@@ -43,7 +43,7 @@ const huecos = [
                 </footer>
               </blockquote>
             ))
-          : huecos.map((h, i) => (
+          : huecos.map((h) => (
               <div class="reveal">
                 <Placeholder label={h.label} note={h.note} ratio="4 / 3" icon="quote" />
               </div>

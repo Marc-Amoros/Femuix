@@ -42,25 +42,23 @@ const {
         decoding="async"
       />
     ) : (
-  <div class="ph__inner">
-    {
-      icon === 'play' ? (
-        <span class="ph__play" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5.5v13l10.5-6.5z" />
-          </svg>
-        </span>
-      ) : icon === 'quote' ? (
-        <span class="ph__mark ph__mark--quote" aria-hidden="true">“</span>
-      ) : (
-        <Isotipo class="ph__mark" tone={tone === 'dark' ? 'light' : 'auto'} />
-      )
-    }
-    <figcaption>
-      <span class="ph__label">{label}</span>
-      {note && <span class="ph__note">{note}</span>}
-    </figcaption>
-  </div>
+      <div class="ph__inner">
+        {icon === 'play' ? (
+          <span class="ph__play" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5.5v13l10.5-6.5z" />
+            </svg>
+          </span>
+        ) : icon === 'quote' ? (
+          <span class="ph__mark ph__mark--quote" aria-hidden="true">“</span>
+        ) : (
+          <Isotipo class="ph__mark" tone={tone === 'dark' ? 'light' : 'auto'} />
+        )}
+        <figcaption>
+          <span class="ph__label">{label}</span>
+          {note && <span class="ph__note">{note}</span>}
+        </figcaption>
+      </div>
     )
   }
 </figure>
@@ -124,11 +122,7 @@ const {
     }
   }
 
-  .ph--photo::after {
-    display: none;
-  }
-
-  /* Paspartú: marco fino interior, como una lámina enmarcada */
+  /* Paspartú: marco fino interior, como una lámina enmarcada (las fotos no lo llevan) */
   .ph::after {
     content: '';
     position: absolute;
@@ -136,6 +130,10 @@ const {
     border: 1px solid var(--ph-frame);
     border-radius: 2px;
     pointer-events: none;
+  }
+
+  .ph--photo::after {
+    display: none;
   }
 
   .ph__inner {

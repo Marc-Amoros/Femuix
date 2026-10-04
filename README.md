@@ -15,13 +15,19 @@ One page de Femuix (reformas de vivienda en Barcelona), hecha con [Astro](https:
 
 ```
 src/
-├── data/site.ts        ← textos, enlaces y contenido editable
+├── data/site.ts        ← textos, enlaces y contenido editable; url('/ruta') da la dirección
+│                         de una página respetando la carpeta de GitHub Pages
 ├── styles/global.css   ← paleta 60/30/10, tipografía y animaciones base
 ├── scripts/motion.ts   ← scroll suave (Lenis), efectos ligados al scroll, contadores
+├── env.d.ts            ← tipos globales (window.lenis)
 ├── layouts/Base.astro  ← <head>, SEO y animaciones de entrada
 ├── components/         ← una sección por componente
 └── pages/index.astro   ← orden de las secciones
 ```
+
+Los enlaces a otras páginas se escriben siempre con `url('/privacidad')` y no a mano: añade la
+carpeta de publicación y la barra final, de modo que coinciden con la dirección canónica y la del
+mapa del sitio (`sitemap.xml`) y no pasan por una redirección. La página 404 lleva `noindex`.
 
 ## Paleta
 

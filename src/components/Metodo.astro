@@ -101,8 +101,7 @@ import { fases } from '../data/site';
       let y = list.getBoundingClientRect().top + window.scrollY;
       for (let j = 0; j < i; j++) y += cards[j].offsetHeight + gap;
       y -= parseFloat(getComputedStyle(cards[i]).top) || 0;
-      const lenis = (window as Window & { lenis?: { scrollTo: (y: number, o?: object) => void } })
-        .lenis;
+      const { lenis } = window;
       if (lenis) lenis.scrollTo(y + 2, { immediate: reduceMotion });
       else window.scrollTo({ top: y + 2, behavior: reduceMotion ? 'auto' : 'smooth' });
       cards[i].focus({ preventScroll: true });
@@ -275,7 +274,6 @@ import { fases } from '../data/site';
       transition: none;
     }
   }
-
 
   .fase__top {
     display: flex;

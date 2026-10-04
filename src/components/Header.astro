@@ -59,10 +59,6 @@ const { base = '' } = Astro.props;
 
     <div class="menu__foot">
       <p class="menu__hello">¿Empezamos por el orden?</p>
-      <div class="menu__mode">
-        <span>Modo</span>
-        <ModeSwitch />
-      </div>
       <a class="btn btn--primary" href={`${base}${site.retoUrl}`} data-menu-link>Empezar por el reto gratuito</a>
       <a class="menu__mail" href={`mailto:${site.email}`}>{site.email}</a>
     </div>
@@ -71,7 +67,7 @@ const { base = '' } = Astro.props;
 </header>
 
 <script>
-  // Modo día (por defecto) o modo noche. La elección se recuerda en el navegador.
+  // Modo día (por defecto) o modo noche. El modo noche se recuerda solo durante la visita (sesión).
   const root = document.documentElement;
   const options = [...document.querySelectorAll<HTMLButtonElement>('[data-mode]')];
 
@@ -113,16 +109,19 @@ const { base = '' } = Astro.props;
       const x = r.left + r.width / 2;
       const y = r.top + r.height / 2;
       const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-      doc.startViewTransition(apply).ready.then(() => {
-        root.animate(
-          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
-          {
-            duration: 800,
-            easing: 'cubic-bezier(0.77, 0, 0.18, 1)',
-            pseudoElement: '::view-transition-new(root)',
-          },
-        );
-      });
+      doc
+        .startViewTransition(apply)
+        .ready.then(() => {
+          root.animate(
+            { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
+            {
+              duration: 800,
+              easing: 'cubic-bezier(0.77, 0, 0.18, 1)',
+              pseudoElement: '::view-transition-new(root)',
+            },
+          );
+        })
+        .catch(() => {}); // si el navegador se salta la transición, el cambio de modo ya está hecho
     });
   }
 
@@ -134,7 +133,7 @@ const { base = '' } = Astro.props;
 
   const setMenu = (open: boolean, returnFocus = true) => {
     if (!menu || !menuBtn) return;
-    const lenis = (window as unknown as { lenis?: { stop(): void; start(): void } }).lenis;
+    const { lenis } = window;
     menuBtn.setAttribute('aria-expanded', String(open));
     header?.classList.toggle('is-menu-open', open);
     root.classList.toggle('menu-open', open);
@@ -509,10 +508,7 @@ const { base = '' } = Astro.props;
       opacity var(--t-color) var(--ease);
   }
 
-  .menu__nav a:focus-visible .menu__label {
-    transform: translateX(6px);
-  }
-
+  .menu__nav a:focus-visible .menu__label,
   .menu__nav a:active .menu__label {
     transform: translateX(6px);
   }
@@ -553,10 +549,6 @@ const { base = '' } = Astro.props;
     font-style: italic;
     font-weight: 300;
     color: var(--em-text);
-  }
-
-  .menu__mode {
-    display: none;
   }
 
   .menu__foot .btn {
@@ -629,7 +621,7 @@ const { base = '' } = Astro.props;
     }
     /* En el móvil la cabecera lleva solo logo, día / noche y menú: el reto va dentro del menú */
     .header__cta {
-      display: none !important;
+      display: none;
     }
     .menu-btn {
       width: 38px;
@@ -637,18 +629,6 @@ const { base = '' } = Astro.props;
     }
     .header__logo {
       width: 136px;
-    }
-
-    .header__cta {
-      min-height: 38px;
-      padding: 0 16px;
-      font-size: 0.8125rem;
-    }
-    .header__cta-long {
-      display: none;
-    }
-    .header__cta-short {
-      display: inline;
     }
   }
 
@@ -659,10 +639,6 @@ const { base = '' } = Astro.props;
     }
     .header__logo {
       width: 118px;
-    }
-    /* No caben interruptor y botón: el reto sigue en el menú y en la portada */
-    .header__cta {
-      display: none;
     }
   }
 </style>

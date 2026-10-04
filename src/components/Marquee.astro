@@ -88,10 +88,12 @@ const loop = [...fases, ...fases];
     padding-right: clamp(22px, 2.8vw, 44px);
   }
 
+  /* Número y palabra comparten color: blanco, o dorado en las fases en cursiva */
   .marquee__item {
     display: inline-flex;
     align-items: flex-start;
     gap: clamp(8px, 0.8vw, 12px);
+    color: var(--text);
   }
 
   .marquee__n {
@@ -111,11 +113,6 @@ const loop = [...fases, ...fases];
     white-space: nowrap;
   }
 
-  /* Número y palabra comparten color: blanco, o dorado en las fases en cursiva */
-  .marquee__item {
-    color: var(--text);
-  }
-
   .marquee__item.is-em {
     color: var(--em);
   }
@@ -128,6 +125,4 @@ const loop = [...fases, ...fases];
     width: clamp(16px, 1.4vw, 22px);
     flex-shrink: 0;
   }
-
-
 </style>
