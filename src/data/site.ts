@@ -3,8 +3,13 @@
 
 // Ruta interna respetando la carpeta donde se publica la web (en GitHub Pages, /nombre-del-repo/).
 // Úsala para cualquier enlace que empiece por «/»: url('/privacidad'), url('/').
-export const url = (path = '/') =>
-  `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
+// Las páginas se publican como carpeta, así que su dirección termina en «/» (la misma que la
+// canónica y la del mapa del sitio, sin redirección); los archivos (favicon.svg) se dejan tal cual.
+export const url = (path = '/') => {
+  const clean = path.replace(/^\//, '');
+  const isPage = clean !== '' && !clean.endsWith('/') && !/\.[a-z0-9]+$/i.test(clean);
+  return `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${clean}${isPage ? '/' : ''}`;
+};
 
 export const site = {
   name: 'Femuix',

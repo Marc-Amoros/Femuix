@@ -9,9 +9,10 @@ import sansUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.wo
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean; // páginas que no deben salir en buscadores (la 404)
 }
 
-const { title = site.title, description = site.description } = Astro.props;
+const { title = site.title, description = site.description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
 // Datos estructurados: tipo de negocio y zona de servicio
@@ -34,7 +35,7 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
     <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
     <meta name="theme-color" content="#ffffff" />
