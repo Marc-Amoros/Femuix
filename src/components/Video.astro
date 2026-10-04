@@ -53,13 +53,13 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
             </button>
           </div>
         ) : (
-      <Placeholder
-        label="Vídeo · 60 a 90 segundos"
-        note="Con subtítulos incrustados: casi todo el tráfico llega desde el móvil y sin sonido. Cuentas para quién trabajas, qué pasa cuando no hay plan y qué haces tú distinto."
-        ratio="16 / 9"
-        icon="play"
-        tone="dark"
-      />
+          <Placeholder
+            label="Vídeo · 60 a 90 segundos"
+            note="Con subtítulos incrustados: casi todo el tráfico llega desde el móvil y sin sonido. Cuentas para quién trabajas, qué pasa cuando no hay plan y qué haces tú distinto."
+            ratio="16 / 9"
+            icon="play"
+            tone="dark"
+          />
         )
       }
     </div>
@@ -128,7 +128,8 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
       if (!video) return;
       video.controls = true;
       player.classList.add('is-playing');
-      video.play();
+      // Si el navegador no puede reproducir, los controles ya están a la vista para reintentarlo
+      video.play().catch(() => {});
       video.focus();
     });
   });

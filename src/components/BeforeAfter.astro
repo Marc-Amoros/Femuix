@@ -213,10 +213,14 @@ const sizes = '(max-width: 1240px) 100vw, 1240px';
     cursor: ew-resize;
   }
 
-  .ba__range:focus-visible ~ .ba__handle span,
+  /* Foco con teclado: un halo blanco pegado al círculo y, fuera, el aro de color, para que se
+     vea igual sobre una foto clara o una oscura (WCAG 1.4.11) */
   .ba:has(.ba__range:focus-visible) .ba__handle span {
     outline: 2px solid var(--green);
     outline-offset: 3px;
+    box-shadow:
+      0 0 0 3px var(--white),
+      0 10px 30px -10px rgba(14, 32, 27, 0.4);
   }
 
   @media (max-width: 720px) {

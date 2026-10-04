@@ -27,7 +27,7 @@ const dias = [
 
       <ol class="reto__dias">
         {
-          dias.map((d, i) => (
+          dias.map((d) => (
             <li class="reveal">
               <span>{d.n}</span>
               {d.t}
@@ -117,7 +117,7 @@ const dias = [
               <Icon name="arrow" />
             </a>
           ) : (
-            <EmailPill email={site.email} center ghost />
+            <EmailPill id="reto-copiar" email={site.email} center ghost />
           )
         }
       </div>
@@ -500,10 +500,6 @@ const dias = [
     background: var(--line);
   }
 
-  .reto__ok:empty {
-    display: none;
-  }
-
   .reto__ok {
     padding: 14px 16px;
     border-left: 3px solid var(--ink);
@@ -511,6 +507,18 @@ const dias = [
     background: var(--surface);
     color: var(--text);
     font-size: 0.875rem;
+  }
+
+  /* Vacía no se ve ni ocupa sitio, pero sigue en el árbol de accesibilidad: con display: none
+     el lector de pantalla no anunciaría el mensaje al llenarse (role="status") */
+  .reto__ok:empty {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip: rect(0 0 0 0);
   }
 
   @media (max-width: 900px) {

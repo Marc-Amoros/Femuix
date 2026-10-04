@@ -145,7 +145,7 @@ const legal = [
     overflow: clip;
   }
 
-  /* Dark UI: pie en #101820 (Pantone Black 6 C) con la escala de grises de black 2 */
+  /* Dark UI: pie en grafito con la escala de grises de black 2 */
   :global([data-theme='dark']) .footer {
     --on-dark-muted: var(--g-200);
     --ft-link: #f5f5f5;
@@ -401,11 +401,13 @@ const legal = [
       transform var(--t-move) var(--ease);
   }
 
-  .footer__nav a:hover {
+  .footer__nav a:hover,
+  .footer__nav a:focus-visible {
     color: var(--white);
   }
 
-  .footer__nav a:hover .footer__label {
+  .footer__nav a:hover .footer__label,
+  .footer__nav a:focus-visible .footer__label {
     transform: translateX(8px);
   }
 
@@ -476,13 +478,15 @@ const legal = [
     transition: transform var(--t-move) var(--ease);
   }
 
-  .footer__top-link:hover .footer__top-icon {
+  .footer__top-link:hover .footer__top-icon,
+  .footer__top-link:focus-visible .footer__top-icon {
     border-color: var(--white);
     background: var(--white);
     color: var(--green);
   }
 
-  .footer__top-link:hover .footer__top-icon :global(svg) {
+  .footer__top-link:hover .footer__top-icon :global(svg),
+  .footer__top-link:focus-visible .footer__top-icon :global(svg) {
     transform: rotate(-90deg) translateX(3px);
   }
 

@@ -271,24 +271,27 @@ import { fotos, usarMuestras } from '../data/media';
      --stagger (motion.ts) marca cuándo empieza cada bloque; lo de dentro se apoya en él.
      Si el sistema pide reducir el movimiento no se aplica nada de esto: todo está quieto y a la vista. */
   @media (prefers-reduced-motion: no-preference) {
-    /* --stagger llega de la foto (data-stagger-scope): el paspartú sube justo antes de que se descubra */
-    :global(.js) .sobre__frame {
-      opacity: 0;
-      translate: 0 40px;
-      scale: 0.97;
-      transition:
-        opacity var(--t-enter) var(--ease) var(--stagger, 0ms),
-        translate var(--t-media) var(--ease) var(--stagger, 0ms),
-        scale var(--t-media) var(--ease) var(--stagger, 0ms);
-    }
-
-    :global(.js) .sobre__frame:has(:global(.clip-reveal.is-visible)) {
-      opacity: 1;
-      translate: 0 0;
-      scale: 1;
-    }
-
+    /* Foto y firma dependen de :has() para saber cuándo se ha descubierto la foto. Sin :has()
+       (navegadores antiguos) no se oculta nada: la regla que lo muestra no existiría y la foto
+       se quedaría invisible. */
     @supports selector(:has(*)) {
+      /* --stagger llega de la foto (data-stagger-scope): el paspartú sube justo antes de que se descubra */
+      :global(.js) .sobre__frame {
+        opacity: 0;
+        translate: 0 40px;
+        scale: 0.97;
+        transition:
+          opacity var(--t-enter) var(--ease) var(--stagger, 0ms),
+          translate var(--t-media) var(--ease) var(--stagger, 0ms),
+          scale var(--t-media) var(--ease) var(--stagger, 0ms);
+      }
+
+      :global(.js) .sobre__frame:has(:global(.clip-reveal.is-visible)) {
+        opacity: 1;
+        translate: 0 0;
+        scale: 1;
+      }
+
       :global(.js) .sobre__sign {
         --wait: calc(var(--stagger, 0ms) + var(--t-media) + 250ms);
         opacity: 0;

@@ -21,7 +21,7 @@ import { preguntas, site } from '../data/site';
     <div class="faq__body">
       <div class="faq__list">
         {
-          preguntas.map((p, i) => (
+          preguntas.map((p) => (
             <details class="faq__item reveal">
               <summary>
                 <span class="faq__q">{p.q}</span>
@@ -44,13 +44,12 @@ import { preguntas, site } from '../data/site';
             Cuéntame qué quieres reformar y dónde está la vivienda. Leo cada mensaje y te respondo
             personalmente, sin compromiso.
           </p>
-          <EmailPill email={site.email} class="ask__pill" />
+          <EmailPill id="faq-copiar" email={site.email} class="ask__pill" />
         </div>
       </div>
     </div>
   </div>
 </section>
-
 
 <style>
   .faq__grid {

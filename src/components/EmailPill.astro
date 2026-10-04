@@ -4,14 +4,15 @@ import Icon from './Icon.astro';
 // Píldora de contacto: el email (abre el correo) y un botón para copiarlo, con su etiqueta
 // y un check al copiar. Se usa en las preguntas frecuentes y en el formulario del reto.
 interface Props {
+  id: string; // identifica la etiqueta de cada píldora (aria-describedby); distinto en cada una
   email: string;
   center?: boolean;
   ghost?: boolean; // sin relleno: solo el filete, como un botón fantasma
   class?: string;
 }
 
-const { email, center = false, ghost = false, class: className } = Astro.props;
-const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
+const { id, email, center = false, ghost = false, class: className } = Astro.props;
+const tipId = `${id}-tip`;
 ---
 
 <div class:list={['pill', { 'pill--center': center, 'pill--ghost': ghost }, className]}>
@@ -68,6 +69,7 @@ const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
 <style>
   .pill {
     display: grid;
+    min-width: 0;
   }
 
   .pill--center .ask__row {
@@ -276,12 +278,7 @@ const tipId = `tip-${Math.random().toString(36).slice(2, 8)}`;
     }
   }
 
-
   /* Móviles estrechos: la píldora cabe sin desbordar (sin el sobre y con la letra algo menor) */
-  .pill {
-    min-width: 0;
-  }
-
   @media (max-width: 420px) {
     .ask__mail {
       gap: 8px;
