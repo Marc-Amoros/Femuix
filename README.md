@@ -11,6 +11,12 @@ One page de Femuix (reformas de vivienda en Barcelona), hecha con [Astro](https:
 | `npm run build`   | Genera la web estática en `dist/`        |
 | `npm run preview` | Previsualiza la build                    |
 
+Para revisar los tipos de los archivos `.astro` y `.ts` (no está instalado en el proyecto, no hace falta para publicar):
+
+```sh
+npx -p @astrojs/check -p typescript@5 astro-check --root .
+```
+
 ## Estructura
 
 ```
@@ -90,8 +96,9 @@ rombo dorado. Las bandas de bruma usan `.band` y la de petróleo `.band--teal` (
 | `--pine-600` | `#375D53` | Marca de enlaces en Dark UI, degradados oscuros            |
 | `--pine-500` | `#527A70` | Bordes de campos sobre blanco (≥3:1)                       |
 | `--pine-400` | `#769E93` | Bordes de campos sobre verde                               |
-| `--pine-200` | `#C9D9D5` | Texto secundario sobre verde                               |
+| `--pine-200` | `#D3E0DC` | Texto secundario sobre verde                               |
 | `--pine-100` | `#E1EAE8` | Enlaces sobre verde                                        |
+| `--pine-50`  | `#F0F5F3` | Luz del degradado del «antes» en el comparador             |
 
 ## Modos White y Dark UI
 

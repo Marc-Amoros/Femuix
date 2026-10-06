@@ -465,7 +465,8 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
     .hero__grid {
       grid-template-columns: minmax(0, 1fr);
     }
-    /* Tablet: imagen apaisada a todo el ancho para que no ocupe una pantalla entera */
+    /* Tablet: imagen apaisada a todo el ancho para que no ocupe una pantalla entera.
+       El !important de las proporciones es necesario: el hueco las trae en su atributo style */
     .hero__media {
       width: 100%;
     }
