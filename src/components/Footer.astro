@@ -465,10 +465,15 @@ const legal = [
     height: 40px;
     border: 1px solid var(--ft-line);
     border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25); /* el mismo relleno suave que la píldora del email */
     transition:
       background-color var(--t-color) var(--ease),
       border-color var(--t-color) var(--ease),
       color var(--t-color) var(--ease);
+  }
+
+  :global([data-theme='dark']) .footer__top-icon {
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .footer__top-icon :global(svg) {
