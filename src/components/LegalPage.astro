@@ -17,7 +17,7 @@ const { title, description, updated, draft = true } = Astro.props;
 
 <Base title={`${title} · Femuix`} description={description}>
   <Header base={url('/')} />
-  <main id="main" class="legal">
+  <main id="main" class="legal" tabindex="-1">
     <div class="container legal__inner">
       <a class="legal__back text-link" href={url('/')}>Volver a la portada</a>
       <h1 class="legal__title">{title}</h1>

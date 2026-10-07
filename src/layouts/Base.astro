@@ -63,6 +63,10 @@ const jsonLd = {
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
+        // Si el motor de movimiento no llega a arrancar (sin red, navegador antiguo), no queda nada oculto
+        setTimeout(function () {
+          if (!d.dataset.motion) d.classList.remove('js');
+        }, 6000);
         // Siempre abre en modo día; el modo noche solo dura mientras se navega por la web (sesión)
         var theme = 'light';
         try {

@@ -3,6 +3,7 @@ import Lenis from 'lenis';
 
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const root = document.documentElement;
+root.dataset.motion = 'ready'; // avisa a Base.astro de que el motor ha arrancado
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
