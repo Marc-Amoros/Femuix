@@ -52,7 +52,9 @@ const dias = [
         <p class="reto__req">Todos los campos son obligatorios.</p>
       </div>
 
+      <!-- Los avisos son regiones en vivo, siempre presentes: se anuncian al rellenarse (WCAG 4.1.3) -->
       <div class="field">
+        <label for="reto-nombre">Nombre</label>
         <input
           id="reto-nombre"
           name="first_name"
@@ -62,11 +64,11 @@ const dias = [
           required
           aria-describedby="reto-nombre-error"
         />
-        <label for="reto-nombre">Nombre</label>
-        <p class="field__error" id="reto-nombre-error"></p>
+        <p class="field__error" id="reto-nombre-error" aria-live="polite"></p>
       </div>
 
       <div class="field">
+        <label for="reto-email">Email</label>
         <input
           id="reto-email"
           name="email"
@@ -77,8 +79,7 @@ const dias = [
           required
           aria-describedby="reto-email-error"
         />
-        <label for="reto-email">Email</label>
-        <p class="field__error" id="reto-email-error"></p>
+        <p class="field__error" id="reto-email-error" aria-live="polite"></p>
       </div>
 
       <div>
@@ -88,7 +89,7 @@ const dias = [
             He leído y acepto la <a class="text-link" href={url('/privacidad')}>política de privacidad</a>.
           </span>
         </label>
-        <p class="field__error" id="reto-privacidad-error"></p>
+        <p class="field__error" id="reto-privacidad-error" aria-live="polite"></p>
       </div>
 
       <div class="reto__submit">
@@ -117,7 +118,7 @@ const dias = [
               <Icon name="arrow" />
             </a>
           ) : (
-            <EmailPill id="reto-copiar" email={site.email} center ghost />
+            <EmailPill email={site.email} center ghost />
           )
         }
       </div>
@@ -277,7 +278,6 @@ const dias = [
   }
 
   .field label {
-    order: -1;
     margin-bottom: 4px;
     font-size: 0.75rem;
     font-weight: 600;
@@ -315,21 +315,30 @@ const dias = [
     background-size: 100% 2px;
   }
 
+  /* Colores forzados (Windows): el fondo de la línea de foco desaparece, así que vuelve el contorno */
+  @media (forced-colors: active) {
+    .field input:focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
+  }
+
   /* Campo con error: línea y mensaje en el color de error (con texto, no solo color) */
   .field input[aria-invalid='true'] {
     border-bottom-color: var(--error);
     background-image: linear-gradient(var(--error), var(--error));
   }
 
+  /* Vacío no ocupa sitio, pero sigue en el árbol de accesibilidad (una región en vivo con
+     display: none no anuncia lo que se le escribe después) */
   .field__error {
-    margin-top: 8px;
     font-size: 0.8125rem;
     line-height: 1.45;
     color: var(--error);
   }
 
-  .field__error:empty {
-    display: none;
+  .field__error:not(:empty) {
+    margin-top: 8px;
   }
 
   .check {

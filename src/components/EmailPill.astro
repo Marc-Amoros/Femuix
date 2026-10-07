@@ -4,15 +4,13 @@ import Icon from './Icon.astro';
 // Píldora de contacto: el email (abre el correo) y un botón para copiarlo, con su etiqueta
 // y un check al copiar. Se usa en las preguntas frecuentes y en el formulario del reto.
 interface Props {
-  id: string; // identifica la etiqueta de cada píldora (aria-describedby); distinto en cada una
   email: string;
   center?: boolean;
   ghost?: boolean; // sin relleno: solo el filete, como un botón fantasma
   class?: string;
 }
 
-const { id, email, center = false, ghost = false, class: className } = Astro.props;
-const tipId = `${id}-tip`;
+const { email, center = false, ghost = false, class: className } = Astro.props;
 ---
 
 <div class:list={['pill', { 'pill--center': center, 'pill--ghost': ghost }, className]}>
@@ -21,10 +19,12 @@ const tipId = `${id}-tip`;
       <Icon name="mail" />
       <span>{email}</span>
     </a>
-    <button class="ask__copy" type="button" data-copy={email} aria-label="Copiar el email" aria-describedby={tipId}>
+    <!-- El nombre accesible repite la etiqueta visible (WCAG 2.5.3); la etiqueta no se vuelve a leer
+         como descripción: el aviso «Email copiado» llega por la región de estado -->
+    <button class="ask__copy" type="button" data-copy={email} aria-label="Copiar email">
       <span class="ask__icon ask__icon--copy"><Icon name="copy" /></span>
       <span class="ask__icon ask__icon--done"><Icon name="check" /></span>
-      <span class="ask__tip" id={tipId} role="tooltip" data-copy-tip>Copiar email</span>
+      <span class="ask__tip" role="tooltip" data-copy-tip>Copiar email</span>
     </button>
   </div>
   <p class="visually-hidden" aria-live="polite" data-copy-status></p>
