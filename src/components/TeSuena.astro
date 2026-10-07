@@ -99,7 +99,10 @@ const palabras = frase.flatMap((p) => p.text.split(' ').map((w) => ({ w, em: p.e
     color: var(--number);
   }
 
+  /* El padding derecho reserva lo que avanza el texto al marcarse (12 px): con la frase ya marcada
+     quedan los 24 px del gap hasta el check, aunque la línea llene todo el ancho */
   .suena__text {
+    padding-right: 12px;
     font-family: var(--serif);
     font-size: clamp(1.3rem, 2.4vw, 2.1rem);
     font-weight: 300;
@@ -186,6 +189,9 @@ const palabras = frase.flatMap((p) => p.text.split(' ').map((w) => ({ w, em: p.e
     }
     .suena__icon {
       display: none;
+    }
+    .suena__text {
+      padding-right: 0; /* sin check al lado, no hay hueco que reservar */
     }
   }
 </style>
