@@ -238,7 +238,6 @@ const scrubs = [...document.querySelectorAll<HTMLElement>('[data-scrub]')];
 const parallax = [...document.querySelectorAll<HTMLElement>('[data-parallax]')];
 const marquees = [...document.querySelectorAll<HTMLElement>('[data-marquee]')];
 const expands = [...document.querySelectorAll<HTMLElement>('[data-expand]')];
-const rotators = [...document.querySelectorAll<SVGElement>('[data-rotate]')];
 const checks = [...document.querySelectorAll<HTMLElement>('[data-check]')];
 const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.header__nav a, .menu__nav a')]
   .map((a) => ({ a, id: a.hash.slice(1) }))
@@ -323,9 +322,6 @@ function update() {
       const e = clamp01((vh - el.getBoundingClientRect().top) / (vh * 0.75)).toFixed(4);
       writes.push(() => el.style.setProperty('--e', e));
     }
-
-    // Sello de la portada: gira solo y despacio (CSS); el scroll le suma este giro
-    for (const el of rotators) writes.push(() => el.style.setProperty('--rot', `${(y * 0.12).toFixed(1)}deg`));
 
     // Franjas de fases: avanzan en sentidos opuestos mientras cruzan la pantalla.
     // El desplazamiento siempre es negativo para que nunca asome el borde izquierdo.

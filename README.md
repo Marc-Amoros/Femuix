@@ -139,7 +139,7 @@ rombo dorado. Las bandas de bruma usan `.band` y la de petróleo `.band--teal` (
 ## Movimiento
 
 Intro con el isotipo (una vez por sesión), titulares palabra a palabra, scroll suave, franja de
-fases que se mueve con el scroll, sello que gira siempre despacio (y más rápido con el scroll), vídeo que crece con el scroll, frase que se ilumina, tarjetas del método apiladas,
+fases que se mueve con el scroll, sello de la portada con el texto fijo, vídeo que crece con el scroll, frase que se ilumina, tarjetas del método apiladas,
 portal en 3D, comparador antes/después, «Sobre mí» en tres tiempos (foto, firma y texto, con la cita
 que se escribe y filetes que se dibujan) y logotipo gigante en el pie. Todo se desactiva si el
 sistema pide reducir el movimiento.
@@ -235,9 +235,10 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
   `--gold-deep` (4,8:1) es solo para cifras y cursivas grandes. Usa los tokens (`--ink`,
   `--muted`, `--line-ui`, `--error`, `--em`) en lugar de colores sueltos. Si añades un token
   dentro de `.band`, redefínelo también en `:root[data-theme='dark'] .band`.
-- **Casi nada se mueve solo** (2.2.2): los efectos van ligados al scroll. La única animación
-  infinita es el giro del sello de la portada, pedido así a propósito; no añadas más, y
-  ponlas siempre dentro de `prefers-reduced-motion: no-preference`.
+- **Nada se mueve solo** (2.2.2): los efectos van ligados al scroll. El sello de la portada
+  tuvo un giro infinito y se quitó a propósito (el texto del anillo queda fijo); si se vuelve a
+  añadir alguna animación continua, hace falta un botón de pausa y ponerla dentro de
+  `prefers-reduced-motion: no-preference`.
 - **Titulares animados:** `SplitText` incluye el texto real oculto para lectores de pantalla;
   úsalo siempre en lugar de partir palabras a mano.
 - **Foco visible:** nunca quites `outline` sin sustituirlo; sobre fondos verdes, aro blanco.
