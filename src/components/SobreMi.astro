@@ -12,7 +12,7 @@ import { fotos, usarMuestras } from '../data/media';
     <!-- Retrato con la firma superpuesta, como una tarjeta de visita -->
     <div class="sobre__media" data-stagger-scope>
       <div class="sobre__frame">
-        <div class="clip-reveal">
+        <div class="clip-reveal" data-first data-step="1700">
           <div data-parallax="0.08">
             <Placeholder
               label="Foto tuya"
@@ -43,14 +43,14 @@ import { fotos, usarMuestras } from '../data/media';
       />
       <p class="lead reveal">{sobreMi.intro}</p>
 
-      <blockquote class="sobre__quote reveal">
+      <blockquote class="sobre__quote reveal" data-step="600">
         <p>{sobreMi.cita}</p>
       </blockquote>
 
       <ol class="sobre__pacts">
         {
           sobreMi.compromisos.map((c, i) => (
-            <li class="reveal">
+            <li class="reveal" data-step="170">
               <span class="sobre__n"><span>0{i + 1}</span></span>
               <h3>{c.titulo}</h3>
               <p>{c.texto}</p>
@@ -101,9 +101,15 @@ import { fotos, usarMuestras } from '../data/media';
     border-radius: var(--radius-lg);
   }
 
-  /* --base suma un retardo fijo al orden de aparición que calcula motion.ts */
+  /* --base suma un retardo fijo al orden de aparición que calcula motion.ts. La foto arranca justo
+     tras el paspartú y se descubre en 1,2 s (la imagen se aleja en 1,6 s) */
   :global(.js) .sobre__frame :global(.clip-reveal) {
-    --base: 250ms;
+    --base: 150ms;
+    transition-duration: 1.2s;
+  }
+
+  :global(.js) .sobre__frame :global(.clip-reveal > *) {
+    transition-duration: 1.6s;
   }
 
   /* Tarjeta de firma que se apoya sobre la esquina de la foto */
@@ -261,14 +267,19 @@ import { fotos, usarMuestras } from '../data/media';
   }
 
   /* ---------- Entrada ----------
-     1. El paspartú sube y se asienta; dentro, la foto se descubre de abajo arriba mientras se aleja.
-     2. Cuando la foto ya está entera llega la tarjeta de la firma y, tras ella, su rombo, el nombre
+     Todo sale en orden de lectura, y cada paso espera al anterior (S = momento en que entra la foto):
+     1. S+0: el paspartú sube y se asienta; dentro, la foto se descubre de abajo arriba mientras se aleja.
+     2. S+1,1 s: con la foto casi entera llega la tarjeta de la firma y, tras ella, su rombo, el nombre
         y el cargo, uno detrás de otro.
-     3. A la derecha, en orden: rótulo, titular, entradilla; el filete dorado de la cita se dibuja de
-        arriba abajo y la frase aparece de izquierda a derecha, como si se escribiera; cada
-        compromiso sube con su número, su título y su texto escalonados, y el filete de las
-        acciones se dibuja antes de que lleguen los botones.
+     3. S+1,7 s (data-step de la foto): a la derecha, en orden: rótulo, titular, entradilla. El filete
+        dorado de la cita se dibuja de arriba abajo y la frase aparece de izquierda a derecha, como
+        si se escribiera; los compromisos esperan a que la frase esté casi escrita (data-step de la
+        cita) y suben uno tras otro, cada uno con su número, su título y su texto escalonados; el
+        filete de las acciones se dibuja antes de que lleguen los botones.
      --stagger (motion.ts) marca cuándo empieza cada bloque; lo de dentro se apoya en él.
+     data-first (motion.ts) hace que la foto salga siempre la primera: el texto es más alto que ella
+     y su rótulo cruzaría la línea de entrada antes. data-step es lo que hace esperar a lo siguiente:
+     la foto tarda más en descubrirse que un texto en aparecer, y sin él el texto saldría antes.
      Si el sistema pide reducir el movimiento no se aplica nada de esto: todo está quieto y a la vista. */
   @media (prefers-reduced-motion: no-preference) {
     /* Foto y firma dependen de :has() para saber cuándo se ha descubierto la foto. Sin :has()
@@ -293,7 +304,7 @@ import { fotos, usarMuestras } from '../data/media';
       }
 
       :global(.js) .sobre__sign {
-        --wait: calc(var(--stagger, 0ms) + var(--t-media) + 250ms);
+        --wait: calc(var(--stagger, 0ms) + 1100ms);
         opacity: 0;
         translate: 40px 0;
         transition:
@@ -312,17 +323,17 @@ import { fotos, usarMuestras } from '../data/media';
       }
 
       :global(.js) .sobre__sign :global(.sobre__mark) {
-        --in: 200ms;
+        --in: 160ms;
         scale: 0.6;
       }
 
       :global(.js) .sobre__name {
-        --in: 320ms;
+        --in: 270ms;
         translate: 0 10px;
       }
 
       :global(.js) .sobre__role {
-        --in: 420ms;
+        --in: 360ms;
         translate: 0 10px;
       }
 
@@ -345,7 +356,7 @@ import { fotos, usarMuestras } from '../data/media';
 
     :global(.js) .sobre__quote::before {
       transform: scaleY(0);
-      transition: transform var(--t-enter) var(--ease-in-out) var(--stagger, 0ms);
+      transition: transform var(--t-enter) var(--ease) var(--stagger, 0ms);
     }
 
     :global(.js) .sobre__quote p {
@@ -358,8 +369,8 @@ import { fotos, usarMuestras } from '../data/media';
       -webkit-mask-position: 100% 0;
       mask-position: 100% 0;
       transition:
-        -webkit-mask-position 1.8s var(--ease) calc(var(--stagger, 0ms) + 350ms),
-        mask-position 1.8s var(--ease) calc(var(--stagger, 0ms) + 350ms);
+        -webkit-mask-position 1.3s var(--ease) calc(var(--stagger, 0ms) + 200ms),
+        mask-position 1.3s var(--ease) calc(var(--stagger, 0ms) + 200ms);
     }
 
     :global(.js) .sobre__quote.is-visible::before {

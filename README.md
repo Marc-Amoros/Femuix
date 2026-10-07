@@ -160,6 +160,13 @@ animación que con el ratón (`.is-tapped`). Si un componente tiene
 su propia `transition` en un elemento `.reveal`, la de entrada manda hasta que termina
 (`.is-done`) y después vuelve la suya.
 
+Dos atributos afinan el orden cuando una pieza tarda más en entrar que un texto (lo usa «Sobre
+mí», donde la foto se descubre despacio): `data-step="ms"` fija cuánto espera lo siguiente
+(ese tiempo no se comprime con la tanda) y `data-first` hace que la pieza abra siempre su
+sección, aunque otra más alta cruce antes la línea de entrada. Así «Sobre mí» sale foto, firma,
+rótulo, titular, entradilla, cita, compromisos y botones, en ese orden y con respiro entre cada
+paso. Los tiempos del resto de la coreografía están en el bloque «Entrada» de `SobreMi.astro`.
+
 Acabados: grano de papel (en modo overlay, no altera el blanco), apariciones con desenfoque,
 secciones verdes que se abren de tarjeta a ancho completo (`data-expand`), índice numerado en
 las etiquetas de sección, texto que rueda en los botones, huecos de imagen con paspartú,

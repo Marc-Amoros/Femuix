@@ -57,8 +57,19 @@ const STEP = 110; // ms entre un elemento y el siguiente
 const MAX_STAGGER = 900; // una tanda larga se comprime para no hacer esperar
 const DURATION = 1300; // lo que dura una entrada (.reveal, --t-enter 1,1 s) con margen
 
+// data-step="ms" fija el hueco de un elemento en la secuencia cuando su entrada dura más que la de un
+// texto (la foto de «Sobre mí» tarda en descubrirse y lo que va después espera). Ese tiempo no se
+// comprime con el resto de la tanda: si se encogiera, lo siguiente saldría antes de que acabe.
+const customStep = (el: HTMLElement) => {
+  const raw = el.dataset.step;
+  const n = raw === undefined ? NaN : Number(raw);
+  return Number.isFinite(n) ? n : null;
+};
+
 // Cuánto ocupa cada elemento en la secuencia: un titular, lo que tardan sus palabras
 function stepOf(el: HTMLElement) {
+  const custom = customStep(el);
+  if (custom !== null) return custom;
   if (el.classList.contains('split')) {
     return Math.min(160 + el.querySelectorAll('.w').length * 40, 480);
   }
@@ -71,7 +82,7 @@ const baseOf = (el: HTMLElement) =>
 
 const scopeOf = (el: Element) => el.closest('section, footer') ?? document.body;
 const unitOf = (el: Element) => el.closest('[data-reveal-unit]');
-const inUnit = new Set<HTMLElement>(); // entran con su bloque aunque estén por debajo de la pantalla
+const inUnit = new Set<HTMLElement>(); // entran con su bloque (o con lo que abre su sección) aunque estén por debajo de la pantalla
 
 let pending: HTMLElement[] = [];
 let slot = 0; // momento (performance.now) en que puede empezar el siguiente
@@ -138,9 +149,11 @@ function flush() {
   const start = Math.max(0, slot - now); // espera a que termine la tanda anterior
   let cursor = start;
 
-  // Primera pasada: el orden y el hueco de cada uno
-  const plan: { el: HTMLElement; delay: number; fixed: boolean }[] = [];
+  // Primera pasada: el orden y el hueco de cada uno. `held` suma los huecos fijos (data-step) de lo
+  // anterior: es la parte de la espera que no se comprime
+  const plan: { el: HTMLElement; delay: number; held: number; fixed: boolean }[] = [];
   const vh = window.innerHeight;
+  let held = 0;
   for (const el of batch) {
     const r = el.getBoundingClientRect();
     if (r.bottom < 0 || (r.top > vh && !inUnit.has(el))) {
@@ -152,21 +165,22 @@ function flush() {
     const own = parseFloat(el.style.getPropertyValue('--delay'));
     const fixed = firstPaint && !Number.isNaN(own);
     const delay = fixed ? own : cursor;
+    plan.push({ el, delay, held, fixed });
     cursor = Math.max(cursor, delay + stepOf(el));
-    plan.push({ el, delay, fixed });
+    if (!fixed) held += customStep(el) ?? 0;
   }
   // Una tanda larga se comprime, pero solo su propio reparto: la espera heredada se mantiene
-  // para que nada empiece antes que lo último de la tanda anterior
-  const spread = Math.max(0, ...plan.filter((p) => !p.fixed).map((p) => p.delay - start));
+  // para que nada empiece antes que lo último de la tanda anterior, y los huecos fijos no se tocan
+  const spread = Math.max(0, ...plan.filter((p) => !p.fixed).map((p) => p.delay - p.held - start));
   const scale = spread > MAX_STAGGER ? MAX_STAGGER / spread : 1;
-  const squeeze = (d: number) => start + (d - start) * scale;
-  if (plan.length) slot = now + squeeze(cursor);
+  const squeeze = (d: number, h: number) => start + (d - h - start) * scale + h;
+  if (plan.length) slot = now + squeeze(cursor, held);
   firstPaint = false;
 
   for (const p of plan) {
     let delay = p.delay;
     if (!p.fixed) {
-      delay = Math.round(squeeze(delay));
+      delay = Math.round(squeeze(delay, p.held));
       p.el.style.setProperty('--delay', '0ms');
       setStagger(p.el, delay);
     }
@@ -184,6 +198,17 @@ const io = new IntersectionObserver(
     // Lo que ya se ve en la misma sección entra en la misma tanda
     const scopes = new Set(pending.map(scopeOf));
     const vh = window.innerHeight;
+
+    // Lo marcado con data-first abre su sección: si otra pieza entra antes (el texto es más alto que
+    // la foto, que va centrada), se lleva la foto con ella y la foto sale la primera, aunque aún
+    // asome por debajo de la pantalla
+    for (const target of [...waiting.keys()]) {
+      const el = waiting.get(target);
+      if (el?.dataset.first === undefined || !scopes.has(scopeOf(target))) continue;
+      inUnit.add(el);
+      take(target);
+    }
+
     for (const target of [...waiting.keys()]) {
       if (!scopes.has(scopeOf(target))) continue;
       const r = target.getBoundingClientRect();
