@@ -54,7 +54,7 @@ Variables en `global.css`: `--bg` (60 %), `--band` (30 %), `--ink` (10 %), `--te
 | --- | --- | --- |
 | Pino | `#1D3C34` | Botones, números, cinta de las fases, sello, portal y pie |
 | Petróleo | `#487A7B` · profundo `#335F60` | Cursivas grandes de los titulares (4,8:1). El tono profundo, para la **banda del método** (texto blanco 7,1:1) y las etiquetas pequeñas |
-| Bruma | `#A4BCC2` | Bandas del vídeo, sobre mí y formulario; cursiva de la cinta |
+| Bruma | `#A4BCC2` | Bandas de sobre mí y del formulario; cursiva de la cinta |
 
 Se combinan en tres sitios: la **regla** de color (`--regla`: pino → petróleo → dorado) sobre cada
 tarjeta de fase y el formulario, el **divisor** entre secciones blancas (`--divider`, un filete
@@ -73,7 +73,7 @@ Las secciones alternan blanco, bruma, petróleo y pino para que la lectura tenga
 | Portada       | Blanco, con un bloque de bruma y un marco dorado tras la foto |
 | Para quién es | Blanco, con la tarjeta «Sí» en bruma suave y la «No» en filete |
 | Sobre mí      | Bruma                                |
-| Vídeo         | Bruma, seguida de Sobre mí y separada por un filete con rombo |
+| Vídeo         | Blanco, con el panel de temas en bruma suave |
 | Cinta         | **Pino**, fases en blanco y cursiva en bruma |
 | Método        | **Petróleo**, con las fases en tarjetas blancas |
 | Cómo trabajo  | Blanco, con el portal sobre verde    |

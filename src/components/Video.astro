@@ -9,7 +9,8 @@ import { site } from '../data/site';
 const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué hago distinto'];
 ---
 
-<section class="section band video" data-expand aria-labelledby="video-title">
+<!-- Sección blanca entre la bruma de Sobre mí y el pino de la cinta: marca el cambio de sección -->
+<section class="section video" aria-labelledby="video-title">
   <div class="container">
     <div class="video__head">
       <span class="eyebrow reveal">En un minuto</span>
@@ -170,24 +171,19 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
   }
 
   /* ---------- Panel bajo el vídeo ----------
-     Tarjeta de cristal sobre la bruma: etiqueta con rombo,
+     Tarjeta en bruma muy suave sobre el blanco: etiqueta con rombo,
      los tres temas en columnas con filetes finos y, al pie, la descripción desplegable. */
   .vpanel {
     max-width: 1080px;
     margin: clamp(40px, 5vw, 64px) auto 0;
     padding: clamp(24px, 3vw, 36px) clamp(24px, 3.2vw, 44px) 0;
-    border: 1px solid rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--line);
     border-radius: var(--radius-lg);
-    background: rgba(255, 255, 255, 0.55);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 30px 60px -44px rgba(14, 32, 27, 0.55);
+    background: var(--tint);
   }
 
   :global([data-theme='dark']) .vpanel {
-    border-color: rgba(131, 129, 130, 0.35);
-    background: rgba(0, 0, 0, 0.4);
-    box-shadow: none;
+    background: var(--band);
   }
 
   .vpanel__kicker {
