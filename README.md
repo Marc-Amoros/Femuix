@@ -283,10 +283,12 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
 - **Foco visible:** nunca quites `outline` sin sustituirlo; sobre fondos verdes, aro blanco.
 - **Formulario «Cuéntame tu reforma»** (`ContactoModal.astro`): ventana `<dialog>` modal que abren
   los botones con `data-contacto` (sin JavaScript, abren el email). Atrapa el foco, se cierra con
-  Escape, con «Cerrar» o pulsando fuera, y devuelve el foco al botón. Va en dos pasos, compactos: primero
-  tus datos (nombre, email y teléfono) y después la reforma (qué, dónde, qué cambiar y la
-  privacidad; una vivienda fuera de Barcelona ciudad no se envía). Al cambiar de paso el foco va al
-  título del paso («Paso 2 de 2, Tu reforma»), «Volver» conserva lo escrito y, si se cierra a
+  Escape, con «Cerrar» o pulsando fuera, y devuelve el foco al botón. Una sola columna y tres pantallas:
+  tus datos (nombre, email, móvil y consentimiento), tu vivienda (cuatro preguntas que filtran) y
+  último paso (cinco que perfilan). Si algo de la pantalla 2 descarta, sale la despedida con el
+  motivo; si no, al enviar sale «Gracias, te escribo por WhatsApp». Las preguntas, sus opciones y
+  qué descarta o queda en duda están en `src/data/formulario.ts`. Al cambiar de pantalla el foco
+  va a su título («Paso 2 de 3, Tu vivienda»), «Volver» conserva lo escrito y, si se cierra a
   medias, al reabrir sigue donde estaba. Cada campo o grupo de opciones tiene su mensaje de error
   enlazado (`aria-describedby`) y la confirmación recibe el foco al enviar.
 - **Imágenes y vídeo:** `alt` descriptivo en las fotos; subtítulos y transcripción en el vídeo.
@@ -316,7 +318,11 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 - Revisar los finales completados de «Recibes» y «Al cerrar» de la fase 04 (propuesta, `fases` en `site.ts`).
 - Testimonios reales (`testimonios`; mientras esté vacío la sección no se muestra).
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
-- Servicio que recibe el formulario «Cuéntame tu reforma» (`contactoAction`, p. ej. Formspree).
-  Mientras esté vacío, al enviar se abre el correo con el mensaje ya redactado.
+- Servicio que pasa el formulario «Cuéntame tu reforma» a Consultas en Notion (`contactoAction`:
+  un webhook de Make o Zapier, o Formspree). Recibe todos los campos más `encaje` (Encaja, Dudoso
+  o No encaja), `estado` (Nueva o Descartada), `motivo` del descarte y `procedencia`
+  (`utm_source` del enlace, la web de la que llega o «directo»). Las despedidas también se envían.
+  Mientras esté vacío, la pantalla 3 abre el correo con el mensaje ya redactado y las despedidas
+  no se registran.
 - Datos entre [corchetes] de `/aviso-legal`, `/privacidad` y `/cookies`, y revisión profesional
   de los textos legales.
