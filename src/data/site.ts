@@ -105,7 +105,7 @@ export const fases = [
 export const principios = [
   {
     titulo: 'Todo en un solo sitio.',
-    texto: 'Planos, decisiones y papeles viven en tu portal. Sin buscar en WhatsApp.',
+    texto: 'Un portal de cliente donde viven los planos, las decisiones y los papeles. Sin buscar en WhatsApp.',
   },
   {
     titulo: 'Una fase se cierra antes de abrir la siguiente.',
@@ -117,7 +117,7 @@ export const principios = [
   },
   {
     titulo: 'Licencias y trámites con arquitecto colegiado.',
-    texto: 'No los hago yo: te derivo a un colaborador que sí puede firmarlos.',
+    texto: 'No los firmo yo: te derivo a un colaborador que sí puede hacerlo.',
   },
 ];
 
