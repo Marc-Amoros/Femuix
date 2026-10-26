@@ -65,6 +65,7 @@ export const fases = [
   {
     n: '01',
     nombre: 'Plantea',
+    semanas: 'Semanas 1 a 2',
     texto: 'Qué necesita tu casa y qué no. Definimos el alcance antes de dibujar una sola línea.',
     entregable:
       'Planos del estado actual acotados, dos alternativas de distribución en planta y una primera estimación de inversión por capítulos.',

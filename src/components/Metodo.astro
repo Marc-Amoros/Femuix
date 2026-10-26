@@ -46,7 +46,10 @@ import { fases } from '../data/site';
         fases.map((f, i) => (
           <li class="fase" id={`fase-${f.n}`} style={`--i: ${i}`} data-phase={i} data-reveal-unit>
             <div class="fase__top reveal">
-              <span class="fase__label">Fase {f.n}</span>
+              <span class="fase__label">
+                Fase {f.n}
+                {f.semanas && ` · ${f.semanas}`}
+              </span>
               <span class="fase__n" aria-hidden="true">
                 {f.n}
               </span>
