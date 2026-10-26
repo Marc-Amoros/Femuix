@@ -9,8 +9,15 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
 /* ---------- Scroll suave ---------- */
 
+// Los saltos (menú, «Volver arriba», índice del método) duran lo mismo y arrancan y frenan con
+// suavidad, sea cual sea la distancia: un viaje, no un tirón que se apaga
+const easeInOutQuart = (t: number) => (t < 0.5 ? 8 * t ** 4 : 1 - (-2 * t + 2) ** 4 / 2);
+export const JUMP = { duration: 1.4, easing: easeInOutQuart };
+
+// lerp 0,09: la rueda se suaviza sin que la página vaya «detrás» del gesto. Los saltos a una
+// sección ya respetan el scroll-padding-top de global.css (bajo la cabecera), como sin Lenis
 if (!reduce) {
-  window.lenis = new Lenis({ lerp: 0.075, anchors: { offset: -72 }, autoRaf: true });
+  window.lenis = new Lenis({ lerp: 0.09, anchors: JUMP, autoRaf: true });
 }
 
 /* ---------- Contadores ---------- */
@@ -270,6 +277,15 @@ const spySections = [...new Set(navLinks.map(({ id }) => id))]
   .map((id) => document.getElementById(id))
   .filter((el): el is HTMLElement => !!el);
 
+// Otros scripts (el mazo del método) leen y escriben en el mismo fotograma que el resto: devuelven
+// una función con lo que hay que escribir, que se aplica junto a las demás escrituras
+type FrameHook = () => (() => void) | void;
+const hooks: FrameHook[] = [];
+export function onFrame(hook: FrameHook) {
+  hooks.push(hook);
+  requestUpdate();
+}
+
 let ticking = false;
 
 function update() {
@@ -347,6 +363,11 @@ function update() {
     }
   }
 
+  for (const hook of hooks) {
+    const write = hook();
+    if (write) writes.push(write);
+  }
+
   for (const write of writes) write();
 }
 
@@ -357,7 +378,11 @@ function requestUpdate() {
   }
 }
 
-window.addEventListener('scroll', requestUpdate, { passive: true });
+// Con el scroll suave, los efectos se calculan dentro del mismo fotograma en que Lenis mueve la
+// página: si esperaran al evento scroll irían un fotograma por detrás y la foto, el vídeo o las
+// tarjetas «flotarían» respecto al texto
+if (window.lenis) window.lenis.on('scroll', update);
+else window.addEventListener('scroll', requestUpdate, { passive: true });
 window.addEventListener('resize', requestUpdate);
 update();
 

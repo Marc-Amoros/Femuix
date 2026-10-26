@@ -173,7 +173,28 @@ import { site, url } from '../data/site';
       dialog.querySelector<HTMLElement>('#contacto-title')?.focus();
     };
 
-    const close = () => dialog.close();
+    // Al cerrar, la ventana baja y se desvanece con el fondo antes de cerrarse de verdad
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const OUT = 320; // lo que dura contacto-out
+    const close = () => {
+      if (!dialog.open || dialog.classList.contains('is-closing')) return;
+      if (reduceMotion) {
+        dialog.close();
+        return;
+      }
+      dialog.classList.add('is-closing');
+      window.setTimeout(() => {
+        dialog.classList.remove('is-closing');
+        dialog.close();
+      }, OUT);
+    };
+
+    // Escape también cierra con la animación (si el navegador deja retener el cierre)
+    dialog.addEventListener('cancel', (e) => {
+      if (!e.cancelable) return;
+      e.preventDefault();
+      close();
+    });
 
     dialog.addEventListener('close', () => {
       window.lenis?.start();
@@ -392,6 +413,29 @@ import { site, url } from '../data/site';
     }
     .contacto[open]::backdrop {
       animation: contacto-fondo 0.4s var(--ease);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .contacto.is-closing {
+      animation: contacto-out 0.32s var(--ease-in-out) forwards;
+      pointer-events: none;
+    }
+    .contacto.is-closing::backdrop {
+      animation: contacto-fondo-out 0.32s var(--ease-in-out) forwards;
+    }
+  }
+
+  @keyframes contacto-out {
+    to {
+      opacity: 0;
+      transform: translateY(16px) scale(0.985);
+    }
+  }
+
+  @keyframes contacto-fondo-out {
+    to {
+      opacity: 0;
     }
   }
 

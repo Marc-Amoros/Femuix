@@ -83,32 +83,55 @@ import { fases } from '../data/site';
 </section>
 
 <script>
-  // Las tarjetas se apilan al hacer scroll. La activa es la última que ha llegado a su sitio;
-  // las anteriores se reducen un poco (--depth) y el índice marca la activa.
+  import { JUMP, onFrame } from '../scripts/motion';
+
+  // Las tarjetas se apilan al hacer scroll. Cada una se reduce poco a poco mientras la siguiente
+  // la cubre (--depth, al ritmo del scroll y en el mismo fotograma) y el índice marca la activa:
+  // la última que ha llegado a su sitio.
   const cards = [...document.querySelectorAll<HTMLElement>('[data-phase]')];
   const links = document.querySelectorAll<HTMLElement>('[data-phase-link]');
-  let ticking = false;
+  const list = document.querySelector<HTMLElement>('.fases');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const update = () => {
-    ticking = false;
+  // Dónde se detiene cada tarjeta (su top pegajoso): solo cambia con el tamaño de la ventana
+  let stops: number[] = [];
+  const measure = () => (stops = cards.map((card) => parseFloat(getComputedStyle(card).top) || 0));
+  measure();
+  addEventListener('resize', measure);
+
+  let current = -1;
+  onFrame(() => {
+    const tops = cards.map((card) => card.getBoundingClientRect().top);
+    const heights = cards.map((card) => card.offsetHeight);
     let active = 0;
-    cards.forEach((card, i) => {
-      const stickyTop = parseFloat(getComputedStyle(card).top) || 0;
-      if (card.getBoundingClientRect().top <= stickyTop + 2) active = i;
+    tops.forEach((top, i) => {
+      if (top <= stops[i] + 2) active = i;
     });
-    cards.forEach((card, i) => card.style.setProperty('--depth', String(Math.max(0, active - i))));
-    links.forEach((l) => {
-      const on = Number(l.dataset.phaseLink) === active;
-      l.classList.toggle('is-active', on);
-      if (on) l.setAttribute('aria-current', 'step');
-      else l.removeAttribute('aria-current');
+    // Cuánto ha cubierto cada tarjeta a la anterior, de 0 (aún no la toca) a 1 (encima)
+    const cover = tops.map((top, j) => {
+      if (j === 0) return 0;
+      const from = stops[j - 1] + heights[j - 1];
+      return Math.min(1, Math.max(0, (from - top) / (from - stops[j])));
     });
-  };
+    // Con movimiento reducido, la tarjeta cambia de tamaño de golpe al quedar cubierta
+    const depths = cards.map((_, i) =>
+      reduceMotion ? Math.max(0, active - i) : cover.slice(i + 1).reduce((a, b) => a + b, 0),
+    );
+    return () => {
+      cards.forEach((card, i) => card.style.setProperty('--depth', depths[i].toFixed(3)));
+      if (active === current) return;
+      current = active;
+      links.forEach((l) => {
+        const on = Number(l.dataset.phaseLink) === active;
+        l.classList.toggle('is-active', on);
+        if (on) l.setAttribute('aria-current', 'step');
+        else l.removeAttribute('aria-current');
+      });
+    };
+  });
 
   // Al pulsar un punto del índice se baja hasta su tarjeta. Las tarjetas son pegajosas, así que
   // su posición en pantalla no sirve: se calcula la natural sumando las anteriores y el hueco.
-  const list = document.querySelector<HTMLElement>('.fases');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   cards.forEach((card) => card.setAttribute('tabindex', '-1'));
   links.forEach((link) => {
     link.addEventListener('click', (e) => {
@@ -118,24 +141,13 @@ import { fases } from '../data/site';
       const gap = parseFloat(getComputedStyle(list).rowGap) || 0;
       let y = list.getBoundingClientRect().top + window.scrollY;
       for (let j = 0; j < i; j++) y += cards[j].offsetHeight + gap;
-      y -= parseFloat(getComputedStyle(cards[i]).top) || 0;
+      y -= stops[i];
       const { lenis } = window;
-      if (lenis) lenis.scrollTo(y + 2, { immediate: reduceMotion });
+      if (lenis) lenis.scrollTo(y + 2, JUMP);
       else window.scrollTo({ top: y + 2, behavior: reduceMotion ? 'auto' : 'smooth' });
       cards[i].focus({ preventScroll: true });
     });
   });
-
-  addEventListener(
-    'scroll',
-    () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
-    },
-    { passive: true },
-  );
-  update();
 </script>
 
 <style>
@@ -278,19 +290,12 @@ import { fases } from '../data/site';
       0 30px 60px -40px rgba(14, 32, 27, 0.55);
     transform: scale(calc(1 - var(--depth, 0) * 0.035));
     transform-origin: 50% 0;
-    transition: transform var(--t-move) var(--ease);
   }
 
   :global([data-theme='dark']) .fase {
     box-shadow:
       0 0 0 1px rgba(131, 129, 130, 0.35),
       0 30px 60px -40px rgba(0, 0, 0, 0.8);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .fase {
-      transition: none;
-    }
   }
 
   .fase__top {

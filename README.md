@@ -140,8 +140,24 @@ rombo dorado. Las bandas de bruma usan `.band` y la de petróleo `.band--teal` (
 Intro con el isotipo (una vez por sesión), titulares palabra a palabra, scroll suave, franja de
 fases que se mueve con el scroll, sello de la portada con el texto fijo, vídeo que crece con el scroll, tarjetas del método apiladas,
 portal en 3D, comparador antes/después, «Sobre mí» en tres tiempos (foto, firma y texto, con la cita
-que se escribe y filetes que se dibujan) y logotipo gigante en el pie. Todo se desactiva si el
-sistema pide reducir el movimiento.
+que se escribe y filetes que se dibujan). Todo se desactiva si el sistema pide reducir el
+movimiento.
+
+Fluidez:
+
+- **Scroll:** Lenis con `lerp` 0,09. Los efectos ligados al scroll (vídeo, parallax, secciones que
+  se abren, franjas, mazo del método, barra de progreso) se calculan en el mismo fotograma en que
+  Lenis mueve la página (`lenis.on('scroll')`), así que no van un fotograma por detrás. Otros
+  scripts se suman con `onFrame()` de `motion.ts` (lecturas primero, escrituras después).
+- **Saltos** (menú, «Volver arriba», índice del método): 1,4 s con arranque y frenada suaves
+  (`JUMP` en `motion.ts`). Lenis respeta el `scroll-padding-top`, así que la sección queda justo
+  bajo la cabecera, igual que sin scroll suave.
+- **Mazo del método:** cada tarjeta se reduce poco a poco mientras la siguiente la cubre
+  (`--depth` continuo, al ritmo del scroll).
+- **Cierres:** el menú y el formulario se desvanecen al cerrarse (también con Escape), en vez de
+  desaparecer de golpe.
+- **Entre páginas** (portada ↔ textos legales): fundido con `@view-transition` en los navegadores
+  que lo admiten. El cambio de modo mantiene su círculo (`.vt-theme`).
 
 Escala de movimiento (tokens en `global.css`): `--t-color` 0,4 s para colores y subrayados,
 `--t-move` 0,6 s para microinteracciones, `--t-enter` 1,1 s para entradas y filetes que se dibujan,
@@ -166,7 +182,8 @@ sección, aunque otra más alta cruce antes la línea de entrada. Así «Sobre m
 rótulo, titular, entradilla, cita, compromisos y botones, en ese orden y con respiro entre cada
 paso. Los tiempos del resto de la coreografía están en el bloque «Entrada» de `SobreMi.astro`.
 
-Acabados: grano de papel (en modo overlay, no altera el blanco), apariciones con desenfoque,
+Acabados: grano de papel (en modo overlay, no altera el blanco), apariciones con desenfoque
+solo en el texto (en tarjetas y fotos costaría fotogramas en el móvil),
 secciones verdes que se abren de tarjeta a ancho completo (`data-expand`), índice numerado en
 las etiquetas de sección, texto que rueda en los botones, huecos de imagen con paspartú,
 coordenadas de Barcelona en la portada.

@@ -91,7 +91,7 @@ const { base = '' } = Astro.props;
       } catch {}
 
       const doc = document as Document & {
-        startViewTransition?: (cb: () => void) => { ready: Promise<void> };
+        startViewTransition?: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> };
       };
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce || !doc.startViewTransition) {
@@ -104,9 +104,12 @@ const { base = '' } = Astro.props;
       const x = r.left + r.width / 2;
       const y = r.top + r.height / 2;
       const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-      doc
-        .startViewTransition(apply)
-        .ready.then(() => {
+      // .vt-theme cambia la transición de página (fundido) por la del círculo (global.css)
+      root.classList.add('vt-theme');
+      const transition = doc.startViewTransition(apply);
+      transition.finished.catch(() => {}).finally(() => root.classList.remove('vt-theme'));
+      transition.ready
+        .then(() => {
           root.animate(
             { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
             {
@@ -126,6 +129,10 @@ const { base = '' } = Astro.props;
   const menu = document.querySelector<HTMLElement>('[data-menu]');
   const behind = [...document.querySelectorAll<HTMLElement>('main, footer, .skip-link')];
 
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MENU_OUT = 320; // lo que dura menu-out
+  let closing = 0;
+
   const setMenu = (open: boolean, returnFocus = true) => {
     if (!menu || !menuBtn) return;
     const { lenis } = window;
@@ -133,7 +140,18 @@ const { base = '' } = Astro.props;
     header?.classList.toggle('is-menu-open', open);
     root.classList.toggle('menu-open', open);
     behind.forEach((el) => el.toggleAttribute('inert', open));
-    menu.hidden = !open;
+    // Al cerrar, el panel se desvanece en lugar de desaparecer de golpe
+    clearTimeout(closing);
+    menu.classList.remove('is-closing');
+    if (open || reduceMotion || menu.hidden) {
+      menu.hidden = !open;
+    } else {
+      menu.classList.add('is-closing');
+      closing = window.setTimeout(() => {
+        menu.classList.remove('is-closing');
+        menu.hidden = true;
+      }, MENU_OUT);
+    }
     if (open) {
       lenis?.stop();
       menu.querySelector<HTMLElement>('a')?.focus();
@@ -535,6 +553,18 @@ const { base = '' } = Astro.props;
     from {
       opacity: 0;
       transform: translateY(-12px);
+    }
+  }
+
+  .menu.is-closing {
+    animation: menu-out 0.32s var(--ease-in-out) forwards;
+    pointer-events: none;
+  }
+
+  @keyframes menu-out {
+    to {
+      opacity: 0;
+      transform: translateY(-8px);
     }
   }
 
