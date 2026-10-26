@@ -1,8 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
-import SplitText from './SplitText.astro';
-import { llamada, nav, site, url } from '../data/site';
+import { url } from '../data/site';
 
 // En páginas interiores los enlaces apuntan a las secciones de la portada
 interface Props {
@@ -12,8 +11,6 @@ interface Props {
 const { base = '' } = Astro.props;
 
 const year = new Date().getFullYear();
-
-const confianza = ['Sin compromiso', 'Pagas fase a fase', 'Solo Barcelona ciudad'];
 
 const legal = [
   { label: 'Aviso legal', href: url('/aviso-legal') },
@@ -25,41 +22,8 @@ const legal = [
 
 <footer class="footer on-dark" data-expand>
   <div class="container">
-    <!-- Cierre: la última invitación a dar el primer paso -->
-    <div class="footer__cta" data-reveal-unit>
-      <div class="footer__cta-copy">
-        <span class="footer__kicker reveal">El primer paso</span>
-        <SplitText
-          as="p"
-          class="footer__claim"
-          parts={[{ text: '¿Empezamos' }, { text: 'por el orden?', em: true, br: true }]}
-        />
-        <p class="footer__lead reveal">
-          Si lo que has leído encaja con tu reforma, escríbeme y lo vemos juntos.
-        </p>
-      </div>
-
-      <div class="footer__actions reveal">
-        <a class="btn btn--primary" href={llamada.href} data-contacto={!llamada.activa || undefined}>
-          {llamada.hablar}
-          <Icon name="arrow" />
-        </a>
-        <ul class="footer__trust">
-          {
-            confianza.map((t) => (
-              <li>
-                <Icon name="check" />
-                {t}
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer__grid">
-      <!-- Identidad y contacto -->
-      <div class="footer__brand reveal">
+    <div class="footer__main reveal">
+      <div class="footer__brand">
         <a href={`${base}#top`} class="footer__logo" aria-label="Femuix, volver arriba">
           <Logo tone="light" class="only-light" />
           <Logo tone="gray" class="only-dark" />
@@ -68,77 +32,30 @@ const legal = [
           Reformas de vivienda con orden: plan por fases, todo por escrito y una sola
           interlocutora.
         </p>
-
-        <div class="footer__contact">
-          <span class="footer__title">Escríbeme</span>
-          <a class="footer__mail" href={`mailto:${site.email}`}>{site.email}</a>
-        </div>
-
-        <ul class="footer__facts">
-          <li>Proyectos de 12 a 14 semanas</li>
-          <li class="footer__time" data-clock>
-            <time>--:--</time> en {site.city}
-          </li>
-        </ul>
       </div>
 
-      <!-- Navegación: lista editorial, como el menú -->
-      <nav class="footer__nav" aria-labelledby="ft-secciones">
-        <span class="footer__title reveal" id="ft-secciones">Secciones</span>
-        <ul>
-          {
-            nav.map((item, i) => (
-              <li class="reveal">
-                <a href={`${base}${item.href}`}>
-                  <span class="footer__n">0{i + 1}</span>
-                  <span class="footer__label">{item.label}</span>
-                  <Icon name="arrow" />
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="footer__bottom reveal">
-      <span>© {year} Femuix · Interiorismo y reformas de vivienda</span>
-      <nav class="footer__legal" aria-label="Legal">
-        {legal.map((l) => <a href={l.href}>{l.label}</a>)}
-      </nav>
       <a class="footer__top-link" href={`${base}#top`}>
         Volver arriba
         <span class="footer__top-icon" aria-hidden="true"><Icon name="arrow" /></span>
       </a>
     </div>
+
+    <div class="footer__bottom reveal">
+      <span>© {year} Femuix</span>
+      <nav class="footer__legal" aria-label="Legal">
+        {legal.map((l) => <a href={l.href}>{l.label}</a>)}
+      </nav>
+    </div>
   </div>
 </footer>
-
-<script>
-  // Hora local de Barcelona, actualizada cada 15 s
-  const clock = document.querySelector('[data-clock] time');
-  const fmt = new Intl.DateTimeFormat('es-ES', {
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZone: 'Europe/Madrid',
-  });
-  const tick = () => {
-    if (clock) clock.textContent = fmt.format(new Date());
-  };
-  tick();
-  setInterval(tick, 15000);
-</script>
 
 <style>
   .footer {
     --ft-link: var(--pine-100);
     --ft-soft: var(--pine-200);
-    --ft-title: var(--pine-200); /* 7,4:1 también sobre el brillo */
     --ft-line: rgba(201, 217, 213, 0.18);
     --ft-dot: var(--warm);
-    padding-top: clamp(96px, 12vw, 168px);
+    padding-top: clamp(64px, 8vw, 104px);
     font-size: 0.9375rem;
     /* Lo que aún no ha entrado (desplazado hacia abajo) no alarga la página más allá del pie */
     overflow: clip;
@@ -149,118 +66,29 @@ const legal = [
     --on-dark-muted: var(--g-200);
     --ft-link: #f5f5f5;
     --ft-soft: var(--g-200); /* 7,6:1 también sobre el brillo gris */
-    --ft-title: var(--g-200);
     --ft-line: rgba(131, 129, 130, 0.3);
     --ft-dot: var(--warm);
   }
 
-  /* ---------- Cierre ---------- */
+  /* ---------- Marca ---------- */
 
-  .footer__cta {
-    display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
-    gap: clamp(40px, 6vw, 96px);
-    align-items: end;
-    padding-bottom: clamp(64px, 8vw, 112px);
-    border-bottom: 1px solid var(--ft-line);
-    /* Filete que nace dorado y se apaga hacia la derecha */
-    border-image: linear-gradient(90deg, var(--gold-line), var(--ft-line) 45%) 1;
-  }
-
-  .footer__cta-copy {
-    display: grid;
-    gap: 24px;
-  }
-
-  .footer__kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ft-title);
-  }
-
-  .footer__kicker::before {
-    content: '';
-    width: 7px;
-    height: 7px;
-    background: var(--ft-dot);
-    transform: rotate(45deg);
-  }
-
-  /* SplitText es otro componente: el estilo se aplica con :global */
-  .footer :global(.footer__claim) {
-    font-family: var(--serif);
-    font-size: clamp(2.6rem, 6.4vw, 6rem);
-    font-weight: 300;
-    line-height: 1.18; /* aire entre las dos líneas: la «p» de «Empezamos» no roza «por» */
-    letter-spacing: -0.02em;
-  }
-
-  .footer :global(.footer__claim em) {
-    font-style: italic;
-    color: var(--warm);
-  }
-
-  .footer__lead {
-    max-width: 34em;
-    font-size: clamp(1rem, 1.2vw, 1.125rem);
-    line-height: 1.7;
-    color: var(--ft-soft);
-  }
-
-  .footer__actions {
-    display: grid;
-    gap: 12px;
-  }
-
-  .footer__actions .btn {
-    width: 100%;
-  }
-
-  .footer__trust {
-    display: grid;
-    gap: 8px;
-    margin: 12px 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: 0.875rem;
-    color: var(--ft-soft);
-  }
-
-  .footer__trust li {
+  .footer__main {
     display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .footer__trust :global(svg) {
-    width: 16px;
-    height: 16px;
-    color: var(--ft-title);
-  }
-
-  /* ---------- Información ---------- */
-
-  .footer__grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(48px, 8vw, 128px);
-    padding-block: clamp(56px, 7vw, 104px);
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px 48px;
+    padding-bottom: clamp(40px, 5vw, 64px);
   }
 
   .footer__brand {
     display: grid;
-    gap: 32px;
-    align-content: start;
+    gap: 28px;
   }
 
   .footer__logo {
     display: block;
-    width: clamp(200px, 22vw, 300px);
+    width: clamp(180px, 18vw, 240px);
   }
 
   .footer__logo :global(svg) {
@@ -270,150 +98,11 @@ const legal = [
 
   .footer__tagline {
     max-width: 30em;
-    font-size: clamp(1.0625rem, 1.3vw, 1.1875rem);
-    line-height: 1.65;
-    color: var(--ft-soft);
-  }
-
-  .footer__title {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ft-title);
-  }
-
-  .footer__contact {
-    display: grid;
-    gap: 10px;
-    justify-items: start;
-  }
-
-  .footer__mail {
     font-family: var(--serif);
-    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
-    font-style: italic;
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
     font-weight: 300;
-    line-height: 1.2;
+    line-height: 1.45;
     color: var(--white);
-    text-decoration: underline;
-    text-decoration-color: var(--ft-line);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 8px;
-    transition: text-decoration-color var(--t-color) var(--ease);
-  }
-
-  .footer__mail:hover {
-    text-decoration-color: var(--ft-dot);
-  }
-
-  /* Datos del estudio en una sola línea, separados por rombos */
-  .footer__facts {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px 0;
-    margin: 0;
-    padding: 20px 0 0;
-    list-style: none;
-    border-top: 1px solid var(--ft-line);
-    font-size: 0.875rem;
-    color: var(--ft-soft);
-  }
-
-  .footer__facts li {
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-  }
-
-  .footer__facts li + li::before {
-    content: '';
-    width: 5px;
-    height: 5px;
-    margin: 0 16px;
-    background: var(--ft-title);
-    opacity: 0.6;
-    transform: rotate(45deg);
-  }
-
-  .footer__time time {
-    margin-right: 6px;
-    color: var(--white);
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Navegación: enlaces grandes en Merriweather con número y flecha */
-  .footer__nav {
-    display: grid;
-    align-content: start;
-    gap: 14px;
-  }
-
-  .footer__nav ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-top: 1px solid var(--ft-line);
-  }
-
-  .footer__nav li {
-    border-bottom: 1px solid var(--ft-line);
-  }
-
-  .footer__nav a {
-    display: flex;
-    align-items: baseline;
-    gap: 18px;
-    padding: 16px 0;
-    color: var(--ft-link);
-    text-decoration: none;
-    transition: color var(--t-color) var(--ease);
-  }
-
-  .footer__n {
-    min-width: 2ch;
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    color: var(--ft-title);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .footer__label {
-    font-family: var(--serif);
-    font-size: clamp(1.3rem, 2vw, 1.75rem);
-    font-weight: 300;
-    line-height: 1.2;
-    transition: transform var(--t-move) var(--ease);
-  }
-
-  .footer__nav a :global(svg) {
-    align-self: center;
-    width: 18px;
-    height: 18px;
-    margin-left: auto;
-    opacity: 0;
-    transform: translateX(-10px);
-    transition:
-      opacity var(--t-color) var(--ease),
-      transform var(--t-move) var(--ease);
-  }
-
-  .footer__nav a:hover,
-  .footer__nav a:focus-visible {
-    color: var(--white);
-  }
-
-  .footer__nav a:hover .footer__label,
-  .footer__nav a:focus-visible .footer__label {
-    transform: translateX(8px);
-  }
-
-  .footer__nav a:hover :global(svg),
-  .footer__nav a:focus-visible :global(svg) {
-    opacity: 1;
-    transform: none;
   }
 
   /* ---------- Barra final ---------- */
@@ -422,9 +111,8 @@ const legal = [
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px 32px;
-    padding: 24px 0 32px;
+    gap: 8px 44px;
+    padding: 20px 0 clamp(32px, 4vw, 56px);
     border-top: 1px solid var(--ft-line);
     font-size: 0.8125rem;
     color: var(--ft-soft);
@@ -433,20 +121,21 @@ const legal = [
   .footer__legal {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 24px;
+    gap: 0 44px;
   }
 
   .footer__legal a {
     padding-block: 10px; /* objetivo de 40 px de alto */
-    color: var(--ft-soft);
-    text-decoration: none;
+    color: var(--ft-link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
     transition: color var(--t-color) var(--ease);
   }
 
   .footer__legal a:hover {
     color: var(--white);
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    text-decoration-color: var(--ft-dot);
   }
 
   .footer__top-link {
@@ -495,43 +184,18 @@ const legal = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .footer__label,
-    .footer__nav a :global(svg),
     .footer__top-icon :global(svg) {
       transition: none;
     }
   }
 
-  @media (max-width: 1000px) {
-    .footer__cta {
-      grid-template-columns: minmax(0, 1fr);
-      align-items: start;
-    }
-    .footer__actions {
-      max-width: 420px;
-    }
-  }
-
-  @media (max-width: 860px) {
-    .footer__grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
-
   @media (max-width: 640px) {
-    .footer__actions {
-      max-width: none;
-    }
-    .footer__facts {
+    .footer__main {
       flex-direction: column;
       align-items: flex-start;
     }
-    .footer__facts li + li::before {
-      display: none;
-    }
-    .footer__bottom {
-      flex-direction: column;
-      align-items: flex-start;
+    .footer__legal {
+      gap: 0 24px;
     }
   }
 </style>

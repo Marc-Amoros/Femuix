@@ -150,7 +150,7 @@ abajo arriba y los filetes se dibujan de izquierda a derecha.
 
 Apariciones (`.reveal`, `.split`, `.clip-reveal`, en `src/scripts/motion.ts`): salen en orden de
 lectura y por tandas. Lo que ya se ve en la misma sección entra junto (rótulo, titular y
-entradilla); un bloque con `data-reveal-unit` (tarjeta del método, cierre del pie) se presenta
+entradilla); un bloque con `data-reveal-unit` (tarjeta del método) se presenta
 entero y de arriba abajo; al final de la página aparece lo que quede pendiente, cada tanda espera a la anterior sin adelantarla nunca, y en un salto con el menú o
 un giro rápido de rueda se espera a que la página se pare: lo que queda fuera aparece sin
 animación. En el móvil (desplazamiento con el dedo) todo aparece en cuanto entra, también durante
@@ -169,7 +169,7 @@ paso. Los tiempos del resto de la coreografía están en el bloque «Entrada» d
 Acabados: grano de papel (en modo overlay, no altera el blanco), apariciones con desenfoque,
 secciones verdes que se abren de tarjeta a ancho completo (`data-expand`), índice numerado en
 las etiquetas de sección, texto que rueda en los botones, huecos de imagen con paspartú,
-coordenadas de Barcelona en la portada y hora local en el pie.
+coordenadas de Barcelona en la portada.
 
 ## Móvil, tablet y escritorio
 
