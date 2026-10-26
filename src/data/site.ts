@@ -83,8 +83,8 @@ export const fases = [
     nombre: 'Diseña',
     texto: 'El diseño decidido al detalle: distribución, materiales, acabados y equipamiento.',
     entregable:
-      'Los planos definitivos, los alzados de cocina y baños, el plano de iluminación y la selección cerrada de materiales, acabados y equipamiento.',
-    aprueba: 'los planos y la selección de materiales, antes de abrir Materializa.',
+      'Planta propuesta acotada, alzados de las estancias, renders de las decisiones más importantes y fichas de carpinterías a medida.',
+    aprueba: 'el proyecto de diseño, antes de pasar a Materializa.',
   },
   {
     n: '04',

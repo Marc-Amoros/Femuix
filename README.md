@@ -276,7 +276,7 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 ## Pendiente de contenido real
 
 - Foto principal, vídeo de 60–90 s y antes/después (`Placeholder`).
-- Revisar «Recibes» y «Apruebas por escrito» de la fase 03 y «Al cerrar» de la 04 (propuesta, `fases` en `site.ts`).
+- Revisar los finales completados de «Recibes» y «Al cerrar» de la fase 04 (propuesta, `fases` en `site.ts`).
 - Testimonios reales (`testimonios`; mientras esté vacío se muestran huecos).
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
 - Enlace a la agenda de la llamada (`llamadaUrl`): al rellenarlo, los botones de «Escríbeme tu
