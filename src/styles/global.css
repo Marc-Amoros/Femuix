@@ -96,9 +96,9 @@
   --em: var(--petrol); /* cursivas de los titulares: azul petróleo del símbolo (4,8:1) */
   --em-text: var(--petrol-deep); /* petróleo para texto de menos de 24 px: 7,1:1 */
   /* Bruma con luz: claro arriba a la izquierda, petróleo suave abajo a la derecha */
-  --band-image:
-    radial-gradient(75% 60% at 0% 0%, rgba(255, 255, 255, 0.42), transparent 70%),
-    radial-gradient(60% 60% at 100% 100%, rgba(72, 122, 123, 0.12), transparent 70%);
+  --band-light: radial-gradient(75% 60% at 0% 0%, rgba(255, 255, 255, 0.42), transparent 70%);
+  --band-shade: radial-gradient(60% 60% at 100% 100%, rgba(72, 122, 123, 0.12), transparent 70%);
+  --band-image: var(--band-light), var(--band-shade);
   --line: rgba(29, 60, 52, 0.13);
   --line-strong: rgba(29, 60, 52, 0.28);
   --number: var(--pine-800); /* numeración: índices, 01/02/03… */
@@ -180,9 +180,9 @@
     transparent
   );
   /* Grafito con luz gris arriba a la izquierda y un toque dorado abajo a la derecha */
-  --band-image:
-    radial-gradient(75% 60% at 0% 0%, rgba(75, 78, 84, 0.45), transparent 70%),
-    radial-gradient(60% 60% at 100% 100%, rgba(218, 196, 153, 0.07), transparent 70%);
+  --band-light: radial-gradient(75% 60% at 0% 0%, rgba(75, 78, 84, 0.45), transparent 70%);
+  --band-shade: radial-gradient(60% 60% at 100% 100%, rgba(218, 196, 153, 0.07), transparent 70%);
+  --band-image: var(--band-light), var(--band-shade);
   --line: rgba(255, 255, 255, 0.12);
   --line-strong: rgba(255, 255, 255, 0.24);
   --number: var(--warm); /* numeración en dorado */
@@ -508,8 +508,17 @@ a {
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
-/* Dos bandas de bruma seguidas (Sobre mí y vídeo) se leen como una sola: la segunda no se
+/* Dos bandas de bruma seguidas (Sobre mí y vídeo) se leen como una sola: la luz queda arriba
+   en la primera y la sombra abajo en la segunda, para que el corte no se vea; la segunda no se
    recorta al entrar y el compás lo marca un filete fino con el rombo, sobre la bruma */
+.band:not(.band--teal):has(+ .band:not(.band--teal)) {
+  background: var(--band-light), var(--band);
+}
+
+.band:not(.band--teal) + .band:not(.band--teal) {
+  background: var(--band-shade), var(--band);
+}
+
 .js .band:not(.band--teal) + .band:not(.band--teal)[data-expand] {
   clip-path: none;
 }
@@ -552,7 +561,7 @@ a {
    Además, todo el sitio lleva un grano de papel (body::after). */
 :root {
   --tex-lattice: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='80'%3E%3Cpath d='M20 0.5L39.5 40L20 79.5L0.5 40Z' fill='none' stroke='%23FFFFFF' stroke-width='1'/%3E%3C/svg%3E");
-  --tex-lattice-op: 0.35;
+  --tex-lattice-op: 0.26;
 }
 
 :root[data-theme='dark'] {

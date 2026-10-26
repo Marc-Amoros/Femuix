@@ -433,3 +433,42 @@ if (!reduce) {
     setTimeout(() => el.classList.remove('is-tapped'), 650);
   });
 }
+
+/* ---------- Profundidad con el ratón ---------- */
+
+// En la portada, la foto, el marco dorado, la bruma y el sello se desplazan a ritmos distintos
+// siguiendo el ratón, como las capas de una maqueta. Escribe --dx y --dy (de -1 a 1, suavizados)
+// en el contenedor; el CSS decide cuánto se mueve cada capa. Solo con ratón y sin movimiento reducido.
+if (!reduce && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll<HTMLElement>('[data-depth]').forEach((scope) => {
+    let tx = 0;
+    let ty = 0;
+    let x = 0;
+    let y = 0;
+    let raf = 0;
+
+    const step = () => {
+      x += (tx - x) * 0.08;
+      y += (ty - y) * 0.08;
+      scope.style.setProperty('--dx', x.toFixed(4));
+      scope.style.setProperty('--dy', y.toFixed(4));
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.001 ? requestAnimationFrame(step) : 0;
+    };
+    const go = () => {
+      if (!raf) raf = requestAnimationFrame(step);
+    };
+
+    const area = scope.closest('section') ?? scope;
+    area.addEventListener('pointermove', (e) => {
+      const r = scope.getBoundingClientRect();
+      tx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2)));
+      ty = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (window.innerHeight / 2)));
+      go();
+    });
+    area.addEventListener('pointerleave', () => {
+      tx = 0;
+      ty = 0;
+      go();
+    });
+  });
+}

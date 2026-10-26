@@ -1,20 +1,24 @@
 ---
 import BeforeAfter from './BeforeAfter.astro';
-import Placeholder from './Placeholder.astro';
 import SplitText from './SplitText.astro';
 import { testimonios } from '../data/site';
 import { fotos, usarMuestras } from '../data/media';
 
+// Mientras no haya testimonios reales, la misma tarjeta con el texto entre corchetes: así se ve
+// dónde va cada cosa (como el texto de Sobre mí)
 const huecos = [
   {
-    label: 'Testimonio 1',
-    note: 'Nombre, barrio y una frase sobre el miedo que tenía antes de empezar.',
+    cita: '[Una frase real sobre el miedo que tenía antes de empezar y cómo se sintió al recibir las llaves.]',
+    nombre: '[Nombre]',
+    barrio: '[Barrio]',
   },
   {
-    label: 'Testimonio 2',
-    note: 'Mejor si es una captura real de WhatsApp o una reseña de Google, con permiso.',
+    cita: '[Mejor si es una captura de WhatsApp o una reseña de Google, con su permiso.]',
+    nombre: '[Nombre]',
+    barrio: '[Barrio]',
   },
 ];
+const citas = testimonios.length > 0 ? testimonios : huecos;
 ---
 
 <section class="section" aria-labelledby="testimonios-title">
@@ -31,23 +35,18 @@ const huecos = [
 
     <div class="testimonios">
       {
-        testimonios.length > 0
-          ? testimonios.map((t) => (
-              <blockquote class="quote reveal">
-                <span class="quote__mark" aria-hidden="true">
-                  “
-                </span>
-                <p>{t.cita}</p>
-                <footer>
-                  <strong>{t.nombre}</strong> · {t.barrio}
-                </footer>
-              </blockquote>
-            ))
-          : huecos.map((h) => (
-              <div class="reveal">
-                <Placeholder label={h.label} note={h.note} ratio="4 / 3" icon="quote" />
-              </div>
-            ))
+        citas.map((t, i) => (
+          <blockquote class:list={['quote reveal', { 'quote--tint': i % 2 === 0 }]}>
+            <span class="quote__mark" aria-hidden="true">
+              “
+            </span>
+            <p>{t.cita}</p>
+            <footer>
+              <strong>{t.nombre}</strong>
+              <span>{t.barrio}</span>
+            </footer>
+          </blockquote>
+        ))
       }
 
       <div class="testimonios__wide reveal">
@@ -77,39 +76,74 @@ const huecos = [
     margin-top: 16px;
   }
 
+  /* Mismo lenguaje que las tarjetas de «Para quién es»: una en bruma suave y otra en filete */
   .quote {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 28px;
     margin: 0;
-    padding: clamp(32px, 4vw, 56px);
+    padding: clamp(36px, 4vw, 56px);
     border: 1px solid var(--line-strong);
-    border-radius: var(--radius-lg);
+    border-radius: clamp(10px, 1vw, 16px);
+    overflow: hidden;
   }
 
+  .quote--tint {
+    border-color: transparent;
+    background: var(--tint);
+  }
+
+  /* Comilla grande en dorado, como una capitular */
   .quote__mark {
+    height: 0.5em;
     font-family: var(--serif);
-    font-size: 5rem;
-    line-height: 0.5;
-    color: var(--ink);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(5rem, 7vw, 7rem);
+    line-height: 0.9;
+    color: var(--gold-deep);
   }
 
   .quote p {
+    max-width: 30ch;
     font-family: var(--serif);
-    font-size: clamp(1.25rem, 2vw, 1.65rem);
+    font-size: clamp(1.3rem, 2vw, 1.7rem);
+    font-style: italic;
     font-weight: 300;
     line-height: 1.4;
+    letter-spacing: -0.01em;
   }
 
   .quote footer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     margin-top: auto;
-    font-size: 0.875rem;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
     color: var(--muted);
   }
 
   .quote strong {
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text);
+  }
+
+  /* Rombo dorado entre nombre y barrio */
+  .quote footer span::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 14px;
+    vertical-align: middle;
+    background: var(--gold-line);
+    transform: rotate(45deg);
   }
 
   @media (max-width: 720px) {

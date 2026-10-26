@@ -58,7 +58,7 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
       </ul>
     </div>
 
-    <div class="hero__media">
+    <div class="hero__media" data-depth>
       <p class="hero__coords reveal" style="--delay: 1100ms" aria-hidden="true">
         <span>Interiorismo · Reformas</span>
       </p>
@@ -203,6 +203,25 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
       transform: none;
       transition: none;
     }
+  }
+
+  /* Profundidad con el ratón (motion.ts escribe --dx y --dy): cada capa a su ritmo. Usa
+     `translate`, que se suma a los `transform` de las entradas sin pisarlos */
+  .hero__media::before {
+    translate: calc(var(--dx, 0) * 22px) calc(var(--dy, 0) * 16px);
+  }
+
+  .hero__media::after {
+    /* En vertical solo baja, para no cruzar las coordenadas que tiene encima */
+    translate: calc(var(--dx, 0) * -14px) max(0px, calc(var(--dy, 0) * 10px));
+  }
+
+  .hero__media .clip-reveal {
+    translate: calc(var(--dx, 0) * 6px) calc(var(--dy, 0) * 5px);
+  }
+
+  .badge {
+    translate: calc(var(--dx, 0) * -26px) calc(var(--dy, 0) * -20px);
   }
 
   /* Bloque de bruma desplazado tras la foto: da profundidad y anuncia el 30 % */
