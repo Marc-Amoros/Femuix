@@ -18,9 +18,13 @@ export const site = {
     'Interiorismo para reformar tu vivienda en Barcelona ciudad: cuatro fases aprobadas por escrito y un proyecto listo para contratar la obra. Plantea desde 297 €.',
   email: 'hola@femuix.com',
   city: 'Barcelona',
-  // Dirección a la que el formulario «Cuéntame tu reforma» envía los datos (p. ej. Formspree).
-  // Vacía: al enviar se abre el correo con el mensaje ya redactado.
-  contactoAction: '', // TODO: servicio de formularios
+  // Formulario «Cuéntame tu reforma» en Tally (lo que va tras tally.so/r/ en su enlace). Con él,
+  // los botones abren el formulario de Tally en una ventana emergente y las respuestas llegan a
+  // Consultas en Notion desde Tally. Vacío: se usa el formulario propio (ContactoModal.astro).
+  tallyFormId: '', // TODO: identificador del formulario de Tally
+  // Solo para el formulario propio: dirección a la que envía los datos. Vacía: al enviar se abre
+  // el correo con el mensaje ya redactado.
+  contactoAction: '',
 };
 
 // Desde la web no se reserva la llamada de compatibilidad (estrategia de captación): todo lo que

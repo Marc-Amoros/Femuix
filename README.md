@@ -318,11 +318,14 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 - Revisar los finales completados de «Recibes» y «Al cerrar» de la fase 04 (propuesta, `fases` en `site.ts`).
 - Testimonios reales (`testimonios`; mientras esté vacío la sección no se muestra).
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
-- Servicio que pasa el formulario «Cuéntame tu reforma» a Consultas en Notion (`contactoAction`:
-  un webhook de Make o Zapier, o Formspree). Recibe todos los campos más `encaje` (Encaja, Dudoso
-  o No encaja), `estado` (Nueva o Descartada), `motivo` del descarte y `procedencia`
-  (`utm_source` del enlace, la web de la que llega o «directo»). Las despedidas también se envían.
-  Mientras esté vacío, la pantalla 3 abre el correo con el mensaje ya redactado y las despedidas
-  no se registran.
+- **Formulario de Tally** (`tallyFormId` en `site.ts`, lo que va tras `tally.so/r/`). El
+  formulario «Cuéntame tu reforma» se monta en Tally (pantallas, despedida, gracias y envío a
+  Consultas en Notion) con los textos del documento de instrucciones del wireframe. Al poner el
+  identificador, los botones abren Tally en una ventana emergente (`TallyForm.astro`; el script de
+  Tally solo se descarga al pulsar) y le pasan el campo oculto `procedencia` (`utm_source` del
+  enlace, la web de la que llega o «directo»): en Tally hay que crear un campo oculto con ese
+  nombre. Mientras esté vacío, la web usa el formulario propio (`ContactoModal.astro` y
+  `src/data/formulario.ts`), que se puede borrar cuando Tally funcione. Revisar entonces si Tally
+  instala cookies y actualizar `/cookies`.
 - Datos entre [corchetes] de `/aviso-legal`, `/privacidad` y `/cookies`, y revisión profesional
   de los textos legales.

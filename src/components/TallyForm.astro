@@ -1,0 +1,66 @@
+---
+// Formulario «Cuéntame tu reforma» en Tally: los botones con data-contacto lo abren en una ventana
+// emergente. Las preguntas, la despedida de quien no encaja y el envío a Consultas (Notion) se
+// configuran en Tally. Sin JavaScript, o si Tally no carga, los botones abren el email.
+---
+
+<script>
+  import { site } from '../data/site';
+
+  const formId = site.tallyFormId;
+
+  // El script de Tally solo se descarga la primera vez que alguien pulsa un botón: la página no
+  // carga nada de terceros hasta entonces
+  let carga: Promise<void> | null = null;
+  const cargarTally = () =>
+    (carga ??= new Promise<void>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://tally.so/widgets/embed.js';
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => {
+        carga = null;
+        reject(new Error('Tally no ha cargado'));
+      };
+      document.head.append(script);
+    }));
+
+  // De dónde llega la visita, para medir por canal en Consultas (campo oculto «procedencia» en
+  // Tally): la campaña del enlace (?utm_source=instagram), si no la web de la que viene y, si no,
+  // «directo»
+  const procedencia = (() => {
+    const utm = new URLSearchParams(location.search).get('utm_source');
+    if (utm) return utm;
+    try {
+      const ref = document.referrer ? new URL(document.referrer).hostname : '';
+      return ref && ref !== location.hostname ? ref : 'directo';
+    } catch {
+      return 'directo';
+    }
+  })();
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-contacto]').forEach((link) => {
+    link.setAttribute('aria-haspopup', 'dialog');
+    link.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await cargarTally();
+      } catch {
+        window.location.href = link.href; // sin Tally, el email
+        return;
+      }
+      window.Tally?.openPopup(formId, {
+        layout: 'modal',
+        width: 640,
+        overlay: true,
+        hiddenFields: { procedencia },
+        // Mientras está abierto, la página de detrás no se desplaza; al cerrar, el foco vuelve al botón
+        onOpen: () => window.lenis?.stop(),
+        onClose: () => {
+          window.lenis?.start();
+          link.focus();
+        },
+      });
+    });
+  });
+</script>
