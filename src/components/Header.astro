@@ -54,7 +54,7 @@ const { base = '' } = Astro.props;
 
     <div class="menu__foot">
       <p class="menu__hello">¿Empezamos por el orden?</p>
-      <a class="btn btn--primary" href={llamada.href} data-menu-link>{llamada.hablar}</a>
+      <a class="btn btn--primary" href={llamada.href} data-menu-link data-contacto={!llamada.activa || undefined}>{llamada.hablar}</a>
       <a class="menu__mail" href={`mailto:${site.email}`}>{site.email}</a>
     </div>
   </div>

@@ -248,8 +248,10 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
 - **Titulares animados:** `SplitText` incluye el texto real oculto para lectores de pantalla;
   úsalo siempre en lugar de partir palabras a mano.
 - **Foco visible:** nunca quites `outline` sin sustituirlo; sobre fondos verdes, aro blanco.
-- **Formulario:** cada campo tiene su mensaje de error enlazado (`aria-describedby`) y el aviso
-  de envío es una región `role="status"`.
+- **Formulario «Cuéntame tu reforma»** (`ContactoModal.astro`): ventana `<dialog>` modal que abren
+  los botones con `data-contacto` (sin JavaScript, abren el email). Atrapa el foco, se cierra con
+  Escape, con «Cerrar» o pulsando fuera, y devuelve el foco al botón. Cada campo tiene su mensaje
+  de error enlazado (`aria-describedby`) y la confirmación recibe el foco al enviar.
 - **Imágenes y vídeo:** `alt` descriptivo en las fotos; subtítulos y transcripción en el vídeo.
 - **Para auditar:** neutraliza `body::after`, `.band::before` y los degradados antes de pasar
   axe, o devolverá «incompleto» en lugar de medir el contraste.
@@ -279,5 +281,7 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
 - Enlace a la agenda de la llamada (`llamadaUrl`): al rellenarlo, los botones de «Escríbeme tu
   caso» pasan a reservar la llamada.
+- Servicio que recibe el formulario «Cuéntame tu reforma» (`contactoAction`, p. ej. Formspree).
+  Mientras esté vacío, al enviar se abre el correo con el mensaje ya redactado.
 - Datos entre [corchetes] de `/aviso-legal`, `/privacidad` y `/cookies`, y revisión profesional
   de los textos legales.

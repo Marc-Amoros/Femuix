@@ -20,10 +20,14 @@ export const site = {
   city: 'Barcelona',
   // Enlace externo a la agenda de la llamada de compatibilidad
   llamadaUrl: '', // TODO: enlace a la agenda de la llamada de compatibilidad
+  // Dirección a la que el formulario «Cuéntame tu reforma» envía los datos (p. ej. Formspree).
+  // Vacía: al enviar se abre el correo con el mensaje ya redactado.
+  contactoAction: '', // TODO: servicio de formularios
 };
 
 // Mientras no haya enlace a la agenda, la web no anuncia una llamada que no se puede reservar:
-// los botones pasan a invitar a escribir un email. Al rellenar `llamadaUrl` vuelven a ser llamadas.
+// los botones invitan a escribir y abren el formulario «Cuéntame tu reforma» (sin JavaScript,
+// el email). Al rellenar `llamadaUrl` vuelven a ser llamadas.
 const activa = site.llamadaUrl !== '';
 export const llamada = {
   activa,

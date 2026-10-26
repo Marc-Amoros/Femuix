@@ -40,7 +40,7 @@ const legal = [
       </div>
 
       <div class="footer__actions reveal">
-        <a class="btn btn--primary" href={llamada.href}>
+        <a class="btn btn--primary" href={llamada.href} data-contacto={!llamada.activa || undefined}>
           {llamada.hablar}
           <Icon name="arrow" />
         </a>

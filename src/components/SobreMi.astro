@@ -63,7 +63,7 @@ import { retrato } from '../data/media';
       </ol>
 
       <div class="sobre__actions reveal">
-        <a class="btn btn--primary" href={llamada.href}>
+        <a class="btn btn--primary" href={llamada.href} data-contacto={!llamada.activa || undefined}>
           {llamada.hablar}
           <Icon name="arrow" />
         </a>

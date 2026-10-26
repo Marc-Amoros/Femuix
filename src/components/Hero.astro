@@ -39,7 +39,7 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar', 'Una sola i
       </p>
 
       <div class="hero__actions reveal" style="--delay: 620ms">
-        <a class="btn btn--primary" href={llamada.href}>
+        <a class="btn btn--primary" href={llamada.href} data-contacto={!llamada.activa || undefined}>
           ¿En qué te puedo ayudar?
           <Icon name="arrow" />
         </a>
