@@ -260,10 +260,13 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
 ## Fotos y vídeo de muestra
 
 Para ver cómo queda la web, hay fotos de Unsplash y un vídeo de Pexels (licencia de uso gratuita)
-en portada, «Sobre mí», antes/después y vídeo. Están en `src/data/media.ts`:
+en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 
 - Para cambiar una foto, sustituye su `id` y su `alt` (el texto alternativo describe la imagen).
 - Con `usarMuestras = false` vuelven los huecos reservados.
+- Las fotos propias van en `src/assets/fotos` y se enlazan con `imagen` en lugar de `id` (como
+  `retrato`, la foto de «Sobre mí»): Astro las convierte a WebP en tres anchos al compilar y se
+  sirven desde la propia web. Se entregan ya reveladas y recortadas a 4:5.
 - Se cargan desde los servidores de Unsplash y Pexels, así que **son solo para la maqueta**: las
   fotos y el vídeo definitivos deben ser propios y guardarse en `/public`, sin terceros (la página
   de cookies dice que no hay servicios externos).
@@ -272,7 +275,7 @@ en portada, «Sobre mí», antes/después y vídeo. Están en `src/data/media.ts
 
 ## Pendiente de contenido real
 
-- Foto principal, vídeo de 60–90 s, foto de Andrea y antes/después (`Placeholder`).
+- Foto principal, vídeo de 60–90 s y antes/después (`Placeholder`).
 - Entregable de cada fase (`fases` en `site.ts`).
 - Presentación de Andrea (`sobreMi.intro`).
 - Testimonios reales (`testimonios`; mientras esté vacío se muestran huecos).

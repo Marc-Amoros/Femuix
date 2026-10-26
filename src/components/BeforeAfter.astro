@@ -1,13 +1,13 @@
 ---
 import Isotipo from './Isotipo.astro';
-import { fotoSrcset, fotoUrl, type Foto } from '../data/media';
+import { fotoSrcset, fotoUrl, type FotoMuestra } from '../data/media';
 
 // Comparador antes / después. Con fotos (idealmente del mismo rincón) muestra las imágenes;
 // sin ellas, los huecos reservados.
 interface Props {
   note?: string;
-  antes?: Foto;
-  despues?: Foto;
+  antes?: FotoMuestra;
+  despues?: FotoMuestra;
 }
 
 const { note, antes, despues } = Astro.props;

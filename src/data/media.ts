@@ -1,3 +1,5 @@
+import andrea from '../assets/fotos/andrea.jpg';
+
 // Material de MUESTRA para ver cómo queda la web con fotos y vídeo.
 // Fotos de Unsplash y vídeo de Pexels, ambos con licencia de uso gratuita.
 // Antes de publicar: sustituir por fotos y vídeo reales de Femuix y alojarlos en la propia web
@@ -5,13 +7,27 @@
 // Con `usarMuestras = false` la web vuelve a mostrar los huecos reservados.
 export const usarMuestras = true;
 
+// Una foto es de muestra (Unsplash, por `id`) o propia (en src/assets, por `imagen`): las propias
+// las optimiza Astro al compilar y se sirven desde la web
 export interface Foto {
-  id: string; // identificador de la foto en images.unsplash.com
+  id?: string; // identificador de la foto en images.unsplash.com
+  imagen?: ImageMetadata;
   alt: string;
-  fuente: string; // página original de la foto
+  fuente?: string; // página original de la foto de muestra
 }
 
-export const fotos: Record<'portada' | 'antes' | 'despues' | 'sobreMi', Foto> = {
+export interface FotoMuestra extends Foto {
+  id: string;
+  fuente: string;
+}
+
+// Retrato de Sobre mí: foto propia revelada (exposición, blancos, piel y encuadre 4:5), no de muestra
+export const retrato: Foto = {
+  imagen: andrea,
+  alt: 'Retrato de Andrea de perfil, con camisa blanca de rayas, mirando hacia la luz',
+};
+
+export const fotos: Record<'portada' | 'antes' | 'despues', FotoMuestra> = {
   portada: {
     id: '1779960723465-61f8d0f5ac2b',
     alt: 'Comedor reformado con un arco, mesa ovalada y sillas verdes junto a una ventana luminosa',
@@ -26,11 +42,6 @@ export const fotos: Record<'portada' | 'antes' | 'despues' | 'sobreMi', Foto> = 
     id: '1786564026100-7ad7ae7654b2',
     alt: 'Salón reformado con techos altos, sofá claro, aparador de madera y mampara de vidrio',
     fuente: 'https://unsplash.com/photos/p_xTs-dajHk',
-  },
-  sobreMi: {
-    id: '1781888693625-4955204a81a0',
-    alt: 'Imagen de muestra: diseñadora sonriente con planos enrollados en un interior',
-    fuente: 'https://unsplash.com/photos/SjEGSy0G-9A',
   },
 };
 

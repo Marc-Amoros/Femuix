@@ -1,5 +1,6 @@
 ---
 import Isotipo from './Isotipo.astro';
+import { getImage } from 'astro:assets';
 import { fotoSrcset, fotoUrl, type Foto } from '../data/media';
 
 // Hueco reservado para fotografía. Si recibe `foto`, muestra la imagen; si no, el hueco con su nota.
@@ -26,15 +27,22 @@ const {
   eager = false,
   class: className,
 } = Astro.props;
+
+// Foto propia: Astro genera WebP en varios anchos; foto de muestra: la sirve Unsplash al vuelo
+const propia = foto?.imagen
+  ? await getImage({ src: foto.imagen, widths: [480, 800, 1024], format: 'webp', quality: 80 })
+  : undefined;
+const src = propia ? propia.src : foto?.id ? fotoUrl(foto.id, 1200) : undefined;
+const srcset = propia ? propia.srcSet.attribute : foto?.id ? fotoSrcset(foto.id) : undefined;
 ---
 
-<figure class:list={['ph', `ph--${tone}`, { 'ph--photo': foto }, className]} style={`aspect-ratio: ${ratio}`}>
+<figure class:list={['ph', `ph--${tone}`, { 'ph--photo': src }, className]} style={`aspect-ratio: ${ratio}`}>
   {
-    foto ? (
+    foto && src ? (
       <img
         class="ph__img"
-        src={fotoUrl(foto.id, 1200)}
-        srcset={fotoSrcset(foto.id)}
+        src={src}
+        srcset={srcset}
         sizes={sizes}
         alt={foto.alt}
         loading={eager ? 'eager' : 'lazy'}

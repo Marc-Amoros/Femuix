@@ -4,7 +4,7 @@ import Isotipo from './Isotipo.astro';
 import Placeholder from './Placeholder.astro';
 import SplitText from './SplitText.astro';
 import { llamada, site, sobreMi } from '../data/site';
-import { fotos, usarMuestras } from '../data/media';
+import { retrato } from '../data/media';
 ---
 
 <section class="section band tex-none sobre" id="sobre-mi" data-expand aria-labelledby="sobre-title">
@@ -18,7 +18,7 @@ import { fotos, usarMuestras } from '../data/media';
               label="Foto tuya"
               note="Mirando a cámara, en una obra o en tu mesa de trabajo."
               ratio="4 / 5"
-              foto={usarMuestras ? fotos.sobreMi : undefined}
+              foto={retrato}
               sizes="(max-width: 640px) 100vw, 40vw"
             />
           </div>
