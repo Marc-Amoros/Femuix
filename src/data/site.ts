@@ -68,7 +68,7 @@ export const fases = [
     texto: 'Qué necesita tu casa y qué no. Definimos el alcance antes de dibujar una sola línea.',
     entregable:
       'Planos del estado actual acotados, dos alternativas de distribución en planta y una primera estimación de inversión por capítulos.',
-    aprueba: 'el briefing, la distribución en planta y las condiciones.',
+    aprueba: 'el briefing, la distribución en planta y las condiciones, antes de abrir Visualiza.',
   },
   {
     n: '02',
@@ -80,15 +80,19 @@ export const fases = [
   },
   {
     n: '03',
-    nombre: 'Crea',
+    nombre: 'Diseña',
     texto: 'El diseño decidido al detalle: distribución, materiales, acabados y equipamiento.',
-    entregable: '[Entregable de la fase]',
+    entregable:
+      'Los planos definitivos, los alzados de cocina y baños, el plano de iluminación y la selección cerrada de materiales, acabados y equipamiento.',
+    aprueba: 'los planos y la selección de materiales, antes de abrir Materializa.',
   },
   {
     n: '04',
     nombre: 'Materializa',
     texto: 'Todo documentado para pedir presupuestos comparables y empezar sin sorpresas.',
-    entregable: '[Entregable de la fase]',
+    entregable:
+      'Las mediciones, el pliego de calidades y los planos de obra para pedir presupuestos, con la comparativa de las ofertas recibidas.',
+    aprueba: 'el presupuesto elegido y el calendario, antes de empezar la obra.',
   },
 ];
 
