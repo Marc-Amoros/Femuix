@@ -68,7 +68,7 @@ export const fases = [
     texto: 'Qué necesita tu casa y qué no. Definimos el alcance antes de dibujar una sola línea.',
     entregable:
       'Planos del estado actual acotados, dos alternativas de distribución en planta y una primera estimación de inversión por capítulos.',
-    aprueba: 'el briefing, la distribución en planta y las condiciones, antes de abrir Visualiza.',
+    aprueba: 'el briefing, la distribución en planta y las condiciones.',
   },
   {
     n: '02',
