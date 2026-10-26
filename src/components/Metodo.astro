@@ -57,6 +57,11 @@ import { fases } from '../data/site';
               <span>Recibes</span>
               {f.entregable}
             </p>
+            {f.aprueba && (
+              <p class="fase__approve reveal">
+                <strong>Apruebas por escrito:</strong> {f.aprueba}
+              </p>
+            )}
           </li>
         ))
       }
@@ -332,6 +337,22 @@ import { fases } from '../data/site';
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--muted);
+  }
+
+  /* Aviso de lo que se firma al cerrar la fase: bloque suave, sin borde */
+  .fase__approve {
+    margin: 20px 0 0;
+    padding: 16px 20px;
+    border-radius: var(--radius-lg);
+    background: var(--tint);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--text);
+  }
+
+  .fase__approve strong {
+    font-weight: 600;
+    color: var(--ink);
   }
 
   @media (max-width: 900px) {
