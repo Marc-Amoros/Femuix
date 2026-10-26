@@ -72,13 +72,13 @@ Las secciones alternan blanco, bruma, petróleo y pino para que la lectura tenga
 | ------------- | ------------------------------------ |
 | Portada       | Blanco, con un bloque de bruma y un marco dorado tras la foto |
 | Para quién es | Blanco, con la tarjeta «Sí» en bruma suave y la «No» en filete |
+| Sobre mí      | Bruma                                |
+| Vídeo         | Bruma, seguida de Sobre mí y separada por un filete con rombo |
 | Cinta         | **Pino**, fases en blanco y cursiva en bruma |
-| Vídeo         | Bruma                                |
 | ¿Te suena?    | Blanco                               |
 | Método        | **Petróleo**, con las fases en tarjetas blancas |
 | Cómo trabajo  | Blanco, con el portal sobre verde    |
 | Testimonios   | Blanco                               |
-| Sobre mí      | Bruma                                |
 | Preguntas     | Blanco                               |
 | Reto          | Blanco, con el formulario en bruma   |
 | Pie           | Verde pino con brillo petróleo       |

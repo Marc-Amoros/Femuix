@@ -508,6 +508,44 @@ a {
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
+/* Dos bandas de bruma seguidas (Sobre mí y vídeo) se leen como una sola: la segunda no se
+   recorta al entrar y el compás lo marca un filete fino con el rombo, sobre la bruma */
+.js .band:not(.band--teal) + .band:not(.band--teal)[data-expand] {
+  clip-path: none;
+}
+
+.band:not(.band--teal) + .band:not(.band--teal) {
+  padding-top: 0;
+}
+
+.band:not(.band--teal) + .band:not(.band--teal) > .container:first-child {
+  position: relative;
+  padding-top: clamp(64px, 8vw, 112px);
+}
+
+.band:not(.band--teal) + .band:not(.band--teal) > .container:first-child::before,
+.band:not(.band--teal) + .band:not(.band--teal) > .container:first-child::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+}
+
+.band:not(.band--teal) + .band:not(.band--teal) > .container:first-child::before {
+  width: calc(100% - var(--gutter) * 2);
+  height: 1px;
+  background: var(--divider);
+  transform: translateX(-50%);
+}
+
+.band:not(.band--teal) + .band:not(.band--teal) > .container:first-child::after {
+  width: 7px;
+  height: 7px;
+  background: var(--gold-line);
+  outline: 6px solid var(--band);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
 /* ---------- Textura: celosía de rombos ----------
    Rombos con la proporción 1:2 del símbolo, en blanco, que suben desde abajo en las bandas
    de bruma (vídeo y formulario del reto). Decorativa y detrás del contenido.
