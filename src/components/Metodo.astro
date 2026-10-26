@@ -62,6 +62,11 @@ import { fases } from '../data/site';
                 <strong>Apruebas por escrito:</strong> {f.aprueba}
               </p>
             )}
+            {f.alCerrar && (
+              <p class="fase__approve reveal">
+                <strong>Al cerrar:</strong> {f.alCerrar}
+              </p>
+            )}
           </li>
         ))
       }

@@ -91,8 +91,10 @@ export const fases = [
     nombre: 'Materializa',
     texto: 'Todo documentado para pedir presupuestos comparables y empezar sin sorpresas.',
     entregable:
-      'Las mediciones, el pliego de calidades y los planos de obra para pedir presupuestos, con la comparativa de las ofertas recibidas.',
-    aprueba: 'el presupuesto elegido y el calendario, antes de empezar la obra.',
+      'Planos de fontanería, electricidad, evacuación y climatización, mediciones para pedir presupuestos comparables y la comparativa de ofertas de los industriales.',
+    // La última fase no da paso a otra: en vez de lo que se aprueba, dice cómo queda todo al cerrar
+    alCerrar:
+      'el proyecto queda listo para construir y decides la obra con las ofertas comparadas sobre la mesa.',
   },
 ];
 
