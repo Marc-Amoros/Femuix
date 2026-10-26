@@ -1,6 +1,21 @@
 ---
 import SplitText from './SplitText.astro';
 import { fases, principios } from '../data/site';
+
+// Contenido de ejemplo del portal. Es una ilustración: se sustituirá por capturas reales anonimizadas.
+const estados = [
+  { texto: 'Cerrada', clase: 'done' },
+  { texto: 'En marcha', clase: 'now' },
+  { texto: 'Por abrir', clase: 'next' },
+  { texto: 'Por abrir', clase: 'next' },
+];
+const necesito = [
+  ['Elegir las muestras de suelo', 'Semana 4', 'Se retrasa la Presentación 02'],
+  ['Confirmar la visita a showrooms', 'Semana 4', 'Se mueve la fecha de la visita'],
+];
+const decisiones = [
+  ['Distribución en planta: alternativa B', 'Semana 2', 'La planta sobre la que se trabaja en Visualiza'],
+];
 ---
 
 <section class="section" id="como-trabajo" aria-labelledby="como-title">
@@ -10,9 +25,127 @@ import { fases, principios } from '../data/site';
       <SplitText
         id="como-title"
         class="h-section"
-        parts={[{ text: 'Orden, por escrito' }, { text: 'y en un solo sitio', em: true }]}
+        parts={[
+          { text: 'Cada decisión queda' },
+          { text: 'visible,', em: true },
+          { text: 'revisada y aprobada.', em: true, br: true },
+        ]}
       />
     </div>
+
+    <!-- Ilustración del Portal de Proyecto (Notion). Sustituir por 2–3 capturas reales anonimizadas. -->
+    <figure class="portal on-dark">
+      <div class="portal__stage" data-scrub aria-hidden="true">
+        <div class="portal__window">
+          <div class="portal__bar">
+            <span></span><span></span><span></span>
+            <div class="portal__crumb">Portal de Proyecto / Inicio</div>
+            <div class="portal__readonly">Solo lectura</div>
+          </div>
+
+          <div class="portal__body">
+            <aside class="portal__side">
+              <div class="portal__side-label">Tu proyecto</div>
+              <div class="portal__nav is-active"><i></i><span>Inicio</span></div>
+              <div class="portal__nav"><i></i><span>Tu briefing (El encargo)</span></div>
+              <div class="portal__nav"><i></i><span>El camino</span></div>
+              {
+                fases.map((f) => (
+                  <div class="portal__nav portal__nav--sub">
+                    <span>{f.nombre}</span>
+                  </div>
+                ))
+              }
+              <div class="portal__nav"><i></i><span>Entregables</span></div>
+              <div class="portal__nav"><i></i><span>Decisiones</span></div>
+              <div class="portal__nav"><i></i><span>Pagos</span></div>
+            </aside>
+
+            <div class="portal__page">
+              <div class="portal__cover">
+                <div class="portal__cover-top">
+                  <span class="portal__pill">Ejemplo de estructura del portal</span>
+                  <span class="portal__avatar">P5</span>
+                </div>
+                <div class="portal__cover-title">Reforma · proyecto de ejemplo</div>
+              </div>
+
+              <div class="portal__content">
+                <div class="portal__h1">Inicio</div>
+
+                <div class="portal__callout">
+                  <i></i>
+                  <div>
+                    <strong>Dónde estamos</strong>
+                    <p>Fase 02 · Visualiza · semana 4</p>
+                    <p>Próxima entrega: Presentación 02, semana 5</p>
+                    <p>Tu turno: elegir las muestras de suelo</p>
+                  </div>
+                </div>
+
+                <div class="portal__block">
+                  <div class="portal__h2">El camino</div>
+                  <div class="portal__steps">
+                    {
+                      fases.map((f, i) => (
+                        <div class="portal__step">
+                          <span>
+                            {f.n} · {f.nombre}
+                          </span>
+                          <em class={`portal__state portal__state--${estados[i].clase}`}>
+                            {estados[i].texto}
+                          </em>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+
+                <div class="portal__block">
+                  <div class="portal__h2">Lo que necesito de ti</div>
+                  <div class="portal__table" style="--cols: 44.7% 16.4% 1fr">
+                    <div class="portal__tr portal__tr--head">
+                      <span>Hito</span><span>Cuándo</span><span>Qué pasa si se va</span>
+                    </div>
+                    {
+                      necesito.map((fila) => (
+                        <div class="portal__tr">
+                          {fila.map((celda) => (
+                            <span>{celda}</span>
+                          ))}
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+
+                <div class="portal__block">
+                  <div class="portal__h2">Decisiones</div>
+                  <div class="portal__table" style="--cols: 39.7% 13.3% 1fr">
+                    <div class="portal__tr portal__tr--head">
+                      <span>Decisión</span><span>Cuándo</span><span>Qué queda cerrado</span>
+                    </div>
+                    {
+                      decisiones.map((fila) => (
+                        <div class="portal__tr">
+                          {fila.map((celda) => (
+                            <span>{celda}</span>
+                          ))}
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="reveal">
+        Tu Portal de Proyecto en Notion: dónde estamos, lo que necesito de ti, las decisiones tomadas
+        y el estado de cada fase.
+      </figcaption>
+    </figure>
 
     <ul class="principios">
       {
@@ -26,83 +159,19 @@ import { fases, principios } from '../data/site';
       }
     </ul>
   </div>
-
-  <!-- Ilustración del portal de cliente. Sustituir por 2–3 capturas reales anonimizadas. -->
-  <div class="container">
-    <figure class="portal on-dark">
-      <div class="portal__stage" data-scrub aria-hidden="true">
-        <div class="portal__window">
-          <div class="portal__bar">
-            <span></span><span></span><span></span>
-            <div class="portal__url">portal.femuix.com</div>
-          </div>
-
-          <div class="portal__body">
-            <aside class="portal__side">
-              <div class="portal__brand"></div>
-              <div class="portal__nav is-active">Plan por fases</div>
-              <div class="portal__nav">Cronograma</div>
-              <div class="portal__nav">Documentos</div>
-              <div class="portal__nav">Decisiones</div>
-            </aside>
-
-            <div class="portal__main">
-              <div class="portal__title">Plan por fases</div>
-              <div class="portal__phases">
-                {
-                  fases.map((f, i) => (
-                    <div class:list={['portal__phase', { 'is-current': i === 1 }]}>
-                      <span class="portal__phase-n">{f.n}</span>
-                      <span class="portal__phase-name">{f.nombre}</span>
-                      <span class="portal__phase-bar">
-                        <i style={`--w: ${i < 1 ? 1 : i === 1 ? 0.55 : 0}`} />
-                      </span>
-                    </div>
-                  ))
-                }
-              </div>
-
-              <div class="portal__row">
-                <div class="portal__card">
-                  <div class="portal__card-title">Cronograma</div>
-                  <div class="portal__gantt">
-                    <i style="--s: 0%; --w: 22%"></i>
-                    <i style="--s: 20%; --w: 30%"></i>
-                    <i style="--s: 48%; --w: 28%"></i>
-                    <i style="--s: 74%; --w: 26%"></i>
-                  </div>
-                </div>
-                <div class="portal__card">
-                  <div class="portal__card-title">Documentos</div>
-                  <ul class="portal__docs">
-                    <li>Contrato firmado</li>
-                    <li>Planos de estado actual</li>
-                    <li>Propuesta de distribución</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <figcaption class="reveal">
-        El portal de cliente: el plan por fases, el cronograma y la carpeta de documentos, siempre
-        al día.
-      </figcaption>
-    </figure>
-  </div>
 </section>
 
 <style>
   .como__head {
     max-width: 760px;
+    margin-bottom: clamp(32px, 4vw, 48px);
   }
 
   .principios {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: clamp(32px, 6vw, 96px);
-    margin: 0;
+    margin: clamp(32px, 3.6vw, 48px) 0 0;
     padding: 0;
     list-style: none;
   }
@@ -110,10 +179,11 @@ import { fases, principios } from '../data/site';
   .principios li {
     position: relative;
     display: grid;
-    grid-template-columns: 56px 1fr;
-    column-gap: 16px;
-    row-gap: 12px;
-    padding: 36px 0 44px;
+    grid-template-columns: 32px 1fr;
+    align-content: start;
+    column-gap: 10px;
+    row-gap: 8px;
+    padding: 24px 0 32px;
   }
 
   /* Línea superior que se dibuja al aparecer */
@@ -151,7 +221,7 @@ import { fases, principios } from '../data/site';
 
   .principios p {
     color: var(--muted);
-    max-width: 42ch;
+    max-width: 46ch;
   }
 
   /* ---------- Portal (ilustración) ---------- */
@@ -161,16 +231,16 @@ import { fases, principios } from '../data/site';
   }
 
   .portal {
-    margin: clamp(56px, 7vw, 96px) 0 0;
-    padding: clamp(32px, 6vw, 96px) clamp(16px, 5vw, 80px) clamp(28px, 4vw, 48px);
+    margin: 0;
+    padding: clamp(32px, 6vw, 72px) clamp(16px, 5vw, 58px) clamp(28px, 4vw, 48px);
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
 
   .portal figcaption {
-    margin-top: 32px;
-    text-align: center;
-    font-size: 0.875rem;
+    max-width: 920px;
+    margin: 32px auto 0;
+    font-size: 0.8125rem;
     color: var(--on-dark-muted);
   }
 
@@ -180,21 +250,33 @@ import { fases, principios } from '../data/site';
   }
 
   .portal__window {
-    max-width: 980px;
+    /* Etiquetas de estado: verde pino claro y dorado en White; grafito y dorado en Dark UI */
+    --state-done-bg: var(--pine-100);
+    --state-done-fg: var(--pine-800);
+    --state-now-bg: color-mix(in srgb, var(--warm) 38%, #fff);
+    --state-now-fg: #111111;
+
+    max-width: 920px;
     margin-inline: auto;
     overflow: hidden;
     background: var(--surface);
     color: var(--text);
-    border-radius: 12px;
+    border-radius: 10px;
     box-shadow: 0 60px 120px -40px rgba(14, 32, 27, 0.6);
-    font-size: 0.8125rem;
-    transform: rotateX(calc((1 - var(--p)) * 28deg)) scale(calc(0.86 + 0.14 * var(--p)));
+    font-size: 0.75rem;
+    line-height: 1.5;
+    transform: rotateX(calc((1 - var(--p)) * 16deg)) scale(calc(0.9 + 0.1 * var(--p)));
     transform-origin: center bottom;
     will-change: transform;
   }
 
   /* Dark UI: ventana negra sobre el grafito, separada con un filo */
   :global([data-theme='dark']) .portal__window {
+    --state-done-bg: var(--g-700);
+    --state-done-fg: #ffffff;
+    --state-now-bg: var(--warm);
+    --state-now-fg: #000000;
+
     box-shadow:
       0 0 0 1px var(--line-strong),
       0 60px 120px -40px rgba(0, 0, 0, 0.8);
@@ -205,190 +287,300 @@ import { fases, principios } from '../data/site';
     align-items: center;
     gap: 6px;
     height: 40px;
-    padding: 0 16px;
+    padding: 0 14px;
     border-bottom: 1px solid var(--line);
   }
 
   .portal__bar > span {
+    flex: none;
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background: var(--line-strong);
   }
 
-  .portal__url {
-    margin-inline: auto;
-    padding: 3px 16px;
-    border-radius: 6px;
-    background: var(--tint);
+  .portal__crumb {
+    min-width: 0;
+    margin-left: 10px;
+    overflow: hidden;
     font-size: 0.6875rem;
-    color: var(--text);
+    color: var(--muted);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .portal__readonly {
+    flex: none;
+    margin-left: auto;
+    padding: 1px 8px;
+    border-radius: 3px;
+    background: var(--tint);
+    font-size: 0.625rem;
+    color: var(--muted);
   }
 
   .portal__body {
     display: grid;
-    grid-template-columns: 190px 1fr;
-    min-height: 360px;
+    grid-template-columns: 190px minmax(0, 1fr);
   }
+
+  /* ---- Barra lateral ---- */
 
   .portal__side {
     display: grid;
     align-content: start;
-    gap: 4px;
-    padding: 22px 12px;
+    gap: 1px;
+    padding: 16px 10px 24px;
     border-right: 1px solid var(--line);
+    background: var(--tint);
   }
 
-  .portal__brand {
-    width: 76px;
-    height: 12px;
-    margin: 0 10px 20px;
-    border-radius: 2px;
-    background: var(--ink);
+  .portal__side-label {
+    margin-bottom: 4px;
+    padding: 0 7px;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--muted);
   }
 
   .portal__nav {
-    padding: 8px 10px;
-    border-radius: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 7px;
+    border-radius: 5px;
     color: var(--muted);
+  }
+
+  .portal__nav i {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    border-radius: 3px;
+    background: var(--line);
   }
 
   .portal__nav.is-active {
-    background: var(--tint);
-    color: var(--text);
-    font-weight: 500;
-  }
-
-  .portal__main {
-    display: grid;
-    align-content: start;
-    gap: 20px;
-    padding: 26px;
-  }
-
-  .portal__title {
-    font-family: var(--serif);
-    font-size: 1.375rem;
-  }
-
-  .portal__phases {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-
-  .portal__phase {
-    display: grid;
-    gap: 6px;
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-  }
-
-  .portal__phase.is-current {
-    border-color: var(--ink);
-    background: var(--tint);
-  }
-
-  .portal__phase-n {
-    font-size: 0.625rem;
-    letter-spacing: 0.16em;
+    background: var(--line);
     color: var(--text);
   }
 
-  .portal__phase-name {
-    font-family: var(--serif);
+  .portal__nav.is-active i {
+    background: var(--accent);
   }
 
-  .portal__phase-bar {
-    height: 3px;
-    border-radius: 2px;
-    background: var(--tint);
-    overflow: hidden;
+  /* Las fases cuelgan de «El camino», con un punto como viñeta */
+  .portal__nav--sub {
+    padding-left: 29px;
   }
 
-  /* Las barras se rellenan a medida que la ventana se endereza */
-  .portal__phase-bar i {
-    display: block;
-    height: 100%;
-    background: var(--ink);
-    transform: scaleX(calc(var(--w) * var(--p)));
-    transform-origin: left;
-  }
-
-  .portal__row {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 10px;
-  }
-
-  .portal__card {
-    padding: 14px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-  }
-
-  .portal__card-title {
-    margin-bottom: 12px;
-    font-weight: 500;
-  }
-
-  .portal__gantt {
-    display: grid;
-    gap: 8px;
-  }
-
-  .portal__gantt i {
-    display: block;
-    height: 10px;
-    margin-left: var(--s);
-    width: var(--w);
-    border-radius: 3px;
+  .portal__nav--sub::before {
+    content: '';
+    flex: none;
+    width: 5px;
+    height: 5px;
+    margin: 7px -1px 0 0;
+    border-radius: 50%;
     background: var(--line-strong);
   }
 
-  .portal__gantt i:first-child {
-    background: var(--ink);
+  /* ---- Página ---- */
+
+  .portal__cover {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 106px;
+    padding: 36px 24px 16px;
+    background: var(--band);
+    color: var(--text);
   }
 
-  .portal__docs {
+  .portal__cover-top {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .portal__pill {
+    padding: 1px 10px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .portal__avatar {
     display: grid;
-    gap: 8px;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--muted);
+    color: var(--surface);
+    font-size: 0.5625rem;
+    font-weight: 600;
+  }
+
+  .portal__cover-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 1.375rem;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .portal__content {
+    display: grid;
+    gap: 21px;
+    padding: 24px clamp(18px, 4vw, 38px) 32px;
+  }
+
+  /* Rótulo de la página: es una captura de Notion, por eso va en sans y más marcado */
+  .portal__h1 {
+    font-size: 1.625rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .portal__h2 {
+    margin-bottom: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .portal__callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 6px;
+    background: var(--tint);
+  }
+
+  .portal__callout i {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: var(--warm);
+  }
+
+  .portal__callout strong {
+    display: block;
+    font-weight: 600;
+  }
+
+  .portal__callout p {
     margin: 0;
-    padding: 0;
-    list-style: none;
+    font-size: 0.72rem;
+    line-height: 1.65;
+  }
+
+  /* ---- El camino ---- */
+
+  .portal__steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 11px;
+  }
+
+  .portal__step {
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    padding: 13px 12px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+  }
+
+  /* La cuarta fase ocupa toda la fila, como en la galería de Notion */
+  .portal__step:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .portal__state {
+    padding: 1px 7px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    font-size: 0.625rem;
+    font-style: normal;
+    line-height: 1.5;
+  }
+
+  .portal__state--done {
+    background: var(--state-done-bg);
+    color: var(--state-done-fg);
+  }
+
+  .portal__state--now {
+    background: var(--state-now-bg);
+    color: var(--state-now-fg);
+  }
+
+  .portal__state--next {
+    border-color: var(--line-strong);
     color: var(--muted);
   }
 
-  .portal__docs li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  /* ---- Tablas ---- */
+
+  .portal__tr {
+    display: grid;
+    grid-template-columns: var(--cols);
+    column-gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
   }
 
-  .portal__docs li::before {
-    content: '';
-    width: 10px;
-    height: 12px;
-    border: 1px solid var(--line-strong);
-    border-radius: 2px;
+  .portal__tr--head {
+    color: var(--muted);
+    font-size: 0.72rem;
   }
 
-  @media (max-width: 760px) {
-    .principios {
-      grid-template-columns: minmax(0, 1fr);
-    }
+  /* El grueso del contenido: con menos de 900 px desaparece la barra lateral */
+  @media (max-width: 900px) {
     .portal__body {
       grid-template-columns: minmax(0, 1fr);
     }
     .portal__side {
       display: none;
     }
-    .portal__phases {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .portal__row {
+  }
+
+  @media (max-width: 760px) {
+    .principios {
       grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* En móvil las tablas pasan a filas apiladas: el hito arriba y, debajo, cuándo y qué pasa */
+  @media (max-width: 560px) {
+    .portal__steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .portal__step:last-child {
+      grid-column: auto;
+    }
+    .portal__tr {
+      grid-template-columns: 5.5em minmax(0, 1fr);
+    }
+    .portal__tr > :first-child {
+      grid-column: 1 / -1;
+    }
+    .portal__tr--head {
+      display: none;
+    }
+    .portal__cover {
+      padding-top: 44px;
     }
   }
 </style>

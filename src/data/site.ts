@@ -78,19 +78,19 @@ export const fases = [
 
 export const principios = [
   {
-    titulo: 'Todo en un solo sitio',
+    titulo: 'Todo en un solo sitio.',
     texto: 'Un portal de cliente donde viven los planos, las decisiones y los papeles. Sin buscar en WhatsApp.',
   },
   {
-    titulo: 'Una fase se cierra antes de abrir la siguiente',
+    titulo: 'Una fase se cierra antes de abrir la siguiente.',
     texto: 'Nadie avanza con dudas a medias ni con decisiones sin tomar.',
   },
   {
-    titulo: 'Contrato firmado siempre antes de empezar',
+    titulo: 'Contrato firmado antes de empezar.',
     texto: 'Alcance, plazos y precio por escrito desde el primer día.',
   },
   {
-    titulo: 'Licencias y trámites, con arquitecto colegiado',
+    titulo: 'Licencias y trámites con arquitecto colegiado.',
     texto: 'No los hago yo: te derivo a un colaborador que sí puede firmarlos.',
   },
 ];
