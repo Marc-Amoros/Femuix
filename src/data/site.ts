@@ -74,6 +74,7 @@ export const fases = [
   {
     n: '02',
     nombre: 'Visualiza',
+    semanas: 'Semanas 3 a 5',
     texto: 'La ves antes de que exista. Ahí es donde se cambian las cosas, no en obra.',
     entregable:
       'El concepto del proyecto, la dirección de materiales con muestras físicas y propuestas para cocina, baños, puertas y armarios.',
