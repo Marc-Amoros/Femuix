@@ -41,17 +41,77 @@ import { site, url } from '../data/site';
         data-paso-actual="1"
       >
         <div class="contacto__fields">
-          <p class="contacto__req">Dos pasos, todos los campos obligatorios.</p>
+          <div class="contacto__top">
+            <p class="contacto__req">Dos pasos · todo obligatorio</p>
+            <!-- Progreso: decorativo; el paso en que estás lo dice el título de cada paso -->
+            <div class="pasos" aria-hidden="true"><i></i><i></i></div>
+          </div>
 
-          <!-- Progreso: decorativo; el paso en que estás lo dice el título de cada paso -->
-          <div class="pasos" aria-hidden="true"><i></i><i></i></div>
-
-          <!-- Paso 1: la reforma. Primero lo que quieres hacer, sin datos personales; además filtra
-               lo que no hago (viviendas fuera de Barcelona ciudad) antes de pedir el contacto.
-               Los avisos son regiones en vivo, siempre presentes: se anuncian al rellenarse (WCAG 4.1.3) -->
+          <!-- Paso 1: cómo responderte. Los avisos son regiones en vivo, siempre presentes: se
+               anuncian al rellenarse (WCAG 4.1.3) -->
           <div class="paso" data-paso>
             <h3 class="paso__title" tabindex="-1" data-paso-title>
               <span class="paso__n">Paso 1 de 2</span>{' '}
+              Tus datos
+            </h3>
+
+            <div class="field">
+              <label for="contacto-nombre">Nombre</label>
+              <input
+                id="contacto-nombre"
+                name="nombre"
+                type="text"
+                autocomplete="name"
+                required
+                aria-describedby="contacto-nombre-error"
+              />
+              <p class="field__error" id="contacto-nombre-error" aria-live="polite"></p>
+            </div>
+
+            <div class="contacto__pair">
+              <div class="field">
+                <label for="contacto-email">Email</label>
+                <input
+                  id="contacto-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  inputmode="email"
+                  required
+                  aria-describedby="contacto-email-error"
+                />
+                <p class="field__error" id="contacto-email-error" aria-live="polite"></p>
+              </div>
+
+              <div class="field">
+                <label for="contacto-telefono">Teléfono</label>
+                <input
+                  id="contacto-telefono"
+                  name="telefono"
+                  type="tel"
+                  autocomplete="tel"
+                  inputmode="tel"
+                  required
+                  aria-describedby="contacto-telefono-hint contacto-telefono-error"
+                />
+                <p class="field__hint" id="contacto-telefono-hint">Para responderte por WhatsApp.</p>
+                <p class="field__error" id="contacto-telefono-error" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="contacto__submit">
+              <button class="btn btn--primary" type="submit">
+                Continuar
+                <Icon name="arrow" />
+              </button>
+              <p class="contacto__safe">Sin compromiso. Después, tu reforma en tres preguntas.</p>
+            </div>
+          </div>
+
+          <!-- Paso 2: la reforma. Filtra lo que no hago (viviendas fuera de Barcelona ciudad) -->
+          <div class="paso" data-paso hidden>
+            <h3 class="paso__title" tabindex="-1" data-paso-title>
+              <span class="paso__n">Paso 2 de 2</span>{' '}
               Tu reforma
             </h3>
 
@@ -90,73 +150,13 @@ import { site, url } from '../data/site';
               <textarea
                 id="contacto-mensaje"
                 name="mensaje"
-                rows="4"
+                rows="3"
                 required
                 aria-describedby="contacto-mensaje-hint contacto-mensaje-error"></textarea>
               <p class="field__hint" id="contacto-mensaje-hint">
-                Por ejemplo: piso de 80 m² en Gràcia; quiero abrir la cocina al salón y rehacer el baño.
+                Por ejemplo: piso de 80 m² en Gràcia, abrir la cocina al salón y rehacer el baño.
               </p>
               <p class="field__error" id="contacto-mensaje-error" aria-live="polite"></p>
-            </div>
-
-            <div class="contacto__submit">
-              <button class="btn btn--primary" type="submit">
-                Continuar
-                <Icon name="arrow" />
-              </button>
-              <p class="contacto__safe">Sin compromiso. En el siguiente paso, solo cómo responderte.</p>
-            </div>
-          </div>
-
-          <!-- Paso 2: cómo responderte -->
-          <div class="paso" data-paso hidden>
-            <h3 class="paso__title" tabindex="-1" data-paso-title>
-              <span class="paso__n">Paso 2 de 2</span>{' '}
-              Cómo te respondo
-            </h3>
-
-            <div class="contacto__pair">
-              <div class="field">
-                <label for="contacto-nombre">Nombre</label>
-                <input
-                  id="contacto-nombre"
-                  name="nombre"
-                  type="text"
-                  autocomplete="name"
-                  required
-                  aria-describedby="contacto-nombre-error"
-                />
-                <p class="field__error" id="contacto-nombre-error" aria-live="polite"></p>
-              </div>
-
-              <div class="field">
-                <label for="contacto-email">Email</label>
-                <input
-                  id="contacto-email"
-                  name="email"
-                  type="email"
-                  autocomplete="email"
-                  inputmode="email"
-                  required
-                  aria-describedby="contacto-email-error"
-                />
-                <p class="field__error" id="contacto-email-error" aria-live="polite"></p>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="contacto-telefono">Teléfono</label>
-              <input
-                id="contacto-telefono"
-                name="telefono"
-                type="tel"
-                autocomplete="tel"
-                inputmode="tel"
-                required
-                aria-describedby="contacto-telefono-hint contacto-telefono-error"
-              />
-              <p class="field__hint" id="contacto-telefono-hint">Para responderte por WhatsApp.</p>
-              <p class="field__error" id="contacto-telefono-error" aria-live="polite"></p>
             </div>
 
             <div>
@@ -182,12 +182,10 @@ import { site, url } from '../data/site';
               </button>
               <button class="paso__back" type="button" data-paso-back>
                 <Icon name="arrow" />
-                Volver a tu reforma
+                Volver a tus datos
               </button>
               <p class="contacto__safe">
-                Lo leo yo y, si encaja, te propongo una llamada gratuita y sin compromiso. Uso tus datos
-                solo para responderte: no te apunto a ninguna lista. También puedes escribir a{' '}
-                <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>.
+                Lo leo yo y, si encaja, te propongo una llamada gratuita. No te apunto a ninguna lista.
               </p>
             </div>
 
@@ -369,7 +367,7 @@ import { site, url } from '../data/site';
 
     let step = 0;
 
-    // Al cambiar de paso, el foco va a su título («Paso 2 de 2, Cómo te respondo») para que el
+    // Al cambiar de paso, el foco va a su título («Paso 2 de 2, Tu reforma») para que el
     // lector de pantalla lo anuncie y el tabulador siga desde ahí
     function goTo(n: number, focus = true) {
       step = n;
@@ -456,7 +454,7 @@ import { site, url } from '../data/site';
   /* ---------- Ventana ---------- */
 
   .contacto {
-    width: min(1180px, 100% - 48px);
+    width: min(1040px, 100% - 48px);
     max-width: none;
     max-height: calc(100dvh - 48px);
     padding: 0;
@@ -499,7 +497,7 @@ import { site, url } from '../data/site';
     flex: 1;
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding: clamp(40px, 5vw, 72px) clamp(24px, 5vw, 72px);
+    padding: clamp(28px, 3.5vw, 48px) clamp(20px, 3.5vw, 48px);
   }
 
   .contacto__close {
@@ -583,22 +581,22 @@ import { site, url } from '../data/site';
 
   .contacto__grid {
     display: grid;
-    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
-    gap: clamp(32px, 5vw, 80px);
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+    gap: clamp(24px, 3.5vw, 56px);
     align-items: start;
   }
 
   .contacto__copy {
     display: grid;
-    gap: clamp(28px, 3vw, 44px);
+    gap: clamp(16px, 2vw, 24px);
     justify-items: start;
   }
 
   /* Corte natural, sin equilibrar: «Cuéntame tu / reforma» */
   .contacto .contacto__title {
     margin: 0;
-    margin-top: -8px;
-    font-size: clamp(2.5rem, 5.4vw, 4.4rem);
+    margin-top: -6px;
+    font-size: clamp(2rem, 3.8vw, 3.25rem);
     text-wrap: wrap;
   }
 
@@ -614,7 +612,7 @@ import { site, url } from '../data/site';
   /* Cita de Andrea con filete dorado y firma */
   .contacto__quote {
     display: grid;
-    gap: 22px;
+    gap: 14px;
     margin: 0;
     padding: 2px 0 2px clamp(18px, 2vw, 24px);
     border-left: 2px solid var(--gold-line);
@@ -626,7 +624,7 @@ import { site, url } from '../data/site';
 
   .contacto__quote p {
     font-family: var(--serif);
-    font-size: clamp(1.35rem, 2.3vw, 1.9rem);
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
     font-style: italic;
     font-weight: 300;
     line-height: 1.45;
@@ -654,13 +652,18 @@ import { site, url } from '../data/site';
   /* ---------- Formulario: tarjeta de bruma con campos de línea fina ---------- */
 
   .contacto__form {
-    padding: clamp(28px, 3.4vw, 44px);
+    padding: clamp(20px, 2.6vw, 32px);
     border-radius: var(--radius-lg);
   }
 
   .contacto__fields {
     display: grid;
-    gap: 26px;
+    gap: 18px;
+  }
+
+  .contacto__top {
+    display: grid;
+    gap: 10px;
   }
 
   .contacto__fields[hidden] {
@@ -668,7 +671,7 @@ import { site, url } from '../data/site';
   }
 
   .contacto__req {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: var(--text);
   }
 
@@ -679,7 +682,6 @@ import { site, url } from '../data/site';
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 6px;
-    margin-top: -8px;
   }
 
   .pasos i {
@@ -706,7 +708,7 @@ import { site, url } from '../data/site';
 
   .paso {
     display: grid;
-    gap: 26px;
+    gap: 16px;
   }
 
   .paso[hidden] {
@@ -729,9 +731,9 @@ import { site, url } from '../data/site';
 
   .paso__title {
     display: grid;
-    gap: 6px;
+    gap: 4px;
     font-family: var(--serif);
-    font-size: clamp(1.5rem, 2.2vw, 1.875rem);
+    font-size: clamp(1.25rem, 1.8vw, 1.5rem);
     font-weight: 300;
     line-height: 1.15;
   }
@@ -758,7 +760,7 @@ import { site, url } from '../data/site';
   }
 
   .choice legend {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     padding: 0;
     font-size: 0.9375rem;
     font-weight: 600;
@@ -768,7 +770,7 @@ import { site, url } from '../data/site';
   .choice__options {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
   }
 
   .choice__opt {
@@ -776,12 +778,12 @@ import { site, url } from '../data/site';
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    min-height: 44px;
-    padding: 8px 18px 8px 14px;
+    min-height: 40px;
+    padding: 6px 16px 6px 12px;
     border: 1px solid var(--line-ui); /* ≥3:1, WCAG 1.4.11 */
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.35);
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     color: var(--text);
     cursor: pointer;
     transition:
@@ -886,7 +888,7 @@ import { site, url } from '../data/site';
   .contacto__pair {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 26px 24px;
+    gap: 16px 20px;
   }
 
   .field {
@@ -895,7 +897,7 @@ import { site, url } from '../data/site';
   }
 
   .field label {
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--text);
@@ -925,7 +927,7 @@ import { site, url } from '../data/site';
   }
 
   .field textarea {
-    min-height: 116px;
+    min-height: 84px;
     resize: vertical;
     line-height: 1.5;
   }
@@ -947,8 +949,8 @@ import { site, url } from '../data/site';
   }
 
   .field__hint {
-    margin-top: 10px;
-    font-size: 0.875rem;
+    margin-top: 6px;
+    font-size: 0.8125rem;
     color: var(--muted);
   }
 
@@ -1025,7 +1027,8 @@ import { site, url } from '../data/site';
 
   .contacto__submit {
     display: grid;
-    gap: 16px;
+    gap: 10px;
+    margin-top: 4px;
   }
 
   .contacto__form .btn {
@@ -1034,7 +1037,7 @@ import { site, url } from '../data/site';
 
   .contacto__safe {
     font-family: var(--serif);
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-style: italic;
     font-weight: 300;
     line-height: 1.55;
@@ -1043,9 +1046,9 @@ import { site, url } from '../data/site';
 
   /* Letra pequeña separada por un filete */
   .contacto__legal {
-    padding-top: 20px;
+    padding-top: 14px;
     border-top: 1px solid var(--line);
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     line-height: 1.6;
     color: var(--muted);
   }
@@ -1105,9 +1108,13 @@ import { site, url } from '../data/site';
 
   /* ---------- Tablet y móvil ---------- */
 
+  /* Una columna: el título arriba y el formulario a la vista; la cita de Andrea sobra aquí */
   @media (max-width: 900px) {
     .contacto__grid {
       grid-template-columns: minmax(0, 1fr);
+    }
+    .contacto__quote {
+      display: none;
     }
   }
 
@@ -1121,7 +1128,7 @@ import { site, url } from '../data/site';
       border-radius: 0;
     }
     .contacto__scroll {
-      padding: 72px var(--gutter) 40px;
+      padding: 64px var(--gutter) 32px;
     }
     .contacto__close {
       top: 12px;
