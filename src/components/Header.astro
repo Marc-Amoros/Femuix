@@ -2,7 +2,7 @@
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import ModeSwitch from './ModeSwitch.astro';
-import { nav, site } from '../data/site';
+import { llamada, nav, site } from '../data/site';
 
 // En páginas interiores los enlaces apuntan a las secciones de la portada
 interface Props {
@@ -54,7 +54,7 @@ const { base = '' } = Astro.props;
 
     <div class="menu__foot">
       <p class="menu__hello">¿Empezamos por el orden?</p>
-      <a class="btn btn--primary" href={`${base}${site.retoUrl}`} data-menu-link>Empezar por el reto gratuito</a>
+      <a class="btn btn--primary" href={llamada.href} data-menu-link>{llamada.hablar}</a>
       <a class="menu__mail" href={`mailto:${site.email}`}>{site.email}</a>
     </div>
   </div>
@@ -377,7 +377,7 @@ const { base = '' } = Astro.props;
   }
 
   /* Menú desplegable: índice editorial con números dorados, filetes finos y un cierre con
-     el reto; fondo con una luz suave de bruma (grafito en Dark UI) */
+     la invitación a escribir; fondo con una luz suave de bruma (grafito en Dark UI) */
   .menu {
     position: fixed;
     inset: var(--header-h) 0 0;

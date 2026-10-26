@@ -559,7 +559,7 @@ a {
 
 /* ---------- Textura: celosía de rombos ----------
    Rombos con la proporción 1:2 del símbolo, en blanco, que suben desde abajo en las bandas
-   de bruma (vídeo y formulario del reto). Decorativa y detrás del contenido.
+   de bruma (vídeo). Decorativa y detrás del contenido.
    Además, todo el sitio lleva un grano de papel (body::after). */
 :root {
   --tex-lattice: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='80'%3E%3Cpath d='M20 0.5L39.5 40L20 79.5L0.5 40Z' fill='none' stroke='%23FFFFFF' stroke-width='1'/%3E%3C/svg%3E");

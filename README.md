@@ -79,7 +79,6 @@ Las secciones alternan blanco, bruma, petróleo y pino para que la lectura tenga
 | Cómo trabajo  | Blanco, con el portal sobre verde    |
 | Testimonios   | Blanco                               |
 | Preguntas     | Blanco                               |
-| Reto          | Blanco, con el formulario en bruma   |
 | Pie           | Verde pino con brillo petróleo       |
 
 Cuando dos secciones blancas van seguidas, las separa un filete en degradado con un pequeño
@@ -278,6 +277,7 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 - Entregable de cada fase (`fases` en `site.ts`).
 - Testimonios reales (`testimonios`; mientras esté vacío se muestran huecos).
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
-- URL del formulario de Systeme.io (`systemeFormAction`) y enlace de la llamada (`llamadaUrl`).
+- Enlace a la agenda de la llamada (`llamadaUrl`): al rellenarlo, los botones de «Escríbeme tu
+  caso» pasan a reservar la llamada.
 - Datos entre [corchetes] de `/aviso-legal`, `/privacidad` y `/cookies`, y revisión profesional
-  de los textos legales y de la información de privacidad del formulario (`Reto.astro`).
+  de los textos legales.

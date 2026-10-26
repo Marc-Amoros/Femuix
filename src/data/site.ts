@@ -18,15 +18,13 @@ export const site = {
     'Acompaño tu reforma de principio a fin: decidimos qué se toca y qué no, lo ves antes de construirlo y llegas a la obra con todo definido. De 12 a 14 semanas, solo en Barcelona ciudad.',
   email: 'hola@femuix.com',
   city: 'Barcelona',
-  // Enlaces externos (Systeme.io para el reto, agenda para la llamada)
-  retoUrl: '#reto',
-  llamadaUrl: '#reto', // TODO: enlace a la agenda de la llamada de compatibilidad
-  systemeFormAction: '', // TODO: URL de acción del formulario de Systeme.io
+  // Enlace externo a la agenda de la llamada de compatibilidad
+  llamadaUrl: '', // TODO: enlace a la agenda de la llamada de compatibilidad
 };
 
 // Mientras no haya enlace a la agenda, la web no anuncia una llamada que no se puede reservar:
 // los botones pasan a invitar a escribir un email. Al rellenar `llamadaUrl` vuelven a ser llamadas.
-const activa = !site.llamadaUrl.startsWith('#');
+const activa = site.llamadaUrl !== '';
 export const llamada = {
   activa,
   href: activa ? site.llamadaUrl : `mailto:${site.email}`,

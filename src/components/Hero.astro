@@ -3,7 +3,7 @@ import Icon from './Icon.astro';
 import Isotipo from './Isotipo.astro';
 import Placeholder from './Placeholder.astro';
 import SplitText from './SplitText.astro';
-import { llamada, site } from '../data/site';
+import { llamada } from '../data/site';
 import { fotos, usarMuestras } from '../data/media';
 
 // `count` anima el número al entrar en pantalla
@@ -13,9 +13,9 @@ const datos = [
   { etiqueta: 'Las revisiones', valor: '2', count: 2, unidad: 'rondas', texto: 'De cambios en cada fase, incluidas en el precio.' },
 ];
 
-const badge = 'Reto gratuito · Empieza aquí · Reto gratuito · Empieza aquí · ';
+const badge = 'El método Femuix · Cuatro fases · El método Femuix · Cuatro fases · ';
 
-const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empezar'];
+const confianza = ['Pagas fase a fase', 'Contrato antes de empezar', 'Una sola interlocutora'];
 ---
 
 <section class="hero" id="top">
@@ -76,7 +76,7 @@ const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empe
         </div>
       </div>
 
-      <a href={site.retoUrl} class="badge reveal" style="--delay: 900ms" aria-label="Reto gratuito: empieza aquí">
+      <a href="#metodo" class="badge reveal" style="--delay: 900ms" aria-label="El método Femuix: ver las cuatro fases">
         <svg class="badge__ring" viewBox="0 0 200 200" aria-hidden="true">
           <defs>
             <path id="badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"></path>

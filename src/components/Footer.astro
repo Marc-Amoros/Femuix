@@ -2,7 +2,7 @@
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import SplitText from './SplitText.astro';
-import { nav, site, url } from '../data/site';
+import { llamada, nav, site, url } from '../data/site';
 
 // En páginas interiores los enlaces apuntan a las secciones de la portada
 interface Props {
@@ -13,8 +13,7 @@ const { base = '' } = Astro.props;
 
 const year = new Date().getFullYear();
 
-// Sobre el reto, que es lo que propone este cierre
-const confianza = ['Gratuito y sin compromiso', 'Tres días, por email', 'Te das de baja cuando quieras'];
+const confianza = ['Sin compromiso', 'Pagas fase a fase', 'Solo Barcelona ciudad'];
 
 const legal = [
   { label: 'Aviso legal', href: url('/aviso-legal') },
@@ -29,21 +28,20 @@ const legal = [
     <!-- Cierre: la última invitación a dar el primer paso -->
     <div class="footer__cta" data-reveal-unit>
       <div class="footer__cta-copy">
-        <span class="footer__kicker reveal">El primer paso es gratis</span>
+        <span class="footer__kicker reveal">El primer paso</span>
         <SplitText
           as="p"
           class="footer__claim"
           parts={[{ text: '¿Empezamos' }, { text: 'por el orden?', em: true, br: true }]}
         />
         <p class="footer__lead reveal">
-          Tres días de ejercicios cortos por email para saber qué necesita tu casa antes de pedir
-          presupuestos.
+          Si lo que has leído encaja con tu reforma, escríbeme y lo vemos juntos.
         </p>
       </div>
 
       <div class="footer__actions reveal">
-        <a class="btn btn--primary" href={`${base}${site.retoUrl}`}>
-          Empezar el reto gratuito
+        <a class="btn btn--primary" href={llamada.href}>
+          {llamada.hablar}
           <Icon name="arrow" />
         </a>
         <ul class="footer__trust">
@@ -89,7 +87,7 @@ const legal = [
         <span class="footer__title reveal" id="ft-secciones">Secciones</span>
         <ul>
           {
-            [...nav, { label: 'Reto gratuito', href: '#reto' }].map((item, i) => (
+            nav.map((item, i) => (
               <li class="reveal">
                 <a href={`${base}${item.href}`}>
                   <span class="footer__n">0{i + 1}</span>
