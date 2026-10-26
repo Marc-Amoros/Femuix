@@ -38,98 +38,164 @@ import { site, url } from '../data/site';
         aria-labelledby="contacto-title"
         novalidate
         data-contacto-form
+        data-paso-actual="1"
       >
         <div class="contacto__fields">
-          <p class="contacto__req">Todos los campos son obligatorios.</p>
+          <p class="contacto__req">Dos pasos, todos los campos obligatorios.</p>
 
-          <!-- Los avisos son regiones en vivo, siempre presentes: se anuncian al rellenarse (WCAG 4.1.3) -->
-          <div class="contacto__pair">
+          <!-- Progreso: decorativo; el paso en que estás lo dice el título de cada paso -->
+          <div class="pasos" aria-hidden="true"><i></i><i></i></div>
+
+          <!-- Paso 1: la reforma. Primero lo que quieres hacer, sin datos personales; además filtra
+               lo que no hago (viviendas fuera de Barcelona ciudad) antes de pedir el contacto.
+               Los avisos son regiones en vivo, siempre presentes: se anuncian al rellenarse (WCAG 4.1.3) -->
+          <div class="paso" data-paso>
+            <h3 class="paso__title" tabindex="-1" data-paso-title>
+              <span class="paso__n">Paso 1 de 2</span>{' '}
+              Tu reforma
+            </h3>
+
+            <fieldset class="choice" aria-describedby="contacto-reforma-error">
+              <legend>Qué quieres reformar</legend>
+              <div class="choice__options">
+                {
+                  ['Toda la vivienda', 'Cocina o baños', 'Varias estancias'].map((v) => (
+                    <label class="choice__opt">
+                      <input type="radio" name="reforma" value={v} required />
+                      <span>{v}</span>
+                    </label>
+                  ))
+                }
+              </div>
+              <p class="field__error" id="contacto-reforma-error" aria-live="polite"></p>
+            </fieldset>
+
+            <fieldset class="choice" aria-describedby="contacto-zona-error">
+              <legend>Dónde está la vivienda</legend>
+              <div class="choice__options">
+                {
+                  ['Barcelona ciudad', 'Fuera de Barcelona'].map((v) => (
+                    <label class="choice__opt">
+                      <input type="radio" name="zona" value={v} required />
+                      <span>{v}</span>
+                    </label>
+                  ))
+                }
+              </div>
+              <p class="field__error" id="contacto-zona-error" aria-live="polite"></p>
+            </fieldset>
+
             <div class="field">
-              <label for="contacto-nombre">Nombre</label>
-              <input
-                id="contacto-nombre"
-                name="nombre"
-                type="text"
-                autocomplete="name"
+              <label for="contacto-mensaje">Qué te gustaría cambiar</label>
+              <textarea
+                id="contacto-mensaje"
+                name="mensaje"
+                rows="4"
                 required
-                aria-describedby="contacto-nombre-error"
-              />
-              <p class="field__error" id="contacto-nombre-error" aria-live="polite"></p>
+                aria-describedby="contacto-mensaje-hint contacto-mensaje-error"></textarea>
+              <p class="field__hint" id="contacto-mensaje-hint">
+                Por ejemplo: piso de 80 m² en Gràcia; quiero abrir la cocina al salón y rehacer el baño.
+              </p>
+              <p class="field__error" id="contacto-mensaje-error" aria-live="polite"></p>
+            </div>
+
+            <div class="contacto__submit">
+              <button class="btn btn--primary" type="submit">
+                Continuar
+                <Icon name="arrow" />
+              </button>
+              <p class="contacto__safe">Sin compromiso. En el siguiente paso, solo cómo responderte.</p>
+            </div>
+          </div>
+
+          <!-- Paso 2: cómo responderte -->
+          <div class="paso" data-paso hidden>
+            <h3 class="paso__title" tabindex="-1" data-paso-title>
+              <span class="paso__n">Paso 2 de 2</span>{' '}
+              Cómo te respondo
+            </h3>
+
+            <div class="contacto__pair">
+              <div class="field">
+                <label for="contacto-nombre">Nombre</label>
+                <input
+                  id="contacto-nombre"
+                  name="nombre"
+                  type="text"
+                  autocomplete="name"
+                  required
+                  aria-describedby="contacto-nombre-error"
+                />
+                <p class="field__error" id="contacto-nombre-error" aria-live="polite"></p>
+              </div>
+
+              <div class="field">
+                <label for="contacto-email">Email</label>
+                <input
+                  id="contacto-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  inputmode="email"
+                  required
+                  aria-describedby="contacto-email-error"
+                />
+                <p class="field__error" id="contacto-email-error" aria-live="polite"></p>
+              </div>
             </div>
 
             <div class="field">
-              <label for="contacto-email">Email</label>
+              <label for="contacto-telefono">Teléfono</label>
               <input
-                id="contacto-email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                inputmode="email"
+                id="contacto-telefono"
+                name="telefono"
+                type="tel"
+                autocomplete="tel"
+                inputmode="tel"
                 required
-                aria-describedby="contacto-email-error"
+                aria-describedby="contacto-telefono-hint contacto-telefono-error"
               />
-              <p class="field__error" id="contacto-email-error" aria-live="polite"></p>
+              <p class="field__hint" id="contacto-telefono-hint">Para responderte por WhatsApp.</p>
+              <p class="field__error" id="contacto-telefono-error" aria-live="polite"></p>
             </div>
-          </div>
 
-          <div class="field">
-            <label for="contacto-telefono">Teléfono</label>
-            <input
-              id="contacto-telefono"
-              name="telefono"
-              type="tel"
-              autocomplete="tel"
-              inputmode="tel"
-              required
-              aria-describedby="contacto-telefono-hint contacto-telefono-error"
-            />
-            <p class="field__hint" id="contacto-telefono-hint">Para responderte por WhatsApp.</p>
-            <p class="field__error" id="contacto-telefono-error" aria-live="polite"></p>
-          </div>
+            <div>
+              <label class="check">
+                <input
+                  id="contacto-privacidad"
+                  type="checkbox"
+                  name="privacidad"
+                  required
+                  aria-describedby="contacto-privacidad-error"
+                />
+                <span>
+                  He leído y acepto la <a class="text-link" href={url('/privacidad')}>política de privacidad</a>.
+                </span>
+              </label>
+              <p class="field__error" id="contacto-privacidad-error" aria-live="polite"></p>
+            </div>
 
-          <div class="field">
-            <label for="contacto-mensaje">Qué quieres reformar y dónde está la vivienda</label>
-            <textarea
-              id="contacto-mensaje"
-              name="mensaje"
-              rows="4"
-              required
-              aria-describedby="contacto-mensaje-error"></textarea>
-            <p class="field__error" id="contacto-mensaje-error" aria-live="polite"></p>
-          </div>
+            <div class="contacto__submit">
+              <button class="btn btn--primary" type="submit">
+                Enviar mi reforma
+                <Icon name="arrow" />
+              </button>
+              <button class="paso__back" type="button" data-paso-back>
+                <Icon name="arrow" />
+                Volver a tu reforma
+              </button>
+              <p class="contacto__safe">
+                Reviso tu caso personalmente. O escribe a{' '}
+                <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>.
+              </p>
+            </div>
 
-          <div>
-            <label class="check">
-              <input
-                id="contacto-privacidad"
-                type="checkbox"
-                name="privacidad"
-                required
-                aria-describedby="contacto-privacidad-error"
-              />
-              <span>
-                He leído y acepto la <a class="text-link" href={url('/privacidad')}>política de privacidad</a>.
-              </span>
-            </label>
-            <p class="field__error" id="contacto-privacidad-error" aria-live="polite"></p>
-          </div>
-
-          <div class="contacto__submit">
-            <button class="btn btn--primary" type="submit">
-              Cuéntame tu reforma
-              <Icon name="arrow" />
-            </button>
-            <p class="contacto__safe">
-              Sin compromiso. Reviso tu caso personalmente. O escribe a{' '}
-              <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>.
+            <!-- Primera capa de información de privacidad (RGPD). Revisar con quien redacte los textos legales. -->
+            <p class="contacto__legal">
+              [Primera capa de privacidad: responsable, finalidad (valorar tu consulta y responderte,
+              también por WhatsApp), legitimación y derechos. Pendiente de revisión legal.]
             </p>
           </div>
-
-          <!-- Primera capa de información de privacidad (RGPD). Revisar con quien redacte los textos legales. -->
-          <p class="contacto__legal">
-            [Primera capa de privacidad: responsable, finalidad (valorar tu consulta y responderte,
-            también por WhatsApp), legitimación y derechos. Pendiente de revisión legal.]
-          </p>
         </div>
 
         <!-- Confirmación: sustituye a los campos al enviar y recibe el foco para que se anuncie -->
@@ -151,7 +217,8 @@ import { site, url } from '../data/site';
   const form = dialog?.querySelector<HTMLFormElement>('[data-contacto-form]');
 
   if (dialog && form) {
-    const fields = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]')];
+    type Control = HTMLInputElement | HTMLTextAreaElement;
+    const steps = [...form.querySelectorAll<HTMLElement>('[data-paso]')];
     const done = form.querySelector<HTMLElement>('[data-contacto-done]');
     const doneTitle = form.querySelector<HTMLElement>('[data-contacto-done-title]');
     const doneText = form.querySelector<HTMLElement>('[data-contacto-done-text]');
@@ -162,10 +229,12 @@ import { site, url } from '../data/site';
 
     const open = (from: HTMLElement | null) => {
       trigger = from;
-      // Si se envió antes, la ventana vuelve a mostrar el formulario vacío
+      // Si se envió antes, la ventana vuelve a mostrar el formulario vacío, desde el primer paso.
+      // Si se cerró a medias, lo escrito se conserva y se sigue donde se dejó
       if (done && !done.hidden) {
         done.hidden = true;
         fieldset?.removeAttribute('hidden');
+        goTo(0, false);
       }
       dialog.showModal();
       window.lenis?.stop();
@@ -218,53 +287,97 @@ import { site, url } from '../data/site';
     });
 
     // ---------- Validación accesible (WCAG 3.3.1 y 3.3.3) ----------
+    // Se valida por nombre de campo: un grupo de opciones (radio) cuenta como un solo campo
 
-    const message = (input: HTMLInputElement | HTMLTextAreaElement) => {
-      const value = input.value.trim();
-      switch (input.name) {
+    const inputsOf = (name: string) => [...form.querySelectorAll<Control>(`[name="${name}"]`)];
+
+    const valueOf = (name: string) => {
+      const inputs = inputsOf(name);
+      const first = inputs[0] as HTMLInputElement | undefined;
+      if (first?.type === 'radio') return inputs.find((i) => (i as HTMLInputElement).checked)?.value ?? '';
+      if (first?.type === 'checkbox') return first.checked ? 'sí' : '';
+      return first?.value.trim() ?? '';
+    };
+
+    const message = (name: string) => {
+      const value = valueOf(name);
+      switch (name) {
+        case 'reforma':
+          return value ? '' : 'Elige qué quieres reformar.';
+        case 'zona':
+          if (!value) return 'Dime dónde está la vivienda.';
+          return value === 'Fuera de Barcelona'
+            ? 'Solo trabajo en Barcelona ciudad, porque piso cada obra que acompaño. Fuera de la ciudad no podría hacerlo bien.'
+            : '';
+        case 'mensaje':
+          return value ? '' : 'Cuéntame en pocas palabras qué te gustaría cambiar.';
         case 'nombre':
           return value ? '' : 'Escribe tu nombre.';
         case 'email':
           if (!value) return 'Escribe tu email.';
-          return input.validity.typeMismatch ? 'Revisa el email: debe tener el formato nombre@dominio.com.' : '';
+          return (inputsOf(name)[0] as HTMLInputElement).validity.typeMismatch
+            ? 'Revisa el email: debe tener el formato nombre@dominio.com.'
+            : '';
         case 'telefono':
           if (!value) return 'Escribe tu teléfono.';
           return value.replace(/\D/g, '').length < 9
             ? 'Revisa el teléfono: escribe al menos 9 cifras, por ejemplo 612 345 678.'
             : '';
-        case 'mensaje':
-          return value ? '' : 'Cuéntame qué quieres reformar y dónde está la vivienda.';
         case 'privacidad':
-          return (input as HTMLInputElement).checked
-            ? ''
-            : 'Para responderte necesito que aceptes la política de privacidad.';
+          return value ? '' : 'Para responderte necesito que aceptes la política de privacidad.';
         default:
           return '';
       }
     };
 
-    const check = (input: HTMLInputElement | HTMLTextAreaElement) => {
-      const msg = message(input);
-      const errorId = (input.getAttribute('aria-describedby') ?? '').split(' ').find((id) => id.endsWith('-error'));
-      const error = errorId ? document.getElementById(errorId) : null;
+    const check = (name: string) => {
+      const msg = message(name);
+      const error = document.getElementById(`contacto-${name}-error`);
       if (error) error.textContent = msg;
-      if (msg) input.setAttribute('aria-invalid', 'true');
-      else input.removeAttribute('aria-invalid');
+      for (const input of inputsOf(name)) {
+        if (msg) input.setAttribute('aria-invalid', 'true');
+        else input.removeAttribute('aria-invalid');
+      }
       return !msg;
     };
 
-    for (const input of fields) {
-      // Se valida al salir del campo y se corrige en cuanto el error desaparece
+    // El foco va al campo con error; en un grupo de opciones, a la elegida o a la primera
+    const focusField = (name: string) => {
+      const inputs = inputsOf(name);
+      (inputs.find((i) => (i as HTMLInputElement).checked) ?? inputs[0])?.focus();
+    };
+
+    const namesIn = (scope: Element) => [
+      ...new Set([...scope.querySelectorAll<Control>('[required]')].map((input) => input.name)),
+    ];
+
+    for (const input of form.querySelectorAll<Control>('[required]')) {
+      // Se valida al salir del campo y se corrige en cuanto el error desaparece; una opción, al elegirla
       input.addEventListener('blur', () => {
-        if (input.value || input.hasAttribute('aria-invalid')) check(input);
+        if (input.type !== 'radio' && (input.value || input.hasAttribute('aria-invalid'))) check(input.name);
       });
       input.addEventListener('input', () => {
-        if (input.hasAttribute('aria-invalid')) check(input);
+        if (input.hasAttribute('aria-invalid')) check(input.name);
       });
       input.addEventListener('change', () => {
-        if (input.type === 'checkbox') check(input);
+        if (input.type === 'checkbox' || input.type === 'radio') check(input.name);
       });
     }
+
+    // ---------- Pasos ----------
+
+    let step = 0;
+
+    // Al cambiar de paso, el foco va a su título («Paso 2 de 2, Cómo te respondo») para que el
+    // lector de pantalla lo anuncie y el tabulador siga desde ahí
+    function goTo(n: number, focus = true) {
+      step = n;
+      steps.forEach((el, i) => (el.hidden = i !== n));
+      form!.dataset.pasoActual = String(n + 1);
+      if (focus) steps[n].querySelector<HTMLElement>('[data-paso-title]')?.focus();
+    }
+
+    form.querySelector('[data-paso-back]')?.addEventListener('click', () => goTo(0));
 
     // ---------- Envío ----------
 
@@ -277,11 +390,16 @@ import { site, url } from '../data/site';
       doneTitle.focus();
     };
 
+    // Enviar el paso 1 (botón «Continuar» o Intro) lleva al paso 2; enviar el paso 2 envía el formulario
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const invalid = fields.filter((input) => !check(input));
+      const invalid = namesIn(steps[step]).filter((name) => !check(name));
       if (invalid.length) {
-        invalid[0].focus();
+        focusField(invalid[0]);
+        return;
+      }
+      if (step === 0) {
+        goTo(1);
         return;
       }
 
@@ -299,6 +417,7 @@ import { site, url } from '../data/site';
           });
           if (!res.ok) throw new Error(String(res.status));
           form.reset();
+          goTo(0, false);
           showDone(gracias, 'He recibido tu mensaje. Reviso tu caso y te respondo personalmente.');
         } catch {
           showDone(
@@ -311,15 +430,19 @@ import { site, url } from '../data/site';
 
       // Sin servicio: se abre el correo con el mensaje ya redactado
       const body = [
+        `Qué quiero reformar: ${data.get('reforma')}`,
+        `Dónde está la vivienda: ${data.get('zona')}`,
+        '',
+        String(data.get('mensaje')).trim(),
+        '',
         `Nombre: ${nombre}`,
         `Email: ${String(data.get('email')).trim()}`,
         `Teléfono: ${String(data.get('telefono')).trim()}`,
-        '',
-        String(data.get('mensaje')).trim(),
       ].join('\n');
       const mailto = `mailto:${site.email}?subject=${encodeURIComponent(`Mi reforma · ${nombre}`)}&body=${encodeURIComponent(body)}`;
       window.open(mailto, '_self');
       form.reset();
+      goTo(0, false);
       showDone(gracias, 'Se ha abierto tu correo con el mensaje preparado: solo falta enviarlo.');
     });
   }
@@ -545,6 +668,217 @@ import { site, url } from '../data/site';
     color: var(--text);
   }
 
+  /* ---------- Pasos ---------- */
+
+  /* Barra de dos tramos: el segundo se llena al pasar al paso 2 */
+  .pasos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: -8px;
+  }
+
+  .pasos i {
+    position: relative;
+    height: 2px;
+    overflow: hidden;
+    background: var(--line-strong);
+  }
+
+  .pasos i::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--t-enter) var(--ease);
+  }
+
+  .pasos i:first-child::after,
+  .contacto__form[data-paso-actual='2'] .pasos i::after {
+    transform: none;
+  }
+
+  .paso {
+    display: grid;
+    gap: 26px;
+  }
+
+  .paso[hidden] {
+    display: none;
+  }
+
+  /* Cada paso entra con un desliz corto hacia la izquierda, como una página que pasa */
+  @media (prefers-reduced-motion: no-preference) {
+    .paso {
+      animation: paso-in 0.5s var(--ease);
+    }
+  }
+
+  @keyframes paso-in {
+    from {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+  }
+
+  .paso__title {
+    display: grid;
+    gap: 6px;
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.2vw, 1.875rem);
+    font-weight: 300;
+    line-height: 1.15;
+  }
+
+  .paso__title:focus {
+    outline: none;
+  }
+
+  .paso__n {
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--number);
+  }
+
+  /* Grupo de opciones: píldoras con su círculo de radio, en una fila que salta si no cabe */
+  .choice {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .choice legend {
+    margin-bottom: 12px;
+    padding: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .choice__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .choice__opt {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 8px 18px 8px 14px;
+    border: 1px solid var(--line-ui); /* ≥3:1, WCAG 1.4.11 */
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.35);
+    font-size: 0.9375rem;
+    color: var(--text);
+    cursor: pointer;
+    transition:
+      background-color var(--t-color) var(--ease),
+      color var(--t-color) var(--ease),
+      border-color var(--t-color) var(--ease);
+  }
+
+  :global([data-theme='dark']) .choice__opt {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  /* El radio nativo sigue ahí (teclado y lector de pantalla), pero se pinta el círculo propio */
+  .choice__opt input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+  }
+
+  .choice__opt span {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .choice__opt span::before {
+    content: '';
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 4px transparent;
+    transition: box-shadow var(--t-move) var(--ease);
+  }
+
+  /* Elegida: se rellena en tinta y el círculo marca el punto (no solo el color, WCAG 1.4.1) */
+  .choice__opt:has(input:checked) {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .choice__opt:has(input:checked) span::before {
+    background: currentColor;
+    box-shadow: inset 0 0 0 4px var(--ink);
+  }
+
+  .choice__opt:has(input:focus-visible) {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  .choice__opt:has(input[aria-invalid='true']) {
+    border-color: var(--error);
+  }
+
+  @media (hover: hover) {
+    .choice__opt:hover:not(:has(input:checked)) {
+      background: rgba(255, 255, 255, 0.6);
+    }
+    :global([data-theme='dark']) .choice__opt:hover:not(:has(input:checked)) {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  /* Volver: botón de texto discreto, con la flecha hacia atrás */
+  .paso__back {
+    display: inline-flex;
+    align-items: center;
+    justify-self: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 8px;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--line-ui);
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+
+  .paso__back :global(svg) {
+    width: 15px;
+    height: 15px;
+    transform: rotate(180deg);
+    transition: transform var(--t-move) var(--ease);
+  }
+
+  @media (hover: hover) {
+    .paso__back:hover :global(svg) {
+      transform: rotate(180deg) translateX(3px);
+    }
+  }
+
   .contacto__pair {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -752,6 +1086,10 @@ import { site, url } from '../data/site';
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .pasos i::after,
+    .choice__opt,
+    .choice__opt span::before,
+    .paso__back :global(svg),
     .contacto__close,
     .field input,
     .field textarea,

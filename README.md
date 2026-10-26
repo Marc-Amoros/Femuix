@@ -267,8 +267,12 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
 - **Foco visible:** nunca quites `outline` sin sustituirlo; sobre fondos verdes, aro blanco.
 - **Formulario «Cuéntame tu reforma»** (`ContactoModal.astro`): ventana `<dialog>` modal que abren
   los botones con `data-contacto` (sin JavaScript, abren el email). Atrapa el foco, se cierra con
-  Escape, con «Cerrar» o pulsando fuera, y devuelve el foco al botón. Cada campo tiene su mensaje
-  de error enlazado (`aria-describedby`) y la confirmación recibe el foco al enviar.
+  Escape, con «Cerrar» o pulsando fuera, y devuelve el foco al botón. Va en dos pasos: primero la
+  reforma (qué, dónde y qué cambiar; una vivienda fuera de Barcelona ciudad no pasa del paso 1) y
+  después cómo responder (nombre, email, teléfono y privacidad). Al cambiar de paso el foco va al
+  título del paso («Paso 2 de 2, Cómo te respondo»), «Volver» conserva lo escrito y, si se cierra a
+  medias, al reabrir sigue donde estaba. Cada campo o grupo de opciones tiene su mensaje de error
+  enlazado (`aria-describedby`) y la confirmación recibe el foco al enviar.
 - **Imágenes y vídeo:** `alt` descriptivo en las fotos; subtítulos y transcripción en el vídeo.
 - **Para auditar:** neutraliza `body::after`, `.band::before` y los degradados antes de pasar
   axe, o devolverá «incompleto» en lugar de medir el contraste.
