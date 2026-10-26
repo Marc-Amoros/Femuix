@@ -9,6 +9,16 @@ import { retrato } from '../data/media';
 
 <section class="section band tex-none sobre" id="sobre-mi" data-expand aria-labelledby="sobre-title">
   <div class="container sobre__grid">
+    <!-- Rótulo y titular: en móvil, por encima de la foto; en escritorio, en la columna del texto -->
+    <div class="sobre__head">
+      <span class="eyebrow reveal">Antes de nada</span>
+      <SplitText
+        id="sobre-title"
+        class="h-section"
+        parts={[{ text: 'Quién soy y' }, { text: 'por qué trabajo así.', em: true, br: true }]}
+      />
+    </div>
+
     <!-- Retrato con la firma superpuesta, como una tarjeta de visita -->
     <div class="sobre__media" data-stagger-scope>
       <div class="sobre__frame">
@@ -35,12 +45,6 @@ import { retrato } from '../data/media';
     </div>
 
     <div class="sobre__copy">
-      <span class="eyebrow reveal">Antes de nada</span>
-      <SplitText
-        id="sobre-title"
-        class="h-section"
-        parts={[{ text: 'Quién soy y' }, { text: 'por qué trabajo así.', em: true }]}
-      />
 
       <blockquote class="sobre__quote reveal" data-step="600">
         <p>{sobreMi.cita}</p>
@@ -74,11 +78,34 @@ import { retrato } from '../data/media';
 
 <style>
   /* Columnas iguales: el retrato gana tamaño y equilibra la altura del texto */
+  /* La foto ocupa la columna izquierda entera; a la derecha, titular y texto juntos y centrados
+     en vertical respecto a ella (las filas 1fr de arriba y abajo se llevan el espacio sobrante) */
   .sobre__grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(48px, 8vw, 128px);
-    align-items: center;
+    grid-template-rows: 1fr auto auto 1fr;
+    column-gap: clamp(48px, 8vw, 128px);
+    row-gap: 0;
+  }
+
+  .sobre__media {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: center;
+  }
+
+  .sobre__head {
+    grid-column: 2;
+    grid-row: 2;
+    display: grid;
+    gap: 28px;
+    justify-items: start;
+    margin-bottom: 28px;
+  }
+
+  .sobre__copy {
+    grid-column: 2;
+    grid-row: 3;
   }
 
   /* ---------- Retrato ---------- */
@@ -432,8 +459,17 @@ import { retrato } from '../data/media';
   @media (max-width: 900px) {
     .sobre__grid {
       grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-      align-items: start;
-      gap: clamp(32px, 5vw, 48px);
+      grid-template-rows: auto auto 1fr;
+      column-gap: clamp(32px, 5vw, 48px);
+    }
+    .sobre__media {
+      align-self: start;
+    }
+    .sobre__head {
+      grid-row: 1;
+    }
+    .sobre__copy {
+      grid-row: 2;
     }
     .sobre__sign {
       right: 12px;
@@ -441,8 +477,20 @@ import { retrato } from '../data/media';
   }
 
   @media (max-width: 640px) {
+    /* Una columna: titular, foto y texto, en ese orden */
     .sobre__grid {
       grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+      row-gap: 40px;
+    }
+    .sobre__head,
+    .sobre__media,
+    .sobre__copy {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .sobre__head {
+      margin-bottom: 0;
     }
     .sobre__media {
       max-width: 420px;
