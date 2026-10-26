@@ -228,7 +228,7 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
 
 ### Pendiente (depende de ti, no del diseño)
 
-- Texto de presentación de Andrea y «Recibes» de las fases 02 a 04: se ven entre corchetes.
+- Texto de presentación de Andrea y «Recibes» de las fases 03 y 04: se ven entre corchetes.
 - Vídeo definitivo con subtítulos incrustados (`<track>`) y transcripción en `media.ts`.
 - Imagen para compartir (`og:image`, 1200 × 630) y URL real de la agenda.
 - Prueba con lector de pantalla real (VoiceOver o NVDA) antes de publicar.
@@ -276,7 +276,7 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 ## Pendiente de contenido real
 
 - Foto principal, vídeo de 60–90 s y antes/después (`Placeholder`).
-- Entregable de las fases 02 a 04 (`fases` en `site.ts`).
+- Entregable de las fases 03 y 04 (`fases` en `site.ts`).
 - Testimonios reales (`testimonios`; mientras esté vacío se muestran huecos).
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
 - Enlace a la agenda de la llamada (`llamadaUrl`): al rellenarlo, los botones de «Escríbeme tu

@@ -74,7 +74,9 @@ export const fases = [
     n: '02',
     nombre: 'Visualiza',
     texto: 'La ves antes de que exista. Ahí es donde se cambian las cosas, no en obra.',
-    entregable: '[Entregable de la fase]',
+    entregable:
+      'El concepto del proyecto, la dirección de materiales con muestras físicas y propuestas para cocina, baños, puertas y armarios.',
+    aprueba: 'el concepto y la dirección material, antes de abrir Diseña.',
   },
   {
     n: '03',
