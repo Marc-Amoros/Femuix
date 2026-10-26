@@ -152,8 +152,6 @@ export const preguntas = [
 export const testimonios: { cita: string; nombre: string; barrio: string }[] = [];
 
 export const sobreMi = {
-  intro:
-    '[Dos o tres frases tuyas: de dónde vienes, por qué montaste Femuix y qué te hizo trabajar así y no de otra manera.]',
   cita: 'El espacio debe adaptarse a ti, y no al revés.',
   compromisos: [
     { titulo: 'Una sola interlocutora', texto: 'De la primera visita a la entrega de llaves, hablas siempre conmigo.' },

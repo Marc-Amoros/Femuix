@@ -277,7 +277,6 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 
 - Foto principal, vídeo de 60–90 s y antes/después (`Placeholder`).
 - Entregable de cada fase (`fases` en `site.ts`).
-- Presentación de Andrea (`sobreMi.intro`).
 - Testimonios reales (`testimonios`; mientras esté vacío se muestran huecos).
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
 - URL del formulario de Systeme.io (`systemeFormAction`) y enlace de la llamada (`llamadaUrl`).
