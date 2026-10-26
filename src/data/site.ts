@@ -49,6 +49,22 @@ export const dolores = [
   'Has pedido presupuestos que no se parecen en nada entre sí y no sabes cuál mirar.',
 ];
 
+// Para quién es (y para quién no): sección que sigue al hero
+export const paraQuien = {
+  intro:
+    'Trabajo con particulares que reforman su propia vivienda en Barcelona ciudad, de hasta 130 m². Si tu vida ha cambiado y tu casa ya no responde a cómo vives, este proceso es para ti.',
+  si: [
+    'Has comprado una vivienda y quieres reformarla.',
+    'Necesitas reorganizar la casa en la que ya vives.',
+    'Quieres revisar y aprobar cada fase antes de seguir.',
+  ],
+  no: [
+    'La vivienda está fuera de Barcelona ciudad.',
+    'Es obra nueva, un local o solo buscas decoración.',
+    'Buscas que alguien ejecute la obra rápido, sin una fase de definición.',
+  ],
+};
+
 export const fases = [
   {
     n: '01',

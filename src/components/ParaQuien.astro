@@ -1,0 +1,152 @@
+---
+import Icon from './Icon.astro';
+import SplitText from './SplitText.astro';
+import { paraQuien } from '../data/site';
+---
+
+<section class="section paraquien" id="para-quien" aria-labelledby="pq-title">
+  <div class="container">
+    <div class="section-head pq__head">
+      <span class="eyebrow reveal">Para quién es</span>
+      <SplitText
+        id="pq-title"
+        class="h-section"
+        parts={[
+          { text: 'Femuix es para ti si quieres' },
+          { text: 'entender tu reforma antes de ponerla en marcha.', em: true, br: true },
+        ]}
+      />
+      <p class="lead pq__lead reveal">{paraQuien.intro}</p>
+    </div>
+
+    <div class="pq__cards">
+      <div class="pq__card pq__card--si reveal">
+        <h3 id="pq-si">Sí</h3>
+        <ul aria-labelledby="pq-si">
+          {
+            paraQuien.si.map((t) => (
+              <li class="reveal">
+                <Icon name="check" />
+                <span>{t}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="pq__card pq__card--no reveal">
+        <h3 id="pq-no">No</h3>
+        <ul aria-labelledby="pq-no">
+          {
+            paraQuien.no.map((t) => (
+              <li class="reveal">
+                <i aria-hidden="true"></i>
+                <span>{t}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Sigue al hero, que ya deja su propio aire por debajo: arriba, menos padding que una sección suelta */
+  .paraquien {
+    padding-top: clamp(48px, 5vw, 80px);
+  }
+
+  .pq__head {
+    max-width: 760px;
+    margin-bottom: clamp(40px, 3.5vw, 56px);
+  }
+
+  .pq__head .pq__lead {
+    max-width: 42em;
+  }
+
+  .pq__cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  .pq__card {
+    --mk: 32px; /* ancho de la columna del marcador (check o guion) */
+    padding: 40px 40px 40px;
+    border-radius: clamp(10px, 1vw, 16px);
+  }
+
+  .pq__card--si {
+    background: var(--tint);
+  }
+
+  .pq__card--no {
+    --mk: 38px;
+    border: 1px solid var(--line-strong);
+  }
+
+  .pq__card h3 {
+    margin: 0 0 4px;
+    font-size: clamp(2.25rem, 3.3vw, 3rem);
+    font-style: italic;
+    line-height: 1.15;
+  }
+
+  .pq__card--si h3 {
+    color: var(--ink);
+  }
+
+  .pq__card--no h3 {
+    color: var(--gold-deep);
+  }
+
+  .pq__card ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .pq__card li {
+    display: grid;
+    grid-template-columns: var(--mk) minmax(0, 1fr);
+    align-items: start;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    font-family: var(--serif);
+    font-size: clamp(1.0625rem, 1.34vw, 1.34rem);
+    font-weight: 300;
+    line-height: 1.45;
+  }
+
+  .pq__card li:first-child {
+    border-top: 0;
+  }
+
+  .pq__card li :global(svg) {
+    width: 20px;
+    height: 20px;
+    margin-top: 0.3em;
+    color: var(--ink);
+    stroke-width: 2;
+  }
+
+  /* Guion dorado: filete fino a la altura de la primera línea */
+  .pq__card li i {
+    width: 20px;
+    height: 1px;
+    margin-top: 0.82em;
+    background: var(--gold-deep);
+  }
+
+  @media (max-width: 860px) {
+    .pq__cards {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .pq__card {
+      padding: 32px 24px;
+    }
+  }
+</style>

@@ -71,6 +71,7 @@ Las secciones alternan blanco, bruma, petróleo y pino para que la lectura tenga
 | Sección       | Fondo                                |
 | ------------- | ------------------------------------ |
 | Portada       | Blanco, con un bloque de bruma y un marco dorado tras la foto |
+| Para quién es | Blanco, con la tarjeta «Sí» en bruma suave y la «No» en filete |
 | Cinta         | **Pino**, fases en blanco y cursiva en bruma |
 | Vídeo         | Bruma                                |
 | ¿Te suena?    | Blanco                               |
