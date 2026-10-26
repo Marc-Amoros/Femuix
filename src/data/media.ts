@@ -21,7 +21,7 @@ export interface FotoMuestra extends Foto {
   fuente: string;
 }
 
-// Retrato de Sobre mí: foto propia revelada (exposición, blancos, piel y encuadre 4:5), no de muestra
+// Retrato de Sobre mí: foto propia con un revelado natural (algo de luz, blancos y encuadre 4:5), no de muestra
 export const retrato: Foto = {
   imagen: andrea,
   alt: 'Retrato de Andrea de perfil, con camisa blanca de rayas, mirando hacia la luz',
