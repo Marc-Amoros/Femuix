@@ -43,12 +43,6 @@ export const nav = [
   { label: 'Preguntas', href: '#preguntas' },
 ];
 
-export const dolores = [
-  'Tienes las llaves y mil fotos guardadas, pero ninguna decisión tomada.',
-  'Te da miedo gastarte el presupuesto de tu vida y arrepentirte a los dos meses.',
-  'Has pedido presupuestos que no se parecen en nada entre sí y no sabes cuál mirar.',
-];
-
 // Para quién es (y para quién no): sección que sigue al hero
 export const paraQuien = {
   intro:

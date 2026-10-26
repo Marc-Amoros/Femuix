@@ -75,7 +75,6 @@ Las secciones alternan blanco, bruma, petróleo y pino para que la lectura tenga
 | Sobre mí      | Bruma                                |
 | Vídeo         | Bruma, seguida de Sobre mí y separada por un filete con rombo |
 | Cinta         | **Pino**, fases en blanco y cursiva en bruma |
-| ¿Te suena?    | Blanco                               |
 | Método        | **Petróleo**, con las fases en tarjetas blancas |
 | Cómo trabajo  | Blanco, con el portal sobre verde    |
 | Testimonios   | Blanco                               |
@@ -140,7 +139,7 @@ rombo dorado. Las bandas de bruma usan `.band` y la de petróleo `.band--teal` (
 ## Movimiento
 
 Intro con el isotipo (una vez por sesión), titulares palabra a palabra, scroll suave, franja de
-fases que se mueve con el scroll, sello de la portada con el texto fijo, vídeo que crece con el scroll, frase que se ilumina, tarjetas del método apiladas,
+fases que se mueve con el scroll, sello de la portada con el texto fijo, vídeo que crece con el scroll, tarjetas del método apiladas,
 portal en 3D, comparador antes/después, «Sobre mí» en tres tiempos (foto, firma y texto, con la cita
 que se escribe y filetes que se dibujan) y logotipo gigante en el pie. Todo se desactiva si el
 sistema pide reducir el movimiento.
@@ -180,10 +179,10 @@ Revisada sin desplazamiento horizontal ni solapes a 320, 375, 414, 600, 768, 834
 
 | Ancho          | Cabecera                                                    | Contenido                          |
 | -------------- | ----------------------------------------------------------- | ---------------------------------- |
-| > 1100 px      | Menú completo, interruptor día/noche y botón del reto       | Diseño a dos columnas              |
+| > 1100 px      | Menú completo e interruptor día/noche                       | Diseño a dos columnas              |
 | 901–1100 px    | Botón de menú (tablet en horizontal)                        | Dos columnas                       |
 | 561–900 px     | Botón de menú (tablet en vertical)                          | Una columna; foto de portada apaisada; «Sobre mí» a dos columnas |
-| ≤ 560 px       | Logo, «Reto gratuito» y menú; el interruptor va dentro del menú | Una columna                    |
+| ≤ 560 px       | Logo, interruptor día/noche y menú                          | Una columna                        |
 
 El menú (`Header.astro`) se cierra con Escape, al elegir una sección o al pasar a escritorio, y
 mientras está abierto deja la página de detrás inactiva (`inert`) para que el foco no se pierda.

@@ -104,7 +104,6 @@
   --number: var(--pine-800); /* numeración: índices, 01/02/03… */
   --line-ui: var(--pine-500); /* bordes de campos y botones: ≥3:1 (WCAG 1.4.11) */
   --error: var(--burdeos);
-  --fill-dim: #707070; /* frase que se ilumina, antes de encenderse: ya legible (4,9:1) */
 
   /* Botón principal (CTA): verde pino con texto blanco (12:1); al pasar el ratón se
      vacía a blanco con filete verde */
@@ -188,7 +187,6 @@
   --number: var(--warm); /* numeración en dorado */
   --line-ui: var(--g-500); /* 5,4:1 sobre negro, ≥3:1 sobre el grafito */
   --error: var(--rosa-empolvado);
-  --fill-dim: #7a7a7a; /* 4,8:1 sobre negro, texto grande, antes de encenderse */
   --cta-bg: var(--white); /* CTA blanco con texto negro: 21:1 */
   --cta-fg: #000000;
   --cta-hover-bg: var(--warm); /* al pasar el ratón se llena de dorado: 12:1 */
@@ -215,7 +213,6 @@
   --mark: var(--white);
   --em: var(--pine-800); /* sobre bruma, cursivas en verde pino (6:1) */
   --error: #420f16; /* burdeos profundo: 7,3:1 también en la zona más oscura de la bruma */
-  --fill-dim: #3f5256; /* 4,6:1 sobre bruma antes de encenderse */
   background: var(--band-image), var(--band);
   color: var(--text);
 }
@@ -253,7 +250,6 @@
   --line-strong: rgba(255, 255, 255, 0.24);
   --line-ui: var(--g-500);
   --mark: var(--g-700);
-  --fill-dim: #8a8a8a; /* 4,6:1 sobre el grafito, texto grande */
 }
 
 /* Sobre verde (pie, sello y portal) la numeración usa la bruma y el botón principal pasa
@@ -520,6 +516,12 @@ a {
 }
 
 .js .band:not(.band--teal) + .band:not(.band--teal)[data-expand] {
+  clip-path: none;
+}
+
+/* Tras la cinta de fases, la banda del método entra ya a ancho completo: la cinta hace de
+   cabecera y, si se recortara, asomarían esquinas blancas bajo ella */
+.js .marquee + [data-expand] {
   clip-path: none;
 }
 
@@ -989,7 +991,6 @@ main .eyebrow::before {
     --line: rgba(29, 60, 52, 0.45);
     --line-strong: rgba(29, 60, 52, 0.75);
     --line-ui: var(--pine-800);
-    --fill-dim: #5c5c5c;
   }
 
   :root[data-theme='dark'] {
@@ -997,7 +998,6 @@ main .eyebrow::before {
     --line: rgba(255, 255, 255, 0.45);
     --line-strong: rgba(255, 255, 255, 0.75);
     --line-ui: #d0d3d4;
-    --fill-dim: #9ea2a2;
   }
 
   .band {

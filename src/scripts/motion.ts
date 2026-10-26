@@ -263,17 +263,12 @@ const scrubs = [...document.querySelectorAll<HTMLElement>('[data-scrub]')];
 const parallax = [...document.querySelectorAll<HTMLElement>('[data-parallax]')];
 const marquees = [...document.querySelectorAll<HTMLElement>('[data-marquee]')];
 const expands = [...document.querySelectorAll<HTMLElement>('[data-expand]')];
-const checks = [...document.querySelectorAll<HTMLElement>('[data-check]')];
 const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.header__nav a, .menu__nav a')]
   .map((a) => ({ a, id: a.hash.slice(1) }))
   .filter(({ a, id }) => id && a.pathname === location.pathname);
 const spySections = [...new Set(navLinks.map(({ id }) => id))]
   .map((id) => document.getElementById(id))
   .filter((el): el is HTMLElement => !!el);
-const fills = [...document.querySelectorAll<HTMLElement>('[data-fill]')].map((el) => ({
-  el,
-  words: [...el.querySelectorAll<HTMLElement>('.fw')],
-}));
 
 let ticking = false;
 
@@ -315,13 +310,6 @@ function update() {
     });
   }
 
-  // «¿Te suena?»: cada frase se marca al cruzar el centro de la pantalla, y se desmarca al volver
-  for (const el of checks) {
-    const r = el.getBoundingClientRect();
-    const on = reduce || r.top + r.height / 2 < vh * 0.6;
-    writes.push(() => el.classList.toggle('is-on', on));
-  }
-
   if (!reduce) {
     // --p de 0 (entra por abajo) a 1 (centrado en pantalla)
     for (const el of scrubs) {
@@ -357,13 +345,6 @@ function update() {
       const offset = Number(el.dataset.marquee) > 0 ? t - range : -t;
       writes.push(() => el.style.setProperty('--sx', `${offset.toFixed(1)}px`));
     }
-
-    // Frases que se "encienden" palabra a palabra
-    for (const { el, words } of fills) {
-      const r = el.getBoundingClientRect();
-      const lit = clamp01((vh * 0.85 - r.top) / (r.height + vh * 0.35)) * words.length;
-      writes.push(() => words.forEach((w, i) => w.classList.toggle('is-lit', i < lit)));
-    }
   }
 
   for (const write of writes) write();
@@ -382,7 +363,6 @@ update();
 
 if (reduce) {
   scrubs.forEach((el) => el.style.setProperty('--p', '1'));
-  fills.forEach(({ words }) => words.forEach((w) => w.classList.add('is-lit')));
 }
 
 /* ---------- Texto que rueda en los botones ---------- */
