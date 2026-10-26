@@ -15,7 +15,7 @@ export const site = {
   name: 'Femuix',
   title: 'Femuix · Reformas de vivienda en Barcelona',
   description:
-    'Acompaño tu reforma de principio a fin: decidimos qué se toca y qué no, lo ves antes de construirlo y llegas a la obra con todo definido. De 12 a 14 semanas, solo en Barcelona.',
+    'Acompaño tu reforma de principio a fin: decidimos qué se toca y qué no, lo ves antes de construirlo y llegas a la obra con todo definido. De 12 a 14 semanas, solo en Barcelona ciudad.',
   email: 'hola@femuix.com',
   city: 'Barcelona',
   // Enlaces externos (Systeme.io para el reto, agenda para la llamada)
@@ -95,7 +95,7 @@ export const fases = [
 export const principios = [
   {
     titulo: 'Todo en un solo sitio.',
-    texto: 'Un portal de cliente donde viven los planos, las decisiones y los papeles. Sin buscar en WhatsApp.',
+    texto: 'Planos, decisiones y papeles viven en tu portal. Sin buscar en WhatsApp.',
   },
   {
     titulo: 'Una fase se cierra antes de abrir la siguiente.',
@@ -143,7 +143,7 @@ export const preguntas = [
   },
   {
     q: '¿Cómo sé en qué punto está mi reforma?',
-    a: 'Todo vive en tu portal de cliente: el plan por fases, el cronograma, los documentos y las decisiones tomadas. Sin buscar en WhatsApp.',
+    a: 'En tu Portal de Proyecto: dónde estamos, lo que necesito de ti, las decisiones tomadas y el estado de cada fase. Sin buscar en WhatsApp.',
   },
 ];
 
@@ -156,6 +156,6 @@ export const sobreMi = {
   compromisos: [
     { titulo: 'Una sola interlocutora', texto: 'De la primera visita a la entrega de llaves, hablas siempre conmigo.' },
     { titulo: 'Piso cada obra', texto: 'Por eso solo trabajo en Barcelona ciudad.' },
-    { titulo: 'Solo vivienda construida', texto: 'Reformar casas en las que se vive es lo único que hago.' },
+    { titulo: 'Solo vivienda', texto: 'Reformar viviendas es lo único que hago.' },
   ],
 };

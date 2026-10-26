@@ -2,7 +2,7 @@
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import SplitText from './SplitText.astro';
-import { llamada, nav, site, url } from '../data/site';
+import { nav, site, url } from '../data/site';
 
 // En páginas interiores los enlaces apuntan a las secciones de la portada
 interface Props {
@@ -13,7 +13,8 @@ const { base = '' } = Astro.props;
 
 const year = new Date().getFullYear();
 
-const confianza = ['Gratuito y sin compromiso', 'Pagas fase a fase', 'Solo Barcelona ciudad'];
+// Sobre el reto, que es lo que propone este cierre
+const confianza = ['Gratuito y sin compromiso', 'Tres días, por email', 'Te das de baja cuando quieras'];
 
 const legal = [
   { label: 'Aviso legal', href: url('/aviso-legal') },
@@ -35,14 +36,14 @@ const legal = [
           parts={[{ text: '¿Empezamos' }, { text: 'por el orden?', em: true, br: true }]}
         />
         <p class="footer__lead reveal">
-          Unos días de ejercicios cortos por email para saber qué necesita tu casa antes de pedir
+          Tres días de ejercicios cortos por email para saber qué necesita tu casa antes de pedir
           presupuestos.
         </p>
       </div>
 
       <div class="footer__actions reveal">
-        <a class="btn btn--primary" href={llamada.href}>
-          ¿En qué te puedo ayudar?
+        <a class="btn btn--primary" href={`${base}${site.retoUrl}`}>
+          Empezar el reto gratuito
           <Icon name="arrow" />
         </a>
         <ul class="footer__trust">

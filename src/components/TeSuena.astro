@@ -191,7 +191,7 @@ const palabras = frase.flatMap((p) => p.text.split(' ').map((w) => ({ w, em: p.e
       display: none;
     }
     .suena__text {
-      padding-right: 0; /* sin check al lado, no hay hueco que reservar */
+      padding-right: 12px; /* lo que avanza el texto al marcarse: así no invade el margen */
     }
   }
 </style>
