@@ -15,7 +15,7 @@ const datos = [
 
 const badge = 'El método Femuix · Cuatro fases · El método Femuix · Cuatro fases · ';
 
-const confianza = ['Pagas fase a fase', 'Contrato antes de empezar', 'Una sola interlocutora'];
+const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
 ---
 
 <section class="hero" id="top">
@@ -29,24 +29,29 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar', 'Una sola i
         delay={100}
         parts={[
           { text: 'Tu reforma en Barcelona,' },
-          { text: 'lista para contratar.', em: true },
+          { text: 'lista para contratar', em: true },
         ]}
       />
 
       <p class="lead reveal" style="--delay: 500ms">
-        Acompaño tu reforma de principio a fin: decidimos qué se toca y qué no, lo ves antes de
-        construirlo y llegas a la obra con todo definido. De 12 a 14 semanas, solo en Barcelona ciudad.
+        Cuatro fases: Plantea, Visualiza, Diseña y Materializa. Cada una se aprueba por escrito antes
+        de pasar a la siguiente.
       </p>
 
       <div class="hero__actions reveal" style="--delay: 620ms">
         <a class="btn btn--primary" href={llamada.href} data-contacto={!llamada.activa || undefined}>
-          ¿En qué te puedo ayudar?
+          Cuéntame tu reforma
           <Icon name="arrow" />
         </a>
+        <p class="hero__note">Te llevará menos de 3 minutos. Reviso tu caso personalmente.</p>
       </div>
 
       <!-- Señales de confianza: datos del servicio, sin promesas añadidas -->
       <ul class="hero__trust reveal" style="--delay: 700ms">
+        <li>
+          <Icon name="check" />
+          <span><strong>Plantea desde 297 €</strong> · IVA incluido</span>
+        </li>
         {
           confianza.map((t) => (
             <li>
@@ -109,6 +114,25 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar', 'Una sola i
 </section>
 
 <style>
+  .hero__actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero__note {
+    margin-top: 6px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1rem;
+    color: var(--muted);
+  }
+
+  .hero__trust strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
   .hero {
     padding-top: clamp(128px, 15vw, 192px);
     padding-bottom: clamp(56px, 7vw, 96px);
