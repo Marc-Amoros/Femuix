@@ -3,7 +3,8 @@ import Icon from './Icon.astro';
 import Isotipo from './Isotipo.astro';
 import Placeholder from './Placeholder.astro';
 import SplitText from './SplitText.astro';
-import { llamada, site, sobreMi } from '../data/site';
+import CtaReforma from './CtaReforma.astro';
+import { site, sobreMi } from '../data/site';
 import { retrato } from '../data/media';
 ---
 
@@ -63,10 +64,7 @@ import { retrato } from '../data/media';
       </ol>
 
       <div class="sobre__actions reveal">
-        <a class="btn btn--primary" href={llamada.href} data-contacto={!llamada.activa || undefined}>
-          {llamada.hablar}
-          <Icon name="arrow" />
-        </a>
+        <CtaReforma />
         <a class="more-link" href="#metodo">
           <span>Ver el método, fase a fase</span>
           <span class="more-link__icon" aria-hidden="true"><Icon name="arrow" /></span>
@@ -510,9 +508,6 @@ import { retrato } from '../data/media';
     .sobre__role {
       font-size: 0.625rem;
       letter-spacing: 0.12em;
-    }
-    .sobre__actions .btn {
-      width: 100%;
     }
     .sobre__actions .more-link {
       margin-inline: auto;

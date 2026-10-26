@@ -230,6 +230,9 @@
   --line-strong: rgba(255, 255, 255, 0.5);
   --line-ui: #ffffff;
   --mark: var(--pine-800);
+  /* CTA blanco con texto pino (12:1), como sobre los bloques verdes */
+  --cta-bg: var(--white);
+  --cta-fg: var(--pine-800);
   background:
     radial-gradient(90% 80% at 100% 100%, rgba(29, 60, 52, 0.5), transparent 70%),
     radial-gradient(60% 50% at 0% 0%, rgba(29, 60, 52, 0.18), transparent 70%), var(--petrol-deep);

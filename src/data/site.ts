@@ -34,7 +34,7 @@ export const llamada = {
   href: activa ? site.llamadaUrl : `mailto:${site.email}`,
   corta: activa ? 'Llamada de compatibilidad' : 'Escríbeme un email',
   reservar: activa ? 'Reservar una llamada' : 'Escríbeme un email',
-  hablar: activa ? 'Hablemos en una llamada' : 'Escríbeme tu caso',
+  hablar: activa ? 'Hablemos en una llamada' : 'Cuéntame tu reforma',
   enlace: activa ? 'Reserva una llamada de compatibilidad' : `Escríbeme a ${site.email}`,
 };
 

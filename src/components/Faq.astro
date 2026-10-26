@@ -1,5 +1,6 @@
 ---
 import SplitText from './SplitText.astro';
+import CtaReforma from './CtaReforma.astro';
 import { preguntas } from '../data/site';
 ---
 
@@ -13,6 +14,9 @@ import { preguntas } from '../data/site';
         class="h-section"
         parts={[{ text: 'Lo que conviene saber' }, { text: 'antes de empezar', em: true }]}
       />
+      <div class="reveal">
+        <CtaReforma note="¿Te queda otra duda? Escríbela junto a tu reforma y te respondo personalmente." />
+      </div>
     </div>
 
     <!-- La primera pregunta sale abierta, como ejemplo de cómo se despliegan -->

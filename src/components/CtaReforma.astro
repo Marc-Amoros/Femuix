@@ -1,0 +1,54 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+
+// Llamada a la acción principal: abre el formulario «Cuéntame tu reforma» (ContactoModal).
+// Sin JavaScript, el enlace abre el correo.
+interface Props {
+  note?: string;
+  align?: 'start' | 'center';
+  class?: string;
+}
+
+const { note, align = 'start', class: className } = Astro.props;
+---
+
+<div class:list={['cta', `cta--${align}`, className]}>
+  <a class="btn btn--primary" href={`mailto:${site.email}`} data-contacto>
+    Cuéntame tu reforma
+    <Icon name="arrow" />
+  </a>
+  {note && <p class="cta__note">{note}</p>}
+</div>
+
+<style>
+  .cta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .cta--center {
+    align-items: center;
+    text-align: center;
+  }
+
+  .cta__note {
+    max-width: 34em;
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  @media (max-width: 640px) {
+    .cta,
+    .cta .btn {
+      width: 100%;
+    }
+  }
+</style>

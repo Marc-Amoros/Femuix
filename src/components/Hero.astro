@@ -3,7 +3,7 @@ import Icon from './Icon.astro';
 import Isotipo from './Isotipo.astro';
 import Placeholder from './Placeholder.astro';
 import SplitText from './SplitText.astro';
-import { llamada } from '../data/site';
+import CtaReforma from './CtaReforma.astro';
 import { fotos, usarMuestras } from '../data/media';
 
 // `count` anima el número al entrar en pantalla
@@ -39,11 +39,7 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
       </p>
 
       <div class="hero__actions reveal" style="--delay: 620ms">
-        <a class="btn btn--primary" href={llamada.href} data-contacto={!llamada.activa || undefined}>
-          Cuéntame tu reforma
-          <Icon name="arrow" />
-        </a>
-        <p class="hero__note">Te llevará menos de 3 minutos. Reviso tu caso personalmente.</p>
+        <CtaReforma note="Te llevará menos de 3 minutos. Reviso tu caso personalmente." />
       </div>
 
       <!-- Señales de confianza: datos del servicio, sin promesas añadidas -->
@@ -114,20 +110,6 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
 </section>
 
 <style>
-  .hero__actions {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .hero__note {
-    margin-top: 6px;
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 300;
-    font-size: 1rem;
-    color: var(--muted);
-  }
-
   .hero__trust strong {
     font-weight: 600;
     color: var(--ink);
@@ -519,8 +501,7 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
       width: 88%;
       margin-left: auto;
     }
-    .hero__actions,
-    .hero__actions .btn {
+    .hero__actions {
       width: 100%;
     }
     .hero__facts {
