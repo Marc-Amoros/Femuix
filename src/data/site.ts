@@ -107,35 +107,15 @@ export const principios = [
 export const preguntas = [
   {
     q: '¿Cuánto dura todo el proceso?',
-    a: 'De 12 a 14 semanas de principio a fin, repartidas en cuatro fases cerradas: Plantea, Visualiza, Crea y Materializa.',
+    a: 'De 12 a 14 semanas de principio a fin, repartidas en cuatro fases cerradas.',
   },
   {
     q: '¿Tengo que contratar las cuatro fases de golpe?',
     a: 'No. Cada fase es un producto cerrado: se paga al abrirla y puedes parar al final de cualquiera de ellas.',
   },
   {
-    q: '¿Y si quiero cambiar algo?',
-    a: 'Cada fase incluye hasta dos rondas de revisión. Los cambios se hacen sobre el papel, antes de la obra, que es donde tiene sentido hacerlos.',
-  },
-  {
-    q: '¿Habrá un contrato?',
-    a: 'Sí, siempre firmado antes de empezar, con el alcance, los plazos y el precio por escrito desde el primer día.',
-  },
-  {
-    q: '¿Qué tipo de proyectos acompañas?',
-    a: 'Solo reformas de vivienda ya construida. No hago obra nueva, locales ni decoración suelta.',
-  },
-  {
     q: '¿Trabajas fuera de Barcelona?',
     a: 'No. Solo trabajo en Barcelona ciudad, porque piso cada obra que acompaño.',
-  },
-  {
-    q: '¿Quién se encarga de las licencias?',
-    a: 'No las firmo yo: te derivo a un arquitecto colegiado colaborador que sí puede firmarlas.',
-  },
-  {
-    q: '¿Cómo sé en qué punto está mi reforma?',
-    a: 'En tu Portal de Proyecto: dónde estamos, lo que necesito de ti, las decisiones tomadas y el estado de cada fase. Sin buscar en WhatsApp.',
   },
 ];
 

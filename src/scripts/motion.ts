@@ -402,7 +402,7 @@ if (!reduce) {
 // Sin ratón no hay hover: al tocar un botón o un enlace, hace durante un instante la misma
 // animación que al pasar el ratón (relleno, texto que rueda, flecha que avanza).
 if (!reduce) {
-  const TAPPABLE = '.btn, .more-link, .ask__mail, .faq__item summary, .vpanel__alt summary';
+  const TAPPABLE = '.btn, .more-link, .faq__item summary, .vpanel__alt summary';
   let pointer = 'mouse';
   document.addEventListener('pointerdown', (e) => (pointer = e.pointerType), { passive: true });
   document.addEventListener('click', (e) => {
