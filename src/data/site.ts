@@ -13,7 +13,7 @@ export const url = (path = '/') => {
 
 export const site = {
   name: 'Femuix',
-  title: 'Femuix · Reformas de vivienda en Barcelona',
+  title: 'Interiorista en Barcelona para reformar tu vivienda · Femuix',
   description:
     'Interiorismo para reformar tu vivienda en Barcelona ciudad: cuatro fases aprobadas por escrito y un proyecto listo para contratar la obra. Plantea desde 297 €.',
   email: 'hola@femuix.com',
@@ -26,6 +26,10 @@ export const site = {
 // Desde la web no se reserva la llamada de compatibilidad (estrategia de captación): todo lo que
 // llega en frío pasa antes por el formulario «Cuéntame tu reforma», y Andrea propone la llamada
 // si la reforma encaja. Los botones abren el formulario; sin JavaScript, el email.
+
+// Mensaje central de la marca (estrategia de captación): se repite igual en cada canal
+export const mensajeCentral =
+  'Antes de tocar una pared, nada se improvisa: cada decisión se aprueba por escrito, para que la obra no se pare a esperar decisiones ni se rehaga por un cambio de idea.';
 
 export const nav = [
   { label: 'Para quién es', href: '#para-quien' },
@@ -40,14 +44,14 @@ export const paraQuien = {
   intro:
     'Trabajo con particulares que reforman su propia vivienda en Barcelona ciudad, de hasta 130 m². Si tu vida ha cambiado y tu casa ya no responde a cómo vives, este proceso es para ti.',
   si: [
-    'Has comprado una vivienda y quieres reformarla.',
+    'Tienes las llaves de tu casa y todavía no tienes un plan.',
     'Necesitas reorganizar la casa en la que ya vives.',
-    'Quieres revisar y aprobar cada fase antes de seguir.',
+    'Quieres decidirlo todo, y por escrito, antes de pedir presupuestos.',
   ],
   no: [
-    'La vivienda está fuera de Barcelona ciudad.',
+    'La vivienda está fuera de Barcelona ciudad o pasa de 130 m².',
     'Es obra nueva, un local o solo buscas decoración.',
-    'Buscas que alguien ejecute la obra rápido, sin una fase de definición.',
+    'La obra ya ha empezado o solo buscas quien la ejecute.',
   ],
 };
 
@@ -115,11 +119,19 @@ export const principios = [
 export const preguntas = [
   {
     q: '¿Cuánto dura todo el proceso?',
-    a: 'De 12 a 14 semanas de principio a fin, repartidas en cuatro fases cerradas.',
+    a: 'De 12 a 14 semanas, desde la primera visita hasta tener el proyecto listo para contratar la obra, repartidas en cuatro fases cerradas.',
+  },
+  {
+    q: '¿Cuánto cuesta?',
+    a: 'Depende de la superficie de la vivienda. Plantea cuesta desde 297 € y el método completo, desde 3.488 €, con el IVA incluido. Cada fase se paga por separado.',
   },
   {
     q: '¿Tengo que contratar las cuatro fases de golpe?',
     a: 'No. Cada fase es un producto cerrado: se paga al abrirla y puedes parar al final de cualquiera de ellas.',
+  },
+  {
+    q: '¿Ejecutas tú la obra?',
+    a: 'No. Te acompaño a decidir tu reforma y la dejo lista para contratar. La obra la ejecutan los industriales que elijas, con presupuestos que puedes comparar.',
   },
   {
     q: '¿Trabajas fuera de Barcelona?',
@@ -134,8 +146,22 @@ export const testimonios: { cita: string; nombre: string; barrio: string }[] = [
 export const sobreMi = {
   cita: 'El espacio debe adaptarse a ti, y no al revés.',
   compromisos: [
-    { titulo: 'Una sola interlocutora', texto: 'De la primera visita a la entrega de llaves, hablas siempre conmigo.' },
+    { titulo: 'Una sola interlocutora', texto: 'De la primera visita al proyecto terminado, hablas siempre conmigo.' },
     { titulo: 'Piso cada obra', texto: 'Por eso solo trabajo en Barcelona ciudad.' },
-    { titulo: 'Solo vivienda', texto: 'Reformar viviendas es lo único que hago.' },
+    { titulo: 'Solo vivienda', texto: 'Solo acompaño reformas de vivienda: ni locales ni obra nueva.' },
   ],
 };
+
+// Precios publicados (estrategia de captación, 26 de octubre de 2026), con el IVA incluido.
+// Cada fase se contrata y se paga por separado: 70 % al abrirla y 30 % antes de la entrega.
+export const tramos = ['Hasta 45 m²', 'Hasta 90 m²', 'Hasta 130 m²'];
+export const precios = [
+  { fase: 'Plantea', importes: [297, 397, 497] },
+  { fase: 'Visualiza', importes: [497, 697, 897] },
+  { fase: 'Diseña', importes: [1097, 1497, 1997] },
+  { fase: 'Materializa', importes: [1597, 2197, 2897] },
+];
+// El método completo es la suma de las cuatro fases de cada tramo
+export const metodoCompleto = tramos.map((_, t) => precios.reduce((suma, p) => suma + p.importes[t], 0));
+// 1097 → «1.097 €» (el formato español no agrupa por sí solo los números de cuatro cifras)
+export const euros = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} €`;

@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { site, url } from '../data/site';
+import { schemaNegocio } from '../data/schema';
 // Fuentes que se ven en la primera pantalla: se piden desde el principio para que no salten
 import serifUrl from '../fonts/merriweather.woff2?url';
 import serifItalicUrl from '../fonts/merriweather-italic.woff2?url';
@@ -10,22 +11,14 @@ interface Props {
   title?: string;
   description?: string;
   noindex?: boolean; // páginas que no deben salir en buscadores (la 404)
+  schema?: Record<string, unknown>[]; // datos estructurados propios de la página (p. ej. sus preguntas)
 }
 
-const { title = site.title, description = site.description, noindex = false } = Astro.props;
+const { title = site.title, description = site.description, noindex = false, schema = [] } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
-// Datos estructurados: tipo de negocio y zona de servicio
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
-  name: site.name,
-  description: site.description,
-  url: new URL(url('/'), Astro.site).href,
-  logo: new URL(url('/femuix-logo.svg'), Astro.site).href,
-  email: site.email,
-  areaServed: { '@type': 'City', name: 'Barcelona' },
-};
+// Datos estructurados: el negocio en todas las páginas y, además, lo propio de cada una
+const jsonLd = { '@context': 'https://schema.org', '@graph': [...schemaNegocio(Astro.site), ...schema] };
 ---
 
 <!doctype html>

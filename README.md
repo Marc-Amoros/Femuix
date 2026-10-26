@@ -35,6 +35,23 @@ Los enlaces a otras páginas se escriben siempre con `url('/privacidad')` y no a
 carpeta de publicación y la barra final, de modo que coinciden con la dirección canónica y la del
 mapa del sitio (`sitemap.xml`) y no pasan por una redirección. La página 404 lleva `noindex`.
 
+## Buscadores y buscadores con IA
+
+Todo sale de los datos de `src/data/site.ts`, así que lo que leen los buscadores nunca contradice
+la página:
+
+- **Título y descripción:** `site.title` y `site.description`; la imagen para compartir es
+  `public/og-image.jpg`.
+- **Datos estructurados** (`src/data/schema.ts`, en todas las páginas): la web, el negocio
+  (`ProfessionalService` en Barcelona, con el mensaje central, el rango de precios y el catálogo
+  de las cuatro fases con sus precios), y Andrea. La portada añade sus preguntas (`FAQPage`).
+- **`/robots.txt`:** abierto a todos, con permiso explícito para los rastreadores de IA (GPTBot,
+  ClaudeBot, PerplexityBot, Google-Extended…).
+- **`/llms.txt`:** resumen en texto de qué es Femuix, para quién, las fases, los precios y las
+  preguntas, para los asistentes con IA.
+- **Precios publicados** (`precios`, `tramos` y `metodoCompleto`): la tabla de la sección del
+  método, los datos estructurados y `llms.txt`. El método completo es la suma de las fases.
+
 ## Paleta
 
 | Uso  | Color     | Dónde                                                                 |
@@ -77,7 +94,7 @@ Las secciones alternan blanco, bruma, petróleo y pino para que la lectura tenga
 | Cinta         | **Pino**, fases en blanco y cursiva en bruma |
 | Método        | **Petróleo**, con las fases en tarjetas blancas |
 | Cómo trabajo  | Blanco, con el portal sobre verde    |
-| Testimonios   | Blanco                               |
+| Testimonios   | Blanco (solo con testimonios reales) |
 | Preguntas     | Blanco                               |
 | Pie           | Verde pino con brillo petróleo       |
 
@@ -297,7 +314,7 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 
 - Foto principal, vídeo de 60–90 s y antes/después (`Placeholder`).
 - Revisar los finales completados de «Recibes» y «Al cerrar» de la fase 04 (propuesta, `fases` en `site.ts`).
-- Testimonios reales (`testimonios`; mientras esté vacío se muestran huecos).
+- Testimonios reales (`testimonios`; mientras esté vacío la sección no se muestra).
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
 - Servicio que recibe el formulario «Cuéntame tu reforma» (`contactoAction`, p. ej. Formspree).
   Mientras esté vacío, al enviar se abre el correo con el mensaje ya redactado.

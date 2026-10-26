@@ -13,9 +13,20 @@ import SobreMi from '../components/SobreMi.astro';
 import Faq from '../components/Faq.astro';
 import Footer from '../components/Footer.astro';
 import ContactoModal from '../components/ContactoModal.astro';
+import { preguntas, testimonios } from '../data/site';
+
+// Preguntas frecuentes como datos estructurados: las mismas que se ven en la página
+const faq = {
+  '@type': 'FAQPage',
+  mainEntity: preguntas.map((p) => ({
+    '@type': 'Question',
+    name: p.q,
+    acceptedAnswer: { '@type': 'Answer', text: p.a },
+  })),
+};
 ---
 
-<Base>
+<Base schema={[faq]}>
   <Intro />
   <Header />
   <main id="main" tabindex="-1">
@@ -26,7 +37,8 @@ import ContactoModal from '../components/ContactoModal.astro';
     <Marquee />
     <Metodo />
     <ComoTrabajo />
-    <Testimonios />
+    <!-- Sin testimonios reales no se enseña la sección: nada de huecos ni de casas ajenas -->
+    {testimonios.length > 0 && <Testimonios />}
     <Faq />
   </main>
   <Footer />
