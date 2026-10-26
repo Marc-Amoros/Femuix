@@ -83,6 +83,7 @@ export const fases = [
   {
     n: '03',
     nombre: 'Diseña',
+    semanas: 'Semanas 6 a 8',
     texto: 'El diseño decidido al detalle: distribución, materiales, acabados y equipamiento.',
     entregable:
       'Planta propuesta acotada, alzados de las estancias, renders de las decisiones más importantes y fichas de carpinterías a medida.',
