@@ -36,13 +36,11 @@ import { retrato } from '../data/media';
 
     <div class="sobre__copy">
       <span class="eyebrow reveal">Antes de nada</span>
-      <div class="sobre__title">
-        <SplitText
-          id="sobre-title"
-          class="h-display"
-          parts={[{ text: 'Hola,' }, { text: 'soy Andrea', em: true }]}
-        />
-      </div>
+      <SplitText
+        id="sobre-title"
+        class="h-section"
+        parts={[{ text: 'Quién soy y' }, { text: 'por qué trabajo así.', em: true }]}
+      />
       <p class="lead reveal">{sobreMi.intro}</p>
 
       <blockquote class="sobre__quote reveal" data-step="600">
@@ -174,17 +172,6 @@ import { retrato } from '../data/media';
     justify-items: start;
   }
 
-  /* «Hola, soy Andrea» siempre en una línea: el tamaño de portada, pero nunca más ancho que
-     su columna (el titular mide unas 7,6 veces su cuerpo). El contenedor envuelve solo el
-     titular porque container-type aísla los contadores, y el rótulo numerado debe quedar fuera */
-  .sobre__title {
-    container-type: inline-size;
-    justify-self: stretch;
-  }
-
-  .sobre__title :global(.h-display) {
-    font-size: min(clamp(2.5rem, 6vw, 5.5rem), 12.8cqi);
-  }
 
   /* Cita: la idea que guía el estudio */
   /* El filete dorado es un borde de un pseudoelemento para poder dibujarlo al entrar; al ser borde,
