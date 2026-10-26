@@ -92,6 +92,7 @@ export const fases = [
   {
     n: '04',
     nombre: 'Materializa',
+    semanas: 'Semanas 9 a 12',
     texto: 'Todo documentado para pedir presupuestos comparables y empezar sin sorpresas.',
     entregable:
       'Planos de fontanería, electricidad, evacuación y climatización, mediciones para pedir presupuestos comparables y la comparativa de ofertas de los industriales.',
