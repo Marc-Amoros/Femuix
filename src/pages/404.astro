@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Icon from '../components/Icon.astro';
-import { llamada, nav, url } from '../data/site';
+import { nav, site, url } from '../data/site';
 
 // Página de error propia: sin ella, GitHub Pages enseñaría la de otra web de la cuenta
 ---
@@ -26,7 +26,7 @@ import { llamada, nav, url } from '../data/site';
           Volver a la portada
           <Icon name="arrow" />
         </a>
-        <a class="text-link" href={llamada.href}>{llamada.enlace}</a>
+        <a class="text-link" href={`mailto:${site.email}`}>Escríbeme a {site.email}</a>
       </div>
 
       <nav class="nf__nav" aria-label="Secciones de la portada">

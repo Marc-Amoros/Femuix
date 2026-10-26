@@ -237,9 +237,8 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
 3. **Objetivos pequeños:** enlaces del menú (24 px) y del pie (22 px) ahora de 40 a 50 px;
    casilla de privacidad de 20 a 24 px.
 4. **Vídeo sin alternativa en texto** (1.2.1): descripción desplegable bajo el vídeo.
-5. **Botones de «llamada» que llevaban al formulario:** mientras `llamadaUrl` no tenga una
-   agenda real, pasan a «Escríbeme un email» (`llamada` en `src/data/site.ts`). Al rellenar la
-   URL vuelven a ser llamadas, sin tocar nada más.
+5. **Sin reserva de llamada desde la web:** según la estrategia de captación, todo lo que llega en
+   frío pasa por el formulario «Cuéntame tu reforma»; la llamada la propone Andrea si encaja.
 6. **Errores en burdeos** poco legibles sobre la bruma: oscurecidos (4,7:1).
 7. Soporte de **`prefers-contrast: more`** y **`forced-colors`**.
 
@@ -300,8 +299,6 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 - Revisar los finales completados de «Recibes» y «Al cerrar» de la fase 04 (propuesta, `fases` en `site.ts`).
 - Testimonios reales (`testimonios`; mientras esté vacío se muestran huecos).
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
-- Enlace a la agenda de la llamada (`llamadaUrl`): al rellenarlo, los botones de «Escríbeme tu
-  caso» pasan a reservar la llamada.
 - Servicio que recibe el formulario «Cuéntame tu reforma» (`contactoAction`, p. ej. Formspree).
   Mientras esté vacío, al enviar se abre el correo con el mensaje ya redactado.
 - Datos entre [corchetes] de `/aviso-legal`, `/privacidad` y `/cookies`, y revisión profesional

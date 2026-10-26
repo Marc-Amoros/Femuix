@@ -940,7 +940,7 @@ main .eyebrow::before {
 }
 
 .intro .hero {
-  --base: 1600ms;
+  --base: 900ms;
 }
 
 @media (prefers-reduced-motion: reduce) {

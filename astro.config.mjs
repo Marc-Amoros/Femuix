@@ -7,4 +7,6 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: process.env.SITE_URL || 'https://femuix.com',
   base: process.env.BASE_PATH || '/',
+  // Los estilos van dentro de cada página: el primer pintado no espera a descargar ningún CSS
+  build: { inlineStylesheets: 'always' },
 });

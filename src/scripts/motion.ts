@@ -85,7 +85,7 @@ function stepOf(el: HTMLElement) {
 }
 
 const baseOf = (el: HTMLElement) =>
-  root.classList.contains('intro') && el.closest('.hero') ? 1600 : 0;
+  root.classList.contains('intro') && el.closest('.hero') ? 900 : 0;
 
 const scopeOf = (el: Element) => el.closest('section, footer') ?? document.body;
 const unitOf = (el: Element) => el.closest('[data-reveal-unit]');

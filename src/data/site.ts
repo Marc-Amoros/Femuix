@@ -15,33 +15,23 @@ export const site = {
   name: 'Femuix',
   title: 'Femuix · Reformas de vivienda en Barcelona',
   description:
-    'Acompaño tu reforma de principio a fin: decidimos qué se toca y qué no, lo ves antes de construirlo y llegas a la obra con todo definido. De 12 a 14 semanas, solo en Barcelona ciudad.',
+    'Interiorismo para reformar tu vivienda en Barcelona ciudad: cuatro fases aprobadas por escrito y un proyecto listo para contratar la obra. Plantea desde 297 €.',
   email: 'hola@femuix.com',
   city: 'Barcelona',
-  // Enlace externo a la agenda de la llamada de compatibilidad
-  llamadaUrl: '', // TODO: enlace a la agenda de la llamada de compatibilidad
   // Dirección a la que el formulario «Cuéntame tu reforma» envía los datos (p. ej. Formspree).
   // Vacía: al enviar se abre el correo con el mensaje ya redactado.
   contactoAction: '', // TODO: servicio de formularios
 };
 
-// Mientras no haya enlace a la agenda, la web no anuncia una llamada que no se puede reservar:
-// los botones invitan a escribir y abren el formulario «Cuéntame tu reforma» (sin JavaScript,
-// el email). Al rellenar `llamadaUrl` vuelven a ser llamadas.
-const activa = site.llamadaUrl !== '';
-export const llamada = {
-  activa,
-  href: activa ? site.llamadaUrl : `mailto:${site.email}`,
-  corta: activa ? 'Llamada de compatibilidad' : 'Escríbeme un email',
-  reservar: activa ? 'Reservar una llamada' : 'Escríbeme un email',
-  hablar: activa ? 'Hablemos en una llamada' : 'Cuéntame tu reforma',
-  enlace: activa ? 'Reserva una llamada de compatibilidad' : `Escríbeme a ${site.email}`,
-};
+// Desde la web no se reserva la llamada de compatibilidad (estrategia de captación): todo lo que
+// llega en frío pasa antes por el formulario «Cuéntame tu reforma», y Andrea propone la llamada
+// si la reforma encaja. Los botones abren el formulario; sin JavaScript, el email.
 
 export const nav = [
+  { label: 'Para quién es', href: '#para-quien' },
+  { label: 'Sobre mí', href: '#sobre-mi' },
   { label: 'El método', href: '#metodo' },
   { label: 'Cómo trabajo', href: '#como-trabajo' },
-  { label: 'Sobre mí', href: '#sobre-mi' },
   { label: 'Preguntas', href: '#preguntas' },
 ];
 
@@ -93,7 +83,7 @@ export const fases = [
     n: '04',
     nombre: 'Materializa',
     semanas: 'Semanas 9 a 12',
-    texto: 'Todo documentado para pedir presupuestos comparables y empezar sin sorpresas.',
+    texto: 'Todo documentado para pedir presupuestos comparables y llegar a la obra con todo decidido.',
     entregable:
       'Planos de fontanería, electricidad, evacuación y climatización, mediciones para pedir presupuestos comparables y la comparativa de ofertas de los industriales.',
     // La última fase no da paso a otra: en vez de lo que se aprueba, dice cómo queda todo al cerrar

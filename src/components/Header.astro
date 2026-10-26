@@ -2,7 +2,7 @@
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import ModeSwitch from './ModeSwitch.astro';
-import { llamada, nav, site } from '../data/site';
+import { nav, site } from '../data/site';
 
 // En páginas interiores los enlaces apuntan a las secciones de la portada
 interface Props {
@@ -54,7 +54,7 @@ const { base = '' } = Astro.props;
 
     <div class="menu__foot">
       <p class="menu__hello">¿Empezamos por el orden?</p>
-      <a class="btn btn--primary" href={llamada.href} data-menu-link data-contacto={!llamada.activa || undefined}>{llamada.hablar}</a>
+      <a class="btn btn--primary" href={`mailto:${site.email}`} data-menu-link data-contacto>Cuéntame tu reforma</a>
       <a class="menu__mail" href={`mailto:${site.email}`}>{site.email}</a>
     </div>
   </div>
