@@ -101,6 +101,16 @@ import { retrato } from '../data/media';
     border-radius: var(--radius-lg);
   }
 
+  /* El retrato ya viene en monocolor verde pino (#1D3C34): sin el filtro que apaga las fotos,
+     para que el verde sea exacto. En Dark UI pasa a grafito, sin verde */
+  .sobre__frame :global(.ph__img) {
+    filter: none;
+  }
+
+  :global([data-theme='dark']) .sobre__frame :global(.ph__img) {
+    filter: grayscale(1);
+  }
+
   /* --base suma un retardo fijo al orden de aparición que calcula motion.ts. La foto arranca justo
      tras el paspartú y se descubre en 1,2 s (la imagen se aleja en 1,6 s) */
   :global(.js) .sobre__frame :global(.clip-reveal) {

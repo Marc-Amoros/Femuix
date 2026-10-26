@@ -21,10 +21,12 @@ export interface FotoMuestra extends Foto {
   fuente: string;
 }
 
-// Retrato de Sobre mí: foto propia con un revelado natural (algo de luz, blancos y encuadre 4:5), no de muestra
+// Retrato de Sobre mí: foto propia en monocolor verde pino (#1D3C34), encuadre 4:5. Se pasa a blanco
+// y negro con filtro rojo suave y se tiñe de pino profundo (sombras) a verde muy claro (luces);
+// el original en color está en src/assets/fotos/originales. En Dark UI la web la muestra en grafito.
 export const retrato: Foto = {
   imagen: andrea,
-  alt: 'Retrato de Andrea de perfil, con camisa blanca de rayas, mirando hacia la luz',
+  alt: 'Retrato de Andrea de perfil, con camisa de rayas, mirando hacia la luz',
 };
 
 export const fotos: Record<'portada' | 'antes' | 'despues', FotoMuestra> = {
