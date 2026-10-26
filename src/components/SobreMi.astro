@@ -36,11 +36,13 @@ import { retrato } from '../data/media';
 
     <div class="sobre__copy">
       <span class="eyebrow reveal">Por qué yo</span>
-      <SplitText
-        id="sobre-title"
-        class="h-display"
-        parts={[{ text: 'Hola,' }, { text: 'soy Andrea', em: true }]}
-      />
+      <div class="sobre__title">
+        <SplitText
+          id="sobre-title"
+          class="h-display"
+          parts={[{ text: 'Hola,' }, { text: 'soy Andrea', em: true }]}
+        />
+      </div>
       <p class="lead reveal">{sobreMi.intro}</p>
 
       <blockquote class="sobre__quote reveal" data-step="600">
@@ -74,9 +76,10 @@ import { retrato } from '../data/media';
 </section>
 
 <style>
+  /* Columnas iguales: el retrato gana tamaño y equilibra la altura del texto */
   .sobre__grid {
     display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(48px, 8vw, 128px);
     align-items: center;
   }
@@ -171,6 +174,18 @@ import { retrato } from '../data/media';
     justify-items: start;
   }
 
+  /* «Hola, soy Andrea» siempre en una línea: el tamaño de portada, pero nunca más ancho que
+     su columna (el titular mide unas 7,6 veces su cuerpo). El contenedor envuelve solo el
+     titular porque container-type aísla los contadores, y el rótulo numerado debe quedar fuera */
+  .sobre__title {
+    container-type: inline-size;
+    justify-self: stretch;
+  }
+
+  .sobre__title :global(.h-display) {
+    font-size: min(clamp(2.5rem, 6vw, 5.5rem), 12.8cqi);
+  }
+
   /* Cita: la idea que guía el estudio */
   /* El filete dorado es un borde de un pseudoelemento para poder dibujarlo al entrar; al ser borde,
      se sigue viendo con los colores forzados de Windows */
@@ -191,6 +206,7 @@ import { retrato } from '../data/media';
   }
 
   .sobre__quote p {
+    text-wrap: balance;
     font-family: var(--serif);
     font-size: clamp(1.4rem, 2.2vw, 1.9rem);
     font-style: italic;
@@ -200,39 +216,41 @@ import { retrato } from '../data/media';
     color: var(--em);
   }
 
-  /* Compromisos en tres tarjetas */
+  /* Compromisos: lista editorial con filetes finos, como el resto de listas de la web */
   .sobre__pacts {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
     width: 100%;
     margin: 8px 0 0;
     padding: 0;
     list-style: none;
+    border-top: 1px solid var(--line-strong);
   }
 
   .sobre__pacts li {
+    position: relative;
     display: grid;
-    align-content: start;
-    gap: 10px;
-    padding: 22px 20px 24px;
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    border-radius: var(--radius-lg);
-    background: rgba(255, 255, 255, 0.55);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
+    grid-template-columns: 52px minmax(0, 1fr);
+    align-items: baseline;
+    row-gap: 4px;
+    padding: 20px 0 22px;
   }
 
-  :global([data-theme='dark']) .sobre__pacts li {
-    border-color: rgba(131, 129, 130, 0.35);
-    background: rgba(0, 0, 0, 0.35);
+  /* Filete inferior: se dibuja de izquierda a derecha al entrar cada compromiso */
+  .sobre__pacts li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: 1px solid var(--line-strong);
+    transform-origin: left;
   }
 
   /* El número sube desde su línea base: se recorta solo por debajo */
   .sobre__n {
+    grid-row: span 2;
     clip-path: inset(-50% -50% 0 -50%);
     font-family: var(--serif);
-    font-size: 1.5rem;
+    font-size: 1.625rem;
     font-style: italic;
     font-weight: 300;
     line-height: 1;
@@ -244,36 +262,26 @@ import { retrato } from '../data/media';
   }
 
   .sobre__pacts h3 {
-    font-size: 1.1875rem;
+    font-size: clamp(1.1875rem, 1.6vw, 1.375rem);
     line-height: 1.25;
   }
 
   .sobre__pacts p {
+    grid-column: 2;
     font-size: 0.9375rem;
     line-height: 1.55;
     color: var(--muted);
   }
 
-  /* Acciones: el botón principal y, tras un filete fino, el enlace secundario editorial */
+  /* Acciones: el botón principal y el enlace secundario editorial; el último filete de los
+     compromisos ya las separa del texto */
   .sobre__actions {
-    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 16px 32px;
     width: 100%;
-    margin-top: 8px;
-    padding-top: 28px;
-  }
-
-  .sobre__actions::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    border-top: 1px solid var(--line);
-    transform-origin: left;
+    margin-top: 12px;
   }
 
   /* ---------- Entrada ----------
@@ -285,7 +293,7 @@ import { retrato } from '../data/media';
         dorado de la cita se dibuja de arriba abajo y la frase aparece de izquierda a derecha, como
         si se escribiera; los compromisos esperan a que la frase esté casi escrita (data-step de la
         cita) y suben uno tras otro, cada uno con su número, su título y su texto escalonados; el
-        filete de las acciones se dibuja antes de que lleguen los botones.
+        filete de cada compromiso se dibuja mientras llega su texto.
      --stagger (motion.ts) marca cuándo empieza cada bloque; lo de dentro se apoya en él.
      data-first (motion.ts) hace que la foto salga siempre la primera: el texto es más alto que ella
      y su rótulo cruzaría la línea de entrada antes. data-step es lo que hace esperar a lo siguiente:
@@ -392,7 +400,16 @@ import { retrato } from '../data/media';
       mask-position: 0 0;
     }
 
-    /* Compromisos: la tarjeta sube y, dentro, número, título y texto llegan escalonados */
+    /* Compromisos: el filete se dibuja y, encima, número, título y texto llegan escalonados */
+    :global(.js) .sobre__pacts li::after {
+      transform: scaleX(0);
+      transition: transform var(--t-media) var(--ease-in-out) var(--stagger, 0ms);
+    }
+
+    :global(.js) .sobre__pacts li:global(.is-visible)::after {
+      transform: none;
+    }
+
     :global(.js) .sobre__n > span,
     :global(.js) .sobre__pacts h3,
     :global(.js) .sobre__pacts p {
@@ -423,31 +440,6 @@ import { retrato } from '../data/media';
     :global(.js) .sobre__pacts :global(.is-visible) p {
       opacity: 1;
       translate: 0 0;
-    }
-
-    /* Acciones: el filete se dibuja de izquierda a derecha mientras suben los botones */
-    :global(.js) .sobre__actions::before {
-      transform: scaleX(0);
-      transition: transform var(--t-media) var(--ease-in-out) var(--stagger, 0ms);
-    }
-
-    :global(.js) .sobre__actions.is-visible::before {
-      transform: none;
-    }
-  }
-
-  /* Hasta escritorio grande los compromisos van en lista: número a la izquierda */
-  @media (max-width: 1280px) {
-    .sobre__pacts {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    .sobre__pacts li {
-      grid-template-columns: 40px 1fr;
-      column-gap: 12px;
-      row-gap: 4px;
-    }
-    .sobre__pacts p {
-      grid-column: 2;
     }
   }
 

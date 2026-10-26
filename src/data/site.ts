@@ -156,8 +156,8 @@ export const sobreMi = {
     '[Dos o tres frases tuyas: de dónde vienes, por qué montaste Femuix y qué te hizo trabajar así y no de otra manera.]',
   cita: 'El espacio debe adaptarse a ti, y no al revés.',
   compromisos: [
-    { titulo: 'Solo vivienda construida', texto: 'Ni obra nueva, ni locales, ni decoración suelta.' },
-    { titulo: 'Solo Barcelona ciudad', texto: 'Porque piso cada obra que acompaño.' },
-    { titulo: 'Una sola interlocutora', texto: 'De principio a fin, hablas siempre conmigo.' },
+    { titulo: 'Una sola interlocutora', texto: 'De la primera visita a la entrega de llaves, hablas siempre conmigo.' },
+    { titulo: 'Piso cada obra', texto: 'Por eso solo trabajo en Barcelona ciudad.' },
+    { titulo: 'Solo vivienda construida', texto: 'Reformar casas en las que se vive es lo único que hago.' },
   ],
 };
