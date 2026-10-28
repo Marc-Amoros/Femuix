@@ -1,8 +1,22 @@
-@import '@fontsource-variable/inter/index.css';
 @import 'lenis/dist/lenis.css';
 
-/* Merriweather (títulos): peso ligero 300 con tamaño óptico variable, recortada a los caracteres
-   del español (−55 % de peso) */
+/* Fuentes propias:
+   - Inter (texto): solo latino y solo los pesos 400 a 600, que son los que usa la web
+     (scripts/fuentes/optimizar.py: de 48 a 31 KB, con el mismo aspecto).
+   - Merriweather (títulos): peso ligero 300 con tamaño óptico variable, recortada a los caracteres
+     del español. No se reduce más: su kerning cambia con el tamaño y simplificarlo mueve el
+     ancho de los titulares (ver el aviso de scripts/fuentes/optimizar.py). */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @font-face {
   font-family: 'Merriweather';
   font-style: normal;

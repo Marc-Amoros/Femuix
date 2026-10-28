@@ -33,7 +33,9 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
       {
         usarMuestras ? (
           <div class="video__player" data-player>
-            <video preload="none" poster={video.poster} playsinline aria-label={video.descripcion}>
+            <!-- El póster no va en el atributo poster: el navegador lo descargaría al cargar la página,
+                 aunque el vídeo esté muy abajo. Se pone cuando el vídeo se acerca (script de abajo) -->
+            <video preload="none" data-poster={video.poster} playsinline aria-label={video.descripcion}>
               <source src={video.src} type="video/mp4" />
             </video>
             <span class="video__corners" aria-hidden="true" />
@@ -111,12 +113,18 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
       time.hidden = false;
     };
     video?.addEventListener('loadedmetadata', showDuration);
-    // La duración (metadatos) solo se pide cuando el vídeo se acerca a la pantalla
+    // El póster y la duración (metadatos) solo se piden cuando el vídeo se acerca a la pantalla. El
+    // póster se pide al ancho que se va a ver (en un móvil, 800 px en lugar de 1.600)
     if (video) {
       const near = new IntersectionObserver(
         (entries) => {
           if (!entries.some((e) => e.isIntersecting)) return;
           near.disconnect();
+          const poster = video.dataset.poster;
+          if (poster) {
+            const ancho = Math.min(1600, Math.max(640, Math.ceil((player.clientWidth * devicePixelRatio) / 200) * 200));
+            video.poster = poster.replace(/([?&]w=)\d+/, `$1${ancho}`);
+          }
           video.preload = 'metadata';
           video.load();
         },

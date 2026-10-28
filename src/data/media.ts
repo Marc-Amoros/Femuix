@@ -59,7 +59,7 @@ export const video = {
 
 // URL de la foto al ancho pedido (Unsplash la recorta y comprime al vuelo)
 export const fotoUrl = (id: string, w: number) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 
-export const fotoSrcset = (id: string, anchos = [480, 800, 1200, 1600]) =>
+export const fotoSrcset = (id: string, anchos = [480, 640, 800, 1200, 1600]) =>
   anchos.map((w) => `${fotoUrl(id, w)} ${w}w`).join(', ');
