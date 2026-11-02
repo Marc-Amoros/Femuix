@@ -1,5 +1,3 @@
-import andrea from '../assets/fotos/andrea.jpg';
-
 // Material de MUESTRA para ver cómo queda la web con fotos y vídeo.
 // Fotos de Unsplash y vídeo de Pexels, ambos con licencia de uso gratuita.
 // Antes de publicar: sustituir por fotos y vídeo reales de Femuix y alojarlos en la propia web
@@ -7,29 +5,13 @@ import andrea from '../assets/fotos/andrea.jpg';
 // Con `usarMuestras = false` la web vuelve a mostrar los huecos reservados.
 export const usarMuestras = true;
 
-// Una foto es de muestra (Unsplash, por `id`) o propia (en src/assets, por `imagen`): las propias
-// las optimiza Astro al compilar y se sirven desde la web
 export interface Foto {
-  id?: string; // identificador de la foto en images.unsplash.com
-  imagen?: ImageMetadata;
+  id: string; // identificador de la foto en images.unsplash.com
   alt: string;
-  fuente?: string; // página original de la foto de muestra
+  fuente: string; // página original de la foto
 }
 
-export interface FotoMuestra extends Foto {
-  id: string;
-  fuente: string;
-}
-
-// Retrato de Sobre mí: foto propia en monocolor verde pino (#1D3C34), encuadre 4:5. Se pasa a blanco
-// y negro con filtro rojo suave y se tiñe de pino profundo (sombras) a verde muy claro (luces);
-// el original en color está en src/assets/fotos/originales. En Dark UI la web la muestra en grafito.
-export const retrato: Foto = {
-  imagen: andrea,
-  alt: 'Retrato de Andrea de perfil, con camisa de rayas, mirando hacia la luz',
-};
-
-export const fotos: Record<'portada' | 'antes' | 'despues', FotoMuestra> = {
+export const fotos: Record<'portada' | 'antes' | 'despues' | 'sobreMi', Foto> = {
   portada: {
     id: '1779960723465-61f8d0f5ac2b',
     alt: 'Comedor reformado con un arco, mesa ovalada y sillas verdes junto a una ventana luminosa',
@@ -45,6 +27,11 @@ export const fotos: Record<'portada' | 'antes' | 'despues', FotoMuestra> = {
     alt: 'Salón reformado con techos altos, sofá claro, aparador de madera y mampara de vidrio',
     fuente: 'https://unsplash.com/photos/p_xTs-dajHk',
   },
+  sobreMi: {
+    id: '1781888693625-4955204a81a0',
+    alt: 'Imagen de muestra: diseñadora sonriente con planos enrollados en un interior',
+    fuente: 'https://unsplash.com/photos/SjEGSy0G-9A',
+  },
 };
 
 export const video = {
@@ -59,7 +46,7 @@ export const video = {
 
 // URL de la foto al ancho pedido (Unsplash la recorta y comprime al vuelo)
 export const fotoUrl = (id: string, w: number) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
 
-export const fotoSrcset = (id: string, anchos = [480, 640, 800, 1200, 1600]) =>
+export const fotoSrcset = (id: string, anchos = [480, 800, 1200, 1600]) =>
   anchos.map((w) => `${fotoUrl(id, w)} ${w}w`).join(', ');

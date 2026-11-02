@@ -9,15 +9,8 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
 /* ---------- Scroll suave ---------- */
 
-// Los saltos (menú, «Volver arriba», índice del método) duran lo mismo y arrancan y frenan con
-// suavidad, sea cual sea la distancia: un viaje, no un tirón que se apaga
-const easeInOutQuart = (t: number) => (t < 0.5 ? 8 * t ** 4 : 1 - (-2 * t + 2) ** 4 / 2);
-export const JUMP = { duration: 1.4, easing: easeInOutQuart };
-
-// lerp 0,09: la rueda se suaviza sin que la página vaya «detrás» del gesto. Los saltos a una
-// sección ya respetan el scroll-padding-top de global.css (bajo la cabecera), como sin Lenis
 if (!reduce) {
-  window.lenis = new Lenis({ lerp: 0.09, anchors: JUMP, autoRaf: true });
+  window.lenis = new Lenis({ lerp: 0.075, anchors: { offset: -72 }, autoRaf: true });
 }
 
 /* ---------- Contadores ---------- */
@@ -85,7 +78,7 @@ function stepOf(el: HTMLElement) {
 }
 
 const baseOf = (el: HTMLElement) =>
-  root.classList.contains('intro') && el.closest('.hero') ? 900 : 0;
+  root.classList.contains('intro') && el.closest('.hero') ? 1600 : 0;
 
 const scopeOf = (el: Element) => el.closest('section, footer') ?? document.body;
 const unitOf = (el: Element) => el.closest('[data-reveal-unit]');
@@ -270,21 +263,17 @@ const scrubs = [...document.querySelectorAll<HTMLElement>('[data-scrub]')];
 const parallax = [...document.querySelectorAll<HTMLElement>('[data-parallax]')];
 const marquees = [...document.querySelectorAll<HTMLElement>('[data-marquee]')];
 const expands = [...document.querySelectorAll<HTMLElement>('[data-expand]')];
+const checks = [...document.querySelectorAll<HTMLElement>('[data-check]')];
 const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.header__nav a, .menu__nav a')]
   .map((a) => ({ a, id: a.hash.slice(1) }))
   .filter(({ a, id }) => id && a.pathname === location.pathname);
 const spySections = [...new Set(navLinks.map(({ id }) => id))]
   .map((id) => document.getElementById(id))
   .filter((el): el is HTMLElement => !!el);
-
-// Otros scripts (el mazo del método) leen y escriben en el mismo fotograma que el resto: devuelven
-// una función con lo que hay que escribir, que se aplica junto a las demás escrituras
-type FrameHook = () => (() => void) | void;
-const hooks: FrameHook[] = [];
-export function onFrame(hook: FrameHook) {
-  hooks.push(hook);
-  requestUpdate();
-}
+const fills = [...document.querySelectorAll<HTMLElement>('[data-fill]')].map((el) => ({
+  el,
+  words: [...el.querySelectorAll<HTMLElement>('.fw')],
+}));
 
 let ticking = false;
 
@@ -326,6 +315,13 @@ function update() {
     });
   }
 
+  // «¿Te suena?»: cada frase se marca al cruzar el centro de la pantalla, y se desmarca al volver
+  for (const el of checks) {
+    const r = el.getBoundingClientRect();
+    const on = reduce || r.top + r.height / 2 < vh * 0.6;
+    writes.push(() => el.classList.toggle('is-on', on));
+  }
+
   if (!reduce) {
     // --p de 0 (entra por abajo) a 1 (centrado en pantalla)
     for (const el of scrubs) {
@@ -361,11 +357,13 @@ function update() {
       const offset = Number(el.dataset.marquee) > 0 ? t - range : -t;
       writes.push(() => el.style.setProperty('--sx', `${offset.toFixed(1)}px`));
     }
-  }
 
-  for (const hook of hooks) {
-    const write = hook();
-    if (write) writes.push(write);
+    // Frases que se "encienden" palabra a palabra
+    for (const { el, words } of fills) {
+      const r = el.getBoundingClientRect();
+      const lit = clamp01((vh * 0.85 - r.top) / (r.height + vh * 0.35)) * words.length;
+      writes.push(() => words.forEach((w, i) => w.classList.toggle('is-lit', i < lit)));
+    }
   }
 
   for (const write of writes) write();
@@ -378,16 +376,13 @@ function requestUpdate() {
   }
 }
 
-// Con el scroll suave, los efectos se calculan dentro del mismo fotograma en que Lenis mueve la
-// página: si esperaran al evento scroll irían un fotograma por detrás y la foto, el vídeo o las
-// tarjetas «flotarían» respecto al texto
-if (window.lenis) window.lenis.on('scroll', update);
-else window.addEventListener('scroll', requestUpdate, { passive: true });
+window.addEventListener('scroll', requestUpdate, { passive: true });
 window.addEventListener('resize', requestUpdate);
 update();
 
 if (reduce) {
   scrubs.forEach((el) => el.style.setProperty('--p', '1'));
+  fills.forEach(({ words }) => words.forEach((w) => w.classList.add('is-lit')));
 }
 
 /* ---------- Texto que rueda en los botones ---------- */
@@ -427,7 +422,7 @@ if (!reduce) {
 // Sin ratón no hay hover: al tocar un botón o un enlace, hace durante un instante la misma
 // animación que al pasar el ratón (relleno, texto que rueda, flecha que avanza).
 if (!reduce) {
-  const TAPPABLE = '.btn, .more-link, .ask__mail, .faq__item summary, .vpanel__alt summary';
+  const TAPPABLE = '.btn, .more-link, .reto__alt-link, .ask__mail, .faq__item summary, .vpanel__alt summary';
   let pointer = 'mouse';
   document.addEventListener('pointerdown', (e) => (pointer = e.pointerType), { passive: true });
   document.addEventListener('click', (e) => {
@@ -436,44 +431,5 @@ if (!reduce) {
     if (!el) return;
     el.classList.add('is-tapped');
     setTimeout(() => el.classList.remove('is-tapped'), 650);
-  });
-}
-
-/* ---------- Profundidad con el ratón ---------- */
-
-// En la portada, la foto, el marco dorado, la bruma y el sello se desplazan a ritmos distintos
-// siguiendo el ratón, como las capas de una maqueta. Escribe --dx y --dy (de -1 a 1, suavizados)
-// en el contenedor; el CSS decide cuánto se mueve cada capa. Solo con ratón y sin movimiento reducido.
-if (!reduce && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  document.querySelectorAll<HTMLElement>('[data-depth]').forEach((scope) => {
-    let tx = 0;
-    let ty = 0;
-    let x = 0;
-    let y = 0;
-    let raf = 0;
-
-    const step = () => {
-      x += (tx - x) * 0.08;
-      y += (ty - y) * 0.08;
-      scope.style.setProperty('--dx', x.toFixed(4));
-      scope.style.setProperty('--dy', y.toFixed(4));
-      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.001 ? requestAnimationFrame(step) : 0;
-    };
-    const go = () => {
-      if (!raf) raf = requestAnimationFrame(step);
-    };
-
-    const area = scope.closest('section') ?? scope;
-    area.addEventListener('pointermove', (e) => {
-      const r = scope.getBoundingClientRect();
-      tx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2)));
-      ty = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (window.innerHeight / 2)));
-      go();
-    });
-    area.addEventListener('pointerleave', () => {
-      tx = 0;
-      ty = 0;
-      go();
-    });
   });
 }

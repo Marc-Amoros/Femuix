@@ -27,6 +27,11 @@ const { base = '' } = Astro.props;
     <!-- Modo día / modo noche: se ven las dos opciones y se resalta la activa -->
     <ModeSwitch class="header__mode" />
 
+    <a class="btn btn--primary header__cta" href={`${base}${site.retoUrl}`}>
+      <span class="header__cta-long">Empezar por el reto gratuito</span>
+      <span class="header__cta-short">Reto gratuito</span>
+    </a>
+
     <!-- Menú para móvil y tablet -->
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
       <span class="menu-btn__lines" aria-hidden="true"><i></i><i></i></span>
@@ -54,7 +59,7 @@ const { base = '' } = Astro.props;
 
     <div class="menu__foot">
       <p class="menu__hello">¿Empezamos por el orden?</p>
-      <a class="btn btn--primary" href={`mailto:${site.email}`} data-menu-link data-contacto>Cuéntame tu reforma</a>
+      <a class="btn btn--primary" href={`${base}${site.retoUrl}`} data-menu-link>Empezar por el reto gratuito</a>
       <a class="menu__mail" href={`mailto:${site.email}`}>{site.email}</a>
     </div>
   </div>
@@ -91,7 +96,7 @@ const { base = '' } = Astro.props;
       } catch {}
 
       const doc = document as Document & {
-        startViewTransition?: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> };
+        startViewTransition?: (cb: () => void) => { ready: Promise<void> };
       };
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce || !doc.startViewTransition) {
@@ -104,12 +109,9 @@ const { base = '' } = Astro.props;
       const x = r.left + r.width / 2;
       const y = r.top + r.height / 2;
       const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-      // .vt-theme cambia la transición de página (fundido) por la del círculo (global.css)
-      root.classList.add('vt-theme');
-      const transition = doc.startViewTransition(apply);
-      transition.finished.catch(() => {}).finally(() => root.classList.remove('vt-theme'));
-      transition.ready
-        .then(() => {
+      doc
+        .startViewTransition(apply)
+        .ready.then(() => {
           root.animate(
             { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
             {
@@ -129,10 +131,6 @@ const { base = '' } = Astro.props;
   const menu = document.querySelector<HTMLElement>('[data-menu]');
   const behind = [...document.querySelectorAll<HTMLElement>('main, footer, .skip-link')];
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const MENU_OUT = 320; // lo que dura menu-out
-  let closing = 0;
-
   const setMenu = (open: boolean, returnFocus = true) => {
     if (!menu || !menuBtn) return;
     const { lenis } = window;
@@ -140,18 +138,7 @@ const { base = '' } = Astro.props;
     header?.classList.toggle('is-menu-open', open);
     root.classList.toggle('menu-open', open);
     behind.forEach((el) => el.toggleAttribute('inert', open));
-    // Al cerrar, el panel se desvanece en lugar de desaparecer de golpe
-    clearTimeout(closing);
-    menu.classList.remove('is-closing');
-    if (open || reduceMotion || menu.hidden) {
-      menu.hidden = !open;
-    } else {
-      menu.classList.add('is-closing');
-      closing = window.setTimeout(() => {
-        menu.classList.remove('is-closing');
-        menu.hidden = true;
-      }, MENU_OUT);
-    }
+    menu.hidden = !open;
     if (open) {
       lenis?.stop();
       menu.querySelector<HTMLElement>('a')?.focus();
@@ -265,7 +252,7 @@ const { base = '' } = Astro.props;
     margin-left: auto;
   }
 
-  /* Filete dorado vertical que separa el índice del interruptor día / noche */
+  /* Filete dorado vertical que separa el índice del interruptor y el botón */
   .header__nav::after {
     content: '';
     width: 1px;
@@ -349,6 +336,31 @@ const { base = '' } = Astro.props;
     }
   }
 
+  /* Portátiles pequeños: el índice se recoge un poco para que el botón no se corte */
+  @media (min-width: 1101px) and (max-width: 1240px) {
+    .header__bar {
+      gap: 20px;
+    }
+    .header__nav {
+      gap: 22px;
+    }
+    .header__logo,
+    .header.is-scrolled .header__logo {
+      width: 136px;
+    }
+  }
+
+  .header__cta {
+    flex-shrink: 0;
+    min-height: 42px;
+    padding: 0 22px;
+    font-size: 0.875rem;
+  }
+
+  .header__cta-short {
+    display: none;
+  }
+
   /* ---------- Menú móvil y tablet ---------- */
 
   .menu-btn {
@@ -395,7 +407,7 @@ const { base = '' } = Astro.props;
   }
 
   /* Menú desplegable: índice editorial con números dorados, filetes finos y un cierre con
-     la invitación a escribir; fondo con una luz suave de bruma (grafito en Dark UI) */
+     el reto; fondo con una luz suave de bruma (grafito en Dark UI) */
   .menu {
     position: fixed;
     inset: var(--header-h) 0 0;
@@ -556,18 +568,6 @@ const { base = '' } = Astro.props;
     }
   }
 
-  .menu.is-closing {
-    animation: menu-out 0.32s var(--ease-in-out) forwards;
-    pointer-events: none;
-  }
-
-  @keyframes menu-out {
-    to {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-  }
-
   @keyframes menu-item {
     from {
       opacity: 0;
@@ -602,13 +602,26 @@ const { base = '' } = Astro.props;
     }
   }
 
+  @media (max-width: 700px) {
+    .header__cta-long {
+      display: none;
+    }
+    .header__cta-short {
+      display: inline;
+    }
+  }
+
   @media (max-width: 560px) {
     .header {
       --header-h: 64px;
     }
-    /* El interruptor día / noche sigue a la vista en el móvil, junto al menú */
+    /* El interruptor día / noche sigue a la vista en el móvil, junto al botón */
     .header :global(.header__mode) {
       margin-left: auto;
+    }
+    /* En el móvil la cabecera lleva solo logo, día / noche y menú: el reto va dentro del menú */
+    .header__cta {
+      display: none;
     }
     .menu-btn {
       width: 38px;
@@ -619,7 +632,7 @@ const { base = '' } = Astro.props;
     }
   }
 
-  /* Pantallas muy estrechas (320 px): logo, día / noche y menú caben en una fila */
+  /* Pantallas muy estrechas (320 px): todo cabe sin cortar el texto del botón */
   @media (max-width: 400px) {
     .header__bar {
       gap: 10px;

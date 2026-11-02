@@ -1,25 +1,31 @@
 ---
 import '../styles/global.css';
 import { site, url } from '../data/site';
-import { schemaNegocio } from '../data/schema';
-import IsotipoSprite from '../components/IsotipoSprite.astro';
 // Fuentes que se ven en la primera pantalla: se piden desde el principio para que no salten
 import serifUrl from '../fonts/merriweather.woff2?url';
 import serifItalicUrl from '../fonts/merriweather-italic.woff2?url';
-import sansUrl from '../fonts/inter-latin.woff2?url';
+import sansUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
 interface Props {
   title?: string;
   description?: string;
   noindex?: boolean; // páginas que no deben salir en buscadores (la 404)
-  schema?: Record<string, unknown>[]; // datos estructurados propios de la página (p. ej. sus preguntas)
 }
 
-const { title = site.title, description = site.description, noindex = false, schema = [] } = Astro.props;
+const { title = site.title, description = site.description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
-// Datos estructurados: el negocio en todas las páginas y, además, lo propio de cada una
-const jsonLd = { '@context': 'https://schema.org', '@graph': [...schemaNegocio(Astro.site), ...schema] };
+// Datos estructurados: tipo de negocio y zona de servicio
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: site.name,
+  description: site.description,
+  url: new URL(url('/'), Astro.site).href,
+  logo: new URL(url('/femuix-logo.svg'), Astro.site).href,
+  email: site.email,
+  areaServed: { '@type': 'City', name: 'Barcelona' },
+};
 ---
 
 <!doctype html>
@@ -37,6 +43,7 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...schemaNegocio(A
     <link rel="preload" href={serifItalicUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={sansUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://videos.pexels.com" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
@@ -47,7 +54,7 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...schemaNegocio(A
     <meta property="og:image" content={new URL(url('/og-image.jpg'), Astro.site).href} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Femuix: tu reforma en Barcelona, lista para contratar" />
+    <meta property="og:image:alt" content="Femuix: no descubras los errores de tu reforma cuando ya no hay marcha atrás" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="color-scheme" content="light dark" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -81,7 +88,6 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...schemaNegocio(A
     </script>
   </head>
   <body>
-    <IsotipoSprite />
     <a class="skip-link" href="#main">Saltar al contenido</a>
     <slot />
 

@@ -35,23 +35,6 @@ Los enlaces a otras páginas se escriben siempre con `url('/privacidad')` y no a
 carpeta de publicación y la barra final, de modo que coinciden con la dirección canónica y la del
 mapa del sitio (`sitemap.xml`) y no pasan por una redirección. La página 404 lleva `noindex`.
 
-## Buscadores y buscadores con IA
-
-Todo sale de los datos de `src/data/site.ts`, así que lo que leen los buscadores nunca contradice
-la página:
-
-- **Título y descripción:** `site.title` y `site.description`; la imagen para compartir es
-  `public/og-image.jpg`.
-- **Datos estructurados** (`src/data/schema.ts`, en todas las páginas): la web, el negocio
-  (`ProfessionalService` en Barcelona, con el mensaje central, el rango de precios y el catálogo
-  de las cuatro fases con sus precios), y Andrea. La portada añade sus preguntas (`FAQPage`).
-- **`/robots.txt`:** abierto a todos, con permiso explícito para los rastreadores de IA (GPTBot,
-  ClaudeBot, PerplexityBot, Google-Extended…).
-- **`/llms.txt`:** resumen en texto de qué es Femuix, para quién, las fases, los precios y las
-  preguntas, para los asistentes con IA.
-- **Precios publicados** (`precios`, `tramos` y `metodoCompleto`): la tabla de la sección del
-  método, los datos estructurados y `llms.txt`. El método completo es la suma de las fases.
-
 ## Paleta
 
 | Uso  | Color     | Dónde                                                                 |
@@ -71,7 +54,7 @@ Variables en `global.css`: `--bg` (60 %), `--band` (30 %), `--ink` (10 %), `--te
 | --- | --- | --- |
 | Pino | `#1D3C34` | Botones, números, cinta de las fases, sello, portal y pie |
 | Petróleo | `#487A7B` · profundo `#335F60` | Cursivas grandes de los titulares (4,8:1). El tono profundo, para la **banda del método** (texto blanco 7,1:1) y las etiquetas pequeñas |
-| Bruma | `#A4BCC2` | Bandas de sobre mí y del formulario; cursiva de la cinta |
+| Bruma | `#A4BCC2` | Bandas del vídeo, sobre mí y formulario; cursiva de la cinta |
 
 Se combinan en tres sitios: la **regla** de color (`--regla`: pino → petróleo → dorado) sobre cada
 tarjeta de fase y el formulario, el **divisor** entre secciones blancas (`--divider`, un filete
@@ -88,14 +71,15 @@ Las secciones alternan blanco, bruma, petróleo y pino para que la lectura tenga
 | Sección       | Fondo                                |
 | ------------- | ------------------------------------ |
 | Portada       | Blanco, con un bloque de bruma y un marco dorado tras la foto |
-| Para quién es | Blanco, con la tarjeta «Sí» en bruma suave y la «No» en filete |
-| Sobre mí      | Bruma                                |
-| Vídeo         | Blanco, con el panel de temas en bruma suave |
 | Cinta         | **Pino**, fases en blanco y cursiva en bruma |
+| Vídeo         | Bruma                                |
+| ¿Te suena?    | Blanco                               |
 | Método        | **Petróleo**, con las fases en tarjetas blancas |
 | Cómo trabajo  | Blanco, con el portal sobre verde    |
-| Testimonios   | Blanco (solo con testimonios reales) |
+| Testimonios   | Blanco                               |
+| Sobre mí      | Bruma                                |
 | Preguntas     | Blanco                               |
+| Reto          | Blanco, con el formulario en bruma   |
 | Pie           | Verde pino con brillo petróleo       |
 
 Cuando dos secciones blancas van seguidas, las separa un filete en degradado con un pequeño
@@ -155,26 +139,10 @@ rombo dorado. Las bandas de bruma usan `.band` y la de petróleo `.band--teal` (
 ## Movimiento
 
 Intro con el isotipo (una vez por sesión), titulares palabra a palabra, scroll suave, franja de
-fases que se mueve con el scroll, sello de la portada con el texto fijo, vídeo que crece con el scroll, tarjetas del método apiladas,
+fases que se mueve con el scroll, sello de la portada con el texto fijo, vídeo que crece con el scroll, frase que se ilumina, tarjetas del método apiladas,
 portal en 3D, comparador antes/después, «Sobre mí» en tres tiempos (foto, firma y texto, con la cita
-que se escribe y filetes que se dibujan). Todo se desactiva si el sistema pide reducir el
-movimiento.
-
-Fluidez:
-
-- **Scroll:** Lenis con `lerp` 0,09. Los efectos ligados al scroll (vídeo, parallax, secciones que
-  se abren, franjas, mazo del método, barra de progreso) se calculan en el mismo fotograma en que
-  Lenis mueve la página (`lenis.on('scroll')`), así que no van un fotograma por detrás. Otros
-  scripts se suman con `onFrame()` de `motion.ts` (lecturas primero, escrituras después).
-- **Saltos** (menú, «Volver arriba», índice del método): 1,4 s con arranque y frenada suaves
-  (`JUMP` en `motion.ts`). Lenis respeta el `scroll-padding-top`, así que la sección queda justo
-  bajo la cabecera, igual que sin scroll suave.
-- **Mazo del método:** cada tarjeta se reduce poco a poco mientras la siguiente la cubre
-  (`--depth` continuo, al ritmo del scroll).
-- **Cierres:** el menú y el formulario se desvanecen al cerrarse (también con Escape), en vez de
-  desaparecer de golpe.
-- **Entre páginas** (portada ↔ textos legales): fundido con `@view-transition` en los navegadores
-  que lo admiten. El cambio de modo mantiene su círculo (`.vt-theme`).
+que se escribe y filetes que se dibujan) y logotipo gigante en el pie. Todo se desactiva si el
+sistema pide reducir el movimiento.
 
 Escala de movimiento (tokens en `global.css`): `--t-color` 0,4 s para colores y subrayados,
 `--t-move` 0,6 s para microinteracciones, `--t-enter` 1,1 s para entradas y filetes que se dibujan,
@@ -183,7 +151,7 @@ abajo arriba y los filetes se dibujan de izquierda a derecha.
 
 Apariciones (`.reveal`, `.split`, `.clip-reveal`, en `src/scripts/motion.ts`): salen en orden de
 lectura y por tandas. Lo que ya se ve en la misma sección entra junto (rótulo, titular y
-entradilla); un bloque con `data-reveal-unit` (tarjeta del método) se presenta
+entradilla); un bloque con `data-reveal-unit` (tarjeta del método, cierre del pie) se presenta
 entero y de arriba abajo; al final de la página aparece lo que quede pendiente, cada tanda espera a la anterior sin adelantarla nunca, y en un salto con el menú o
 un giro rápido de rueda se espera a que la página se pare: lo que queda fuera aparece sin
 animación. En el móvil (desplazamiento con el dedo) todo aparece en cuanto entra, también durante
@@ -199,11 +167,10 @@ sección, aunque otra más alta cruce antes la línea de entrada. Así «Sobre m
 rótulo, titular, entradilla, cita, compromisos y botones, en ese orden y con respiro entre cada
 paso. Los tiempos del resto de la coreografía están en el bloque «Entrada» de `SobreMi.astro`.
 
-Acabados: grano de papel (en modo overlay, no altera el blanco), apariciones con desenfoque
-solo en el texto (en tarjetas y fotos costaría fotogramas en el móvil),
+Acabados: grano de papel (en modo overlay, no altera el blanco), apariciones con desenfoque,
 secciones verdes que se abren de tarjeta a ancho completo (`data-expand`), índice numerado en
 las etiquetas de sección, texto que rueda en los botones, huecos de imagen con paspartú,
-coordenadas de Barcelona en la portada.
+coordenadas de Barcelona en la portada y hora local en el pie.
 
 ## Móvil, tablet y escritorio
 
@@ -212,10 +179,10 @@ Revisada sin desplazamiento horizontal ni solapes a 320, 375, 414, 600, 768, 834
 
 | Ancho          | Cabecera                                                    | Contenido                          |
 | -------------- | ----------------------------------------------------------- | ---------------------------------- |
-| > 1100 px      | Menú completo e interruptor día/noche                       | Diseño a dos columnas              |
+| > 1100 px      | Menú completo, interruptor día/noche y botón del reto       | Diseño a dos columnas              |
 | 901–1100 px    | Botón de menú (tablet en horizontal)                        | Dos columnas                       |
 | 561–900 px     | Botón de menú (tablet en vertical)                          | Una columna; foto de portada apaisada; «Sobre mí» a dos columnas |
-| ≤ 560 px       | Logo, interruptor día/noche y menú                          | Una columna                        |
+| ≤ 560 px       | Logo, «Reto gratuito» y menú; el interruptor va dentro del menú | Una columna                    |
 
 El menú (`Header.astro`) se cierra con Escape, al elegir una sección o al pasar a escritorio, y
 mientras está abierto deja la página de detrás inactiva (`inert`) para que el foco no se pierda.
@@ -254,14 +221,15 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
 3. **Objetivos pequeños:** enlaces del menú (24 px) y del pie (22 px) ahora de 40 a 50 px;
    casilla de privacidad de 20 a 24 px.
 4. **Vídeo sin alternativa en texto** (1.2.1): descripción desplegable bajo el vídeo.
-5. **Sin reserva de llamada desde la web:** según la estrategia de captación, todo lo que llega en
-   frío pasa por el formulario «Cuéntame tu reforma»; la llamada la propone Andrea si encaja.
+5. **Botones de «llamada» que llevaban al formulario:** mientras `llamadaUrl` no tenga una
+   agenda real, pasan a «Escríbeme un email» (`llamada` en `src/data/site.ts`). Al rellenar la
+   URL vuelven a ser llamadas, sin tocar nada más.
 6. **Errores en burdeos** poco legibles sobre la bruma: oscurecidos (4,7:1).
 7. Soporte de **`prefers-contrast: more`** y **`forced-colors`**.
 
 ### Pendiente (depende de ti, no del diseño)
 
-- Texto de presentación de Andrea: se ve entre corchetes.
+- Texto de presentación de Andrea y «Te llevas» de las fases: se ven entre corchetes.
 - Vídeo definitivo con subtítulos incrustados (`<track>`) y transcripción en `media.ts`.
 - Imagen para compartir (`og:image`, 1200 × 630) y URL real de la agenda.
 - Prueba con lector de pantalla real (VoiceOver o NVDA) antes de publicar.
@@ -281,16 +249,8 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
 - **Titulares animados:** `SplitText` incluye el texto real oculto para lectores de pantalla;
   úsalo siempre en lugar de partir palabras a mano.
 - **Foco visible:** nunca quites `outline` sin sustituirlo; sobre fondos verdes, aro blanco.
-- **Formulario «Cuéntame tu reforma»** (`ContactoModal.astro`): ventana `<dialog>` modal que abren
-  los botones con `data-contacto` (sin JavaScript, abren el email). Atrapa el foco, se cierra con
-  Escape, con «Cerrar» o pulsando fuera, y devuelve el foco al botón. Una sola columna y tres pantallas:
-  tus datos (nombre, email, móvil y consentimiento), tu vivienda (cuatro preguntas que filtran) y
-  último paso (cinco que perfilan). Si algo de la pantalla 2 descarta, sale la despedida con el
-  motivo; si no, al enviar sale «Gracias, te escribo por WhatsApp». Las preguntas, sus opciones y
-  qué descarta o queda en duda están en `src/data/formulario.ts`. Al cambiar de pantalla el foco
-  va a su título («Paso 2 de 3, Tu vivienda»), «Volver» conserva lo escrito y, si se cierra a
-  medias, al reabrir sigue donde estaba. Cada campo o grupo de opciones tiene su mensaje de error
-  enlazado (`aria-describedby`) y la confirmación recibe el foco al enviar.
+- **Formulario:** cada campo tiene su mensaje de error enlazado (`aria-describedby`) y el aviso
+  de envío es una región `role="status"`.
 - **Imágenes y vídeo:** `alt` descriptivo en las fotos; subtítulos y transcripción en el vídeo.
 - **Para auditar:** neutraliza `body::after`, `.band::before` y los degradados antes de pasar
   axe, o devolverá «incompleto» en lugar de medir el contraste.
@@ -299,13 +259,10 @@ en modo White y Dark UI: **0 incidencias**. Además, comprobaciones manuales:
 ## Fotos y vídeo de muestra
 
 Para ver cómo queda la web, hay fotos de Unsplash y un vídeo de Pexels (licencia de uso gratuita)
-en portada, antes/después y vídeo. Están en `src/data/media.ts`:
+en portada, «Sobre mí», antes/después y vídeo. Están en `src/data/media.ts`:
 
 - Para cambiar una foto, sustituye su `id` y su `alt` (el texto alternativo describe la imagen).
 - Con `usarMuestras = false` vuelven los huecos reservados.
-- Las fotos propias van en `src/assets/fotos` y se enlazan con `imagen` en lugar de `id` (como
-  `retrato`, la foto de «Sobre mí»): Astro las convierte a WebP en tres anchos al compilar y se
-  sirven desde la propia web. Se entregan ya reveladas y recortadas a 4:5.
 - Se cargan desde los servidores de Unsplash y Pexels, así que **son solo para la maqueta**: las
   fotos y el vídeo definitivos deben ser propios y guardarse en `/public`, sin terceros (la página
   de cookies dice que no hay servicios externos).
@@ -314,18 +271,11 @@ en portada, antes/después y vídeo. Están en `src/data/media.ts`:
 
 ## Pendiente de contenido real
 
-- Foto principal, vídeo de 60–90 s y antes/después (`Placeholder`).
-- Revisar los finales completados de «Recibes» y «Al cerrar» de la fase 04 (propuesta, `fases` en `site.ts`).
-- Testimonios reales (`testimonios`; mientras esté vacío la sección no se muestra).
+- Foto principal, vídeo de 60–90 s, foto de Andrea y antes/después (`Placeholder`).
+- Entregable de cada fase (`fases` en `site.ts`).
+- Presentación de Andrea (`sobreMi.intro`).
+- Testimonios reales (`testimonios`; mientras esté vacío se muestran huecos).
 - Capturas reales del portal de cliente (hoy es una ilustración en `ComoTrabajo.astro`).
-- **Formulario de Tally** (`tallyFormId` en `site.ts`, lo que va tras `tally.so/r/`). El
-  formulario «Cuéntame tu reforma» se monta en Tally (pantallas, despedida, gracias y envío a
-  Consultas en Notion) con los textos del documento de instrucciones del wireframe. Al poner el
-  identificador, los botones abren Tally en una ventana emergente (`TallyForm.astro`; el script de
-  Tally solo se descarga al pulsar) y le pasan el campo oculto `procedencia` (`utm_source` del
-  enlace, la web de la que llega o «directo»): en Tally hay que crear un campo oculto con ese
-  nombre. Mientras esté vacío, la web usa el formulario propio (`ContactoModal.astro` y
-  `src/data/formulario.ts`), que se puede borrar cuando Tally funcione. Revisar entonces si Tally
-  instala cookies y actualizar `/cookies`.
+- URL del formulario de Systeme.io (`systemeFormAction`) y enlace de la llamada (`llamadaUrl`).
 - Datos entre [corchetes] de `/aviso-legal`, `/privacidad` y `/cookies`, y revisión profesional
-  de los textos legales.
+  de los textos legales y de la información de privacidad del formulario (`Reto.astro`).

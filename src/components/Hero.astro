@@ -3,19 +3,19 @@ import Icon from './Icon.astro';
 import Isotipo from './Isotipo.astro';
 import Placeholder from './Placeholder.astro';
 import SplitText from './SplitText.astro';
-import CtaReforma from './CtaReforma.astro';
+import { llamada, site } from '../data/site';
 import { fotos, usarMuestras } from '../data/media';
 
 // `count` anima el número al entrar en pantalla
 const datos = [
   { etiqueta: 'El método', valor: '4', count: 4, unidad: 'fases', texto: 'Cerradas y en orden: ninguna empieza sin cerrar la anterior.' },
-  { etiqueta: 'El plazo', valor: '12–14', unidad: 'semanas', texto: 'De la primera visita al proyecto listo para contratar la obra.' },
+  { etiqueta: 'El plazo', valor: '12–14', unidad: 'semanas', texto: 'De la primera visita a la entrega de llaves.' },
   { etiqueta: 'Las revisiones', valor: '2', count: 2, unidad: 'rondas', texto: 'De cambios en cada fase, incluidas en el precio.' },
 ];
 
-const badge = 'El método Femuix · Cuatro fases · El método Femuix · Cuatro fases · ';
+const badge = 'Reto gratuito · Empieza aquí · Reto gratuito · Empieza aquí · ';
 
-const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
+const confianza = ['Reto gratuito', 'Pagas fase a fase', 'Contrato antes de empezar'];
 ---
 
 <section class="hero" id="top">
@@ -28,26 +28,25 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
         class="h-display"
         delay={100}
         parts={[
-          { text: 'Tu reforma en Barcelona,' },
-          { text: 'lista para contratar', em: true },
+          { text: 'No descubras los errores de tu reforma' },
+          { text: 'cuando ya no hay marcha atrás.', em: true },
         ]}
       />
 
       <p class="lead reveal" style="--delay: 500ms">
-        Cuatro fases: Plantea, Visualiza, Diseña y Materializa. Cada una se aprueba por escrito antes
-        de pasar a la siguiente.
+        Acompaño tu reforma de principio a fin: decidimos qué se toca y qué no, lo ves antes de
+        construirlo y llegas a la obra con todo definido. De 12 a 14 semanas, solo en Barcelona.
       </p>
 
       <div class="hero__actions reveal" style="--delay: 620ms">
-        <CtaReforma note="Te llevará menos de 3 minutos. Lo leo yo y, si encaja, te propongo una llamada gratuita." />
+        <a class="btn btn--primary" href={llamada.href}>
+          ¿En qué te puedo ayudar?
+          <Icon name="arrow" />
+        </a>
       </div>
 
       <!-- Señales de confianza: datos del servicio, sin promesas añadidas -->
       <ul class="hero__trust reveal" style="--delay: 700ms">
-        <li>
-          <Icon name="check" />
-          <span><strong>Plantea desde 297 €</strong> · IVA incluido</span>
-        </li>
         {
           confianza.map((t) => (
             <li>
@@ -59,7 +58,7 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
       </ul>
     </div>
 
-    <div class="hero__media" data-depth>
+    <div class="hero__media">
       <p class="hero__coords reveal" style="--delay: 1100ms" aria-hidden="true">
         <span>Interiorismo · Reformas</span>
       </p>
@@ -71,13 +70,13 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
             note="Un proyecto tuyo terminado, o tú trabajando. Nada de banco de imágenes."
             ratio="4 / 5"
             foto={usarMuestras ? fotos.portada : undefined}
-            sizes="(max-width: 900px) calc((100vw - 40px) * 0.88), 40vw"
+            sizes="(max-width: 900px) 100vw, 40vw"
             eager
           />
         </div>
       </div>
 
-      <a href="#metodo" class="badge reveal" style="--delay: 900ms" aria-label="El método Femuix: ver las cuatro fases">
+      <a href={site.retoUrl} class="badge reveal" style="--delay: 900ms" aria-label="Reto gratuito: empieza aquí">
         <svg class="badge__ring" viewBox="0 0 200 200" aria-hidden="true">
           <defs>
             <path id="badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"></path>
@@ -110,11 +109,6 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
 </section>
 
 <style>
-  .hero__trust strong {
-    font-weight: 600;
-    color: var(--ink);
-  }
-
   .hero {
     padding-top: clamp(128px, 15vw, 192px);
     padding-bottom: clamp(56px, 7vw, 96px);
@@ -209,25 +203,6 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
       transform: none;
       transition: none;
     }
-  }
-
-  /* Profundidad con el ratón (motion.ts escribe --dx y --dy): cada capa a su ritmo. Usa
-     `translate`, que se suma a los `transform` de las entradas sin pisarlos */
-  .hero__media::before {
-    translate: calc(var(--dx, 0) * 22px) calc(var(--dy, 0) * 16px);
-  }
-
-  .hero__media::after {
-    /* En vertical solo baja, para no cruzar las coordenadas que tiene encima */
-    translate: calc(var(--dx, 0) * -14px) max(0px, calc(var(--dy, 0) * 10px));
-  }
-
-  .hero__media .clip-reveal {
-    translate: calc(var(--dx, 0) * 6px) calc(var(--dy, 0) * 5px);
-  }
-
-  .badge {
-    translate: calc(var(--dx, 0) * -26px) calc(var(--dy, 0) * -20px);
   }
 
   /* Bloque de bruma desplazado tras la foto: da profundidad y anuncia el 30 % */
@@ -501,7 +476,8 @@ const confianza = ['Pagas fase a fase', 'Contrato antes de empezar'];
       width: 88%;
       margin-left: auto;
     }
-    .hero__actions {
+    .hero__actions,
+    .hero__actions .btn {
       width: 100%;
     }
     .hero__facts {

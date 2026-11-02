@@ -3,46 +3,32 @@ import Base from '../layouts/Base.astro';
 import Intro from '../components/Intro.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import ParaQuien from '../components/ParaQuien.astro';
 import Marquee from '../components/Marquee.astro';
 import Video from '../components/Video.astro';
+import TeSuena from '../components/TeSuena.astro';
 import Metodo from '../components/Metodo.astro';
 import ComoTrabajo from '../components/ComoTrabajo.astro';
 import Testimonios from '../components/Testimonios.astro';
 import SobreMi from '../components/SobreMi.astro';
 import Faq from '../components/Faq.astro';
+import Reto from '../components/Reto.astro';
 import Footer from '../components/Footer.astro';
-import ContactoModal from '../components/ContactoModal.astro';
-import TallyForm from '../components/TallyForm.astro';
-import { preguntas, site, testimonios } from '../data/site';
-
-// Preguntas frecuentes como datos estructurados: las mismas que se ven en la página
-const faq = {
-  '@type': 'FAQPage',
-  mainEntity: preguntas.map((p) => ({
-    '@type': 'Question',
-    name: p.q,
-    acceptedAnswer: { '@type': 'Answer', text: p.a },
-  })),
-};
 ---
 
-<Base schema={[faq]}>
+<Base>
   <Intro />
   <Header />
   <main id="main" tabindex="-1">
     <Hero />
-    <ParaQuien />
-    <SobreMi />
     <Video />
     <Marquee />
+    <TeSuena />
     <Metodo />
     <ComoTrabajo />
-    <!-- Sin testimonios reales no se enseña la sección: nada de huecos ni de casas ajenas -->
-    {testimonios.length > 0 && <Testimonios />}
+    <Testimonios />
+    <SobreMi />
     <Faq />
+    <Reto />
   </main>
   <Footer />
-  <!-- El formulario es el de Tally en cuanto haya identificador; mientras, el propio -->
-  {site.tallyFormId ? <TallyForm /> : <ContactoModal />}
 </Base>

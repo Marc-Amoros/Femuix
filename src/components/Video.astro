@@ -9,18 +9,17 @@ import { site } from '../data/site';
 const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué hago distinto'];
 ---
 
-<!-- Sección blanca entre la bruma de Sobre mí y el pino de la cinta: marca el cambio de sección -->
-<section class="section video" aria-labelledby="video-title">
+<section class="section band video" data-expand aria-labelledby="video-title">
   <div class="container">
     <div class="video__head">
-      <span class="eyebrow reveal">En un minuto</span>
+      <span class="eyebrow reveal">Antes de nada</span>
       <SplitText
         id="video-title"
         class="h-section"
-        parts={[{ text: 'Así es una reforma' }, { text: 'conmigo', em: true }]}
+        parts={[{ text: 'Quién soy y por qué esto' }, { text: 'funciona así', em: true }]}
       />
       <p class="lead video__lead reveal">
-        Antes de contarte el método fase a fase, mira cómo trabajo y qué hago distinto.
+        Antes de contarte el método, te cuento quién está detrás y por qué trabajo así.
       </p>
     </div>
   </div>
@@ -33,9 +32,7 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
       {
         usarMuestras ? (
           <div class="video__player" data-player>
-            <!-- El póster no va en el atributo poster: el navegador lo descargaría al cargar la página,
-                 aunque el vídeo esté muy abajo. Se pone cuando el vídeo se acerca (script de abajo) -->
-            <video preload="none" data-poster={video.poster} playsinline aria-label={video.descripcion}>
+            <video preload="none" poster={video.poster} playsinline aria-label={video.descripcion}>
               <source src={video.src} type="video/mp4" />
             </video>
             <span class="video__corners" aria-hidden="true" />
@@ -113,18 +110,12 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
       time.hidden = false;
     };
     video?.addEventListener('loadedmetadata', showDuration);
-    // El póster y la duración (metadatos) solo se piden cuando el vídeo se acerca a la pantalla. El
-    // póster se pide al ancho que se va a ver (en un móvil, 800 px en lugar de 1.600)
+    // La duración (metadatos) solo se pide cuando el vídeo se acerca a la pantalla
     if (video) {
       const near = new IntersectionObserver(
         (entries) => {
           if (!entries.some((e) => e.isIntersecting)) return;
           near.disconnect();
-          const poster = video.dataset.poster;
-          if (poster) {
-            const ancho = Math.min(1600, Math.max(640, Math.ceil((player.clientWidth * devicePixelRatio) / 200) * 200));
-            video.poster = poster.replace(/([?&]w=)\d+/, `$1${ancho}`);
-          }
           video.preload = 'metadata';
           video.load();
         },
@@ -179,19 +170,24 @@ const capitulos = ['Para quién trabajo', 'Qué pasa cuando no hay plan', 'Qué 
   }
 
   /* ---------- Panel bajo el vídeo ----------
-     Tarjeta en bruma muy suave sobre el blanco: etiqueta con rombo,
+     Tarjeta de cristal sobre la bruma (como los compromisos de Sobre mí): etiqueta con rombo,
      los tres temas en columnas con filetes finos y, al pie, la descripción desplegable. */
   .vpanel {
     max-width: 1080px;
     margin: clamp(40px, 5vw, 64px) auto 0;
     padding: clamp(24px, 3vw, 36px) clamp(24px, 3.2vw, 44px) 0;
-    border: 1px solid var(--line);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     border-radius: var(--radius-lg);
-    background: var(--tint);
+    background: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 30px 60px -44px rgba(14, 32, 27, 0.55);
   }
 
   :global([data-theme='dark']) .vpanel {
-    background: var(--band);
+    border-color: rgba(131, 129, 130, 0.35);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: none;
   }
 
   .vpanel__kicker {

@@ -1,7 +1,6 @@
 ---
 import SplitText from './SplitText.astro';
-import CtaReforma from './CtaReforma.astro';
-import { euros, fases, mensajeCentral, metodoCompleto, precios, tramos } from '../data/site';
+import { fases } from '../data/site';
 ---
 
 <section class="section band band--teal tex-none metodo" id="metodo" data-expand aria-labelledby="metodo-title">
@@ -14,8 +13,10 @@ import { euros, fases, mensajeCentral, metodoCompleto, precios, tramos } from '.
           class="h-section"
           parts={[{ text: 'El método Femuix: cuatro fases,' }, { text: 'en este orden y por algo', em: true }]}
         />
-        <!-- Mensaje central de la marca: el mismo en la web, la bio, los reels y la llamada -->
-        <p class="lead reveal">{mensajeCentral}</p>
+        <p class="lead reveal">
+          Cada fase es un producto cerrado con hasta dos rondas de revisión. Se paga al abrirla y
+          puedes parar al final de cualquiera de ellas.
+        </p>
 
         <nav aria-label="Fases del método">
           <ol class="metodo__index">
@@ -36,10 +37,6 @@ import { euros, fases, mensajeCentral, metodoCompleto, precios, tramos } from '.
             }
           </ol>
         </nav>
-
-        <div class="metodo__cta reveal">
-          <CtaReforma note="Empiezas por Plantea, desde 297 € con IVA, y decides después si sigues." />
-        </div>
       </div>
     </div>
 
@@ -49,10 +46,7 @@ import { euros, fases, mensajeCentral, metodoCompleto, precios, tramos } from '.
         fases.map((f, i) => (
           <li class="fase" id={`fase-${f.n}`} style={`--i: ${i}`} data-phase={i} data-reveal-unit>
             <div class="fase__top reveal">
-              <span class="fase__label">
-                Fase {f.n}
-                {f.semanas && ` · ${f.semanas}`}
-              </span>
+              <span class="fase__label">Fase {f.n}</span>
               <span class="fase__n" aria-hidden="true">
                 {f.n}
               </span>
@@ -60,124 +54,43 @@ import { euros, fases, mensajeCentral, metodoCompleto, precios, tramos } from '.
             <h3 class="fase__name reveal">{f.nombre}</h3>
             <p class="fase__text reveal">{f.texto}</p>
             <p class="fase__deliver reveal">
-              <span>Recibes</span>
+              <span>Te llevas</span>
               {f.entregable}
             </p>
-            {f.aprueba && (
-              <p class="fase__approve reveal">
-                <strong>Apruebas por escrito:</strong> {f.aprueba}
-              </p>
-            )}
-            {f.alCerrar && (
-              <p class="fase__approve reveal">
-                <strong>Al cerrar:</strong> {f.alCerrar}
-              </p>
-            )}
           </li>
         ))
       }
     </ol>
   </div>
-
-  <!-- Precio publicado: la tabla de la estrategia de captación, con el IVA incluido -->
-  <div class="container">
-    <div class="precios" id="precios">
-      <div class="precios__head reveal">
-        <h3 class="precios__title" id="precios-title">Precios, <em>con el IVA incluido</em></h3>
-        <p class="precios__lead">
-          Según la superficie de la vivienda. Cada fase se contrata y se paga por separado: el 70 %
-          al abrirla y el 30 % antes de la entrega. Puedes parar al final de cualquiera.
-        </p>
-      </div>
-
-      <!-- En pantallas muy estrechas la tabla se desplaza dentro de su marco, sin mover la página -->
-      <div class="precios__scroll reveal" role="region" aria-labelledby="precios-title" tabindex="0">
-        <table class="precios__tabla">
-          <caption class="visually-hidden">
-            Precio de cada fase del método según la superficie de la vivienda, con el IVA incluido
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">Fase</th>
-              {tramos.map((t) => <th scope="col">{t}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {
-              precios.map((p, i) => (
-                <tr>
-                  <th scope="row">
-                    <span class="precios__n">0{i + 1}</span> {p.fase}
-                  </th>
-                  {p.importes.map((n) => (
-                    <td>{euros(n)}</td>
-                  ))}
-                </tr>
-              ))
-            }
-          </tbody>
-          <tfoot>
-            <tr>
-              <th scope="row">Método completo</th>
-              {metodoCompleto.map((n) => <td>{euros(n)}</td>)}
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </div>
-  </div>
 </section>
 
 <script>
-  import { JUMP, onFrame } from '../scripts/motion';
-
-  // Las tarjetas se apilan al hacer scroll. Cada una se reduce poco a poco mientras la siguiente
-  // la cubre (--depth, al ritmo del scroll y en el mismo fotograma) y el índice marca la activa:
-  // la última que ha llegado a su sitio.
+  // Las tarjetas se apilan al hacer scroll. La activa es la última que ha llegado a su sitio;
+  // las anteriores se reducen un poco (--depth) y el índice marca la activa.
   const cards = [...document.querySelectorAll<HTMLElement>('[data-phase]')];
   const links = document.querySelectorAll<HTMLElement>('[data-phase-link]');
-  const list = document.querySelector<HTMLElement>('.fases');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let ticking = false;
 
-  // Dónde se detiene cada tarjeta (su top pegajoso): solo cambia con el tamaño de la ventana
-  let stops: number[] = [];
-  const measure = () => (stops = cards.map((card) => parseFloat(getComputedStyle(card).top) || 0));
-  measure();
-  addEventListener('resize', measure);
-
-  let current = -1;
-  onFrame(() => {
-    const tops = cards.map((card) => card.getBoundingClientRect().top);
-    const heights = cards.map((card) => card.offsetHeight);
+  const update = () => {
+    ticking = false;
     let active = 0;
-    tops.forEach((top, i) => {
-      if (top <= stops[i] + 2) active = i;
+    cards.forEach((card, i) => {
+      const stickyTop = parseFloat(getComputedStyle(card).top) || 0;
+      if (card.getBoundingClientRect().top <= stickyTop + 2) active = i;
     });
-    // Cuánto ha cubierto cada tarjeta a la anterior, de 0 (aún no la toca) a 1 (encima)
-    const cover = tops.map((top, j) => {
-      if (j === 0) return 0;
-      const from = stops[j - 1] + heights[j - 1];
-      return Math.min(1, Math.max(0, (from - top) / (from - stops[j])));
+    cards.forEach((card, i) => card.style.setProperty('--depth', String(Math.max(0, active - i))));
+    links.forEach((l) => {
+      const on = Number(l.dataset.phaseLink) === active;
+      l.classList.toggle('is-active', on);
+      if (on) l.setAttribute('aria-current', 'step');
+      else l.removeAttribute('aria-current');
     });
-    // Con movimiento reducido, la tarjeta cambia de tamaño de golpe al quedar cubierta
-    const depths = cards.map((_, i) =>
-      reduceMotion ? Math.max(0, active - i) : cover.slice(i + 1).reduce((a, b) => a + b, 0),
-    );
-    return () => {
-      cards.forEach((card, i) => card.style.setProperty('--depth', depths[i].toFixed(3)));
-      if (active === current) return;
-      current = active;
-      links.forEach((l) => {
-        const on = Number(l.dataset.phaseLink) === active;
-        l.classList.toggle('is-active', on);
-        if (on) l.setAttribute('aria-current', 'step');
-        else l.removeAttribute('aria-current');
-      });
-    };
-  });
+  };
 
   // Al pulsar un punto del índice se baja hasta su tarjeta. Las tarjetas son pegajosas, así que
   // su posición en pantalla no sirve: se calcula la natural sumando las anteriores y el hueco.
+  const list = document.querySelector<HTMLElement>('.fases');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   cards.forEach((card) => card.setAttribute('tabindex', '-1'));
   links.forEach((link) => {
     link.addEventListener('click', (e) => {
@@ -187,13 +100,24 @@ import { euros, fases, mensajeCentral, metodoCompleto, precios, tramos } from '.
       const gap = parseFloat(getComputedStyle(list).rowGap) || 0;
       let y = list.getBoundingClientRect().top + window.scrollY;
       for (let j = 0; j < i; j++) y += cards[j].offsetHeight + gap;
-      y -= stops[i];
+      y -= parseFloat(getComputedStyle(cards[i]).top) || 0;
       const { lenis } = window;
-      if (lenis) lenis.scrollTo(y + 2, JUMP);
+      if (lenis) lenis.scrollTo(y + 2, { immediate: reduceMotion });
       else window.scrollTo({ top: y + 2, behavior: reduceMotion ? 'auto' : 'smooth' });
       cards[i].focus({ preventScroll: true });
     });
   });
+
+  addEventListener(
+    'scroll',
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    },
+    { passive: true },
+  );
+  update();
 </script>
 
 <style>
@@ -336,12 +260,19 @@ import { euros, fases, mensajeCentral, metodoCompleto, precios, tramos } from '.
       0 30px 60px -40px rgba(14, 32, 27, 0.55);
     transform: scale(calc(1 - var(--depth, 0) * 0.035));
     transform-origin: 50% 0;
+    transition: transform var(--t-move) var(--ease);
   }
 
   :global([data-theme='dark']) .fase {
     box-shadow:
       0 0 0 1px rgba(131, 129, 130, 0.35),
       0 30px 60px -40px rgba(0, 0, 0, 0.8);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fase {
+      transition: none;
+    }
   }
 
   .fase__top {
@@ -403,141 +334,6 @@ import { euros, fases, mensajeCentral, metodoCompleto, precios, tramos } from '.
     color: var(--muted);
   }
 
-  /* Aviso de lo que se firma al cerrar la fase: bloque suave, sin borde */
-  .fase__approve {
-    margin: 20px 0 0;
-    padding: 16px 20px;
-    border-radius: var(--radius-lg);
-    background: var(--tint);
-    font-size: 0.9375rem;
-    line-height: 1.55;
-    color: var(--text);
-  }
-
-  .fase__approve strong {
-    font-weight: 600;
-    color: var(--ink);
-  }
-
-  /* ---------- Precios: tarjeta blanca como las de las fases, con la tabla ---------- */
-
-  .precios {
-    display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(32px, 5vw, 80px);
-    align-items: start;
-    margin-top: clamp(72px, 10vw, 140px);
-    padding: clamp(28px, 4vw, 56px);
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    color: var(--text);
-    box-shadow:
-      0 0 0 1px rgba(29, 60, 52, 0.06),
-      0 30px 60px -40px rgba(14, 32, 27, 0.55);
-  }
-
-  :global(:root:not([data-theme='dark'])) .precios {
-    --text: #111111;
-    --muted: #4a4a4a;
-    --ink: var(--pine-800);
-    --em: var(--petrol-deep);
-    --number: var(--petrol-deep);
-    --line: rgba(29, 60, 52, 0.13);
-    --line-strong: rgba(29, 60, 52, 0.28);
-  }
-
-  :global([data-theme='dark']) .precios {
-    box-shadow:
-      0 0 0 1px rgba(131, 129, 130, 0.35),
-      0 30px 60px -40px rgba(0, 0, 0, 0.8);
-  }
-
-  .precios__head {
-    display: grid;
-    gap: 16px;
-  }
-
-  .precios__title {
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
-  }
-
-  .precios__lead {
-    max-width: 40ch;
-    font-size: 0.9375rem;
-    line-height: 1.65;
-    color: var(--muted);
-  }
-
-  .precios__scroll {
-    min-width: 0;
-    overflow-x: auto;
-  }
-
-  .precios__scroll:focus-visible {
-    outline-offset: 4px;
-  }
-
-  .precios__tabla {
-    width: 100%;
-    min-width: 300px;
-    border-collapse: collapse;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .precios__tabla th,
-  .precios__tabla td {
-    padding: 14px 0 14px 12px;
-    border-bottom: 1px solid var(--line);
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  .precios__tabla :is(th, td):first-child {
-    padding-left: 0;
-    text-align: left;
-  }
-
-  .precios__tabla thead th {
-    padding-top: 0;
-    border-bottom-color: var(--line-strong);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    white-space: normal;
-    color: var(--muted);
-  }
-
-  .precios__tabla tbody th {
-    font-family: var(--serif);
-    font-size: 1.125rem;
-    font-weight: 300;
-  }
-
-  .precios__n {
-    margin-right: 8px;
-    font-family: var(--sans);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    color: var(--number);
-  }
-
-  .precios__tabla td {
-    font-size: 0.9375rem;
-  }
-
-  /* El total, en la cursiva de la marca y sin filete debajo */
-  .precios__tabla tfoot :is(th, td) {
-    border-bottom: 0;
-    padding-bottom: 0;
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 300;
-    font-size: 1.125rem;
-    color: var(--em);
-  }
-
   @media (max-width: 900px) {
     .metodo__grid {
       grid-template-columns: minmax(0, 1fr);
@@ -554,40 +350,6 @@ import { euros, fases, mensajeCentral, metodoCompleto, precios, tramos } from '.
     .fase {
       top: calc(88px + var(--i) * 12px);
       min-height: 360px;
-    }
-    .precios {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
-
-  /* Móvil: la tabla cabe entera sin desplazarse (hasta 320 px), con menos aire y el total
-     partido en dos líneas */
-  @media (max-width: 480px) {
-    .precios {
-      padding: 24px 16px 28px;
-    }
-    .precios__tabla {
-      min-width: 0;
-    }
-    .precios__tabla th,
-    .precios__tabla td {
-      padding-left: 6px;
-    }
-    .precios__tabla tbody th,
-    .precios__tabla tfoot :is(th, td) {
-      font-size: 0.9375rem;
-    }
-    .precios__tabla tfoot th {
-      white-space: normal;
-    }
-    .precios__tabla td {
-      font-size: 0.8125rem;
-    }
-    .precios__tabla thead th {
-      letter-spacing: 0.08em;
-    }
-    .precios__n {
-      display: none;
     }
   }
 </style>
